@@ -1,0 +1,18 @@
+{
+  "conductor_whistle": {
+    "subtitle": "sounds.railways.conductor_whistle",
+    "sounds": [
+      "railways:conductor_whistle"
+    ]
+  },
+  "handcar_cogs": {
+    "sounds": [
+      {
+        "type": "file",
+        "attenuation_distance": 128,
+        "name": "create:cogs"
+      }
+    ],
+    "subtitle": "create.subtitle.cogs"
+  }
+}

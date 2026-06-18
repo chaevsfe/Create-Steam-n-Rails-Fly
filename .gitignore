@@ -1,0 +1,44 @@
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out/
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build/
+.gradle/
+
+# other
+eclipse/
+run/
+
+# Files from Forge MDK
+forge*changelog.txt
+/server/
+
+# Custom
+**/src/main/resources/assets/create/
+jars/
+**/libs/
+**/changelog.html
+**/recent_changelog.html
+.DS_Store
+
+##################
+# Dev's Personal #
+##################
+
+# Slimeist (techno-sam)
+/build_archive/
+/development_assets/venv/
+/common/src/main/resources/assets/minecraft/textures/block/
+/.architectury-transformer/

@@ -1,0 +1,10 @@
+{
+  "render_type": "minecraft:cutout_mipped",
+  "parent": "railways:block/narrow_gauge_base/diag_2",
+  "textures": {
+    "1": "byg:block/track/blue_enchanted/standard_track_blue_enchanted",
+    "2": "byg:block/track/blue_enchanted/standard_track_mip_blue_enchanted",
+    "3": "byg:block/track/blue_enchanted/standard_track_crossing_blue_enchanted",
+    "particle": "byg:block/track/blue_enchanted/standard_track_crossing_blue_enchanted"
+  }
+}

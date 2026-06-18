@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "railways:block/smokestack/block_diesel_case",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "railways:block/smokestack/block_diesel_case",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "railways:block/smokestack/block_diesel_case",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "railways:block/smokestack/block_diesel_case",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "railways:block/smokestack/block_diesel_case"
+    },
+    "facing=west": {
+      "model": "railways:block/smokestack/block_diesel_case",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

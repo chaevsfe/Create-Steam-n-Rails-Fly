@@ -1,0 +1,93 @@
+/*
+ * Steam 'n' Rails
+ * Copyright (c) 2022-2024 The Railways Team
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.railwayteam.railways.content.buffer.headstock;
+
+import com.railwayteam.railways.content.buffer.IDyedBuffer;
+import com.railwayteam.railways.util.BlockStateUtils;
+import com.zurrtum.create.content.decoration.copycat.CopycatBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import org.jetbrains.annotations.Nullable;
+
+public class CopycatHeadstockBlockEntity extends CopycatBlockEntity implements IDyedBuffer {
+    @Nullable
+    protected DyeColor color;
+
+    public CopycatHeadstockBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(pos, state);
+    }
+
+    public @Nullable DyeColor getColor() {
+        return color;
+    }
+
+    @Override
+    protected void write(ValueOutput output, boolean clientPacket) {
+        super.write(output, clientPacket);
+
+        if (color != null)
+            output.putInt("Color", color.getId());
+    }
+
+    @Override
+    protected void read(ValueInput input, boolean clientPacket) {
+        super.read(input, clientPacket);
+        DyeColor prevColor = color;
+
+        if (input.getInt("Color").isPresent())
+            color = DyeColor.byId(input.getInt("Color").orElse(0));
+        else
+            color = null;
+
+        if (clientPacket && prevColor != color)
+            redrawColor();
+    }
+
+    protected void redrawColor() {
+        if (hasLevel()) {
+            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 16);
+            level.getChunkSource()
+                .getLightEngine()
+                .checkBlock(worldPosition);
+        }
+    }
+
+    public InteractionResult applyDyeIfValid(ItemStack stack) {
+        if (!(stack.getItem()instanceof DyeItem dyeItem))
+            return InteractionResult.PASS;
+        DyeColor color = dyeItem.getDyeColor();
+        if (color == this.color)
+            return InteractionResult.PASS;
+        if (level.isClientSide() && !isVirtual())
+            return InteractionResult.SUCCESS;
+        this.color = color;
+        notifyUpdate();
+        level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, worldPosition, Block.getId(BlockStateUtils.getWoolBlock(color).defaultBlockState()));
+        return InteractionResult.SUCCESS;
+    }
+}

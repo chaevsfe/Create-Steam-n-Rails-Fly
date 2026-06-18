@@ -1,0 +1,9 @@
+{
+  "render_type": "minecraft:cutout_mipped",
+  "parent": "create:block/track/segment_left",
+  "textures": {
+    "0": "tfc:block/track/chestnut/standard_track_chestnut",
+    "1": "tfc:block/track/chestnut/standard_track_mip_chestnut",
+    "particle": "tfc:block/track/chestnut/standard_track_crossing_chestnut"
+  }
+}

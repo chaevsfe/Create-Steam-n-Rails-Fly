@@ -1,0 +1,10 @@
+{
+  "render_type": "minecraft:cutout_mipped",
+  "parent": "create:block/track/diag_2",
+  "textures": {
+    "0": "quark:block/track/azalea/standard_track_azalea",
+    "1": "quark:block/track/azalea/standard_track_mip_azalea",
+    "2": "quark:block/track/azalea/standard_track_crossing_azalea",
+    "particle": "quark:block/track/azalea/standard_track_crossing_azalea"
+  }
+}

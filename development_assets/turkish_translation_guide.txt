@@ -1,0 +1,65 @@
+boiler is: "{color?} {wrap_material?} {sarılmış}(only if wrapped) lokomotif kazanı"
+
+colors are:
+    black: siyah
+    blue: mavi
+    brown: kahverengi
+    gray: gri
+    green: yeşil
+    light blue: açık mavi
+    light gray: açık gri
+    lime: açık yeşil
+    magenta: eflatun
+    orange: turuncu
+    pink: pembe
+    purple: mor
+    red: kırmızı
+    white: beyaz
+    yellow: sarı
+
+and wrap_materials are:
+    brass: pirinç
+    copper: bakır
+    iron: demir
+
+normal locometal blocks are:
+"{Düz ve}(only if flat) {wrap_material?} {sarılmış}(only if wrapped) {type?} {color?} lokometal"
+
+pillars:
+"{color?} lokometal sütunu"
+
+types are:
+    slashed: kesik
+    riveted: perçinlenmiş
+    plated: kaplanmış
+
+# i fell into a dilemma but i think you used smokebox as exhaust, chimney so smokebox should be "baca" but if you really used it as smoke box it should be "duman kutusu". but for now, i'll use "baca"
+smokeboxes:
+"{color?} lokomotif bacası"
+
+tracks:
+"{track_variant?}(if avaliable) {track_material?} tren rayı"
+track_variants are:
+    wide: geniş
+    narrow: dar
+    incomplete: Tamamlanmamış {track_material} ray
+
+track_materials are: # A lot of them comes from Mojang-Approved Turkish Translate
+    acacia: akasya
+    birch: huş
+    dark_oak: koyu meşe
+    jungle: orman ağacı
+    oak: meşe
+    spruce: ladin
+    mangrove: mangrov
+    warped: çarpık
+    crimson: kızıl
+    blackstone: kara taş
+    ender: ender
+    tieless: bağsız
+    phantom: kâbustan
+    cherry: kiraz ağacı
+    bamboo: bambu
+    stripped_bamboo: soyulmuş bambu
+    aspen: kavak
+    baobab: baobap ağacı

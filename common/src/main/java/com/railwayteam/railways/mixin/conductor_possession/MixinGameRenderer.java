@@ -1,0 +1,85 @@
+/*
+ * Steam 'n' Rails
+ * Copyright (c) 2022-2024 The Railways Team
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.railwayteam.railways.mixin.conductor_possession;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import com.railwayteam.railways.config.CRConfigs;
+import com.railwayteam.railways.content.conductor.ClientHandler;
+import com.railwayteam.railways.content.conductor.ConductorEntity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+@Mixin(GameRenderer.class)
+public abstract class MixinGameRenderer {
+    @Shadow @Final
+	Minecraft minecraft;
+
+    @Shadow
+	abstract void loadEffect(Identifier Identifier);
+
+    @Inject(method = "bobView", at = @At("HEAD"), cancellable = true)
+    private void railways$bobView(PoseStack matrixStack, float partialTicks, CallbackInfo ci) {
+        if (!(minecraft.getCameraEntity() instanceof ConductorEntity conductor)) {
+            return;
+        }
+        float f = conductor.walkDist - conductor.walkDistO;
+        float g = -(conductor.walkDist + f * partialTicks);
+        float h = Mth.lerp(partialTicks, conductor.oBob, conductor.bob);
+        matrixStack.translate(Mth.sin(g * (float)Math.PI) * h * 0.5f, -Math.abs(Mth.cos(g * (float)Math.PI) * h), 0.0);
+
+        matrixStack.mulPose(Axis.ZP.rotationDegrees(Mth.sin(g * (float)Math.PI) * h * 3.0f));
+        matrixStack.mulPose(Axis.XP.rotationDegrees(Math.abs(Mth.cos(g * (float)Math.PI - 0.2f) * h) * 5.0f));
+        ci.cancel();
+    }
+
+    @Inject(method = "checkEntityPostEffect", at = @At("RETURN"))
+    private void railways$checkEntityPostEffect(Entity entity, CallbackInfo ci) {
+        if (entity instanceof ConductorEntity && CRConfigs.client().useConductorSpyShader.get()) {
+            loadEffect(new Identifier("shaders/post/scan_pincushion.json"));
+        }
+    }
+
+    @Inject(method = "shouldRenderBlockOutline", at = @At("HEAD"), cancellable = true)
+    private void railways$shouldRenderBlockOutline(CallbackInfoReturnable<Boolean> cir) {
+        if (ClientHandler.isPlayerMountedOnCamera()) {
+            boolean flag = !minecraft.options.hideGui;
+            HitResult hitresult = this.minecraft.hitResult;
+            if (hitresult != null && hitresult.getType() == HitResult.Type.BLOCK && minecraft.level != null
+                    && hitresult instanceof BlockHitResult blockHitResult) {
+                flag &= ConductorEntity.canSpyInteract(minecraft.level.getBlockState(blockHitResult.getBlockPos()));
+            } else {
+                flag = false;
+            }
+            cir.setReturnValue(flag);
+        }
+    }
+}

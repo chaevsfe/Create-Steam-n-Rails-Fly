@@ -1,0 +1,10 @@
+{
+  "render_type": "minecraft:cutout_mipped",
+  "parent": "create:block/track/diag",
+  "textures": {
+    "0": "byg:block/track/mahogany/standard_track_mahogany",
+    "1": "byg:block/track/mahogany/standard_track_mip_mahogany",
+    "2": "byg:block/track/mahogany/standard_track_crossing_mahogany",
+    "particle": "byg:block/track/mahogany/standard_track_crossing_mahogany"
+  }
+}

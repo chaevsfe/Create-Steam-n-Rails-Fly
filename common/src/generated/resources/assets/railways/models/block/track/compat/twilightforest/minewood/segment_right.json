@@ -1,0 +1,9 @@
+{
+  "render_type": "minecraft:cutout_mipped",
+  "parent": "create:block/track/segment_right",
+  "textures": {
+    "0": "twilightforest:block/track/minewood/standard_track_minewood",
+    "1": "twilightforest:block/track/minewood/standard_track_mip_minewood",
+    "particle": "twilightforest:block/track/minewood/standard_track_crossing_minewood"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "render_type": "minecraft:cutout_mipped",
+  "parent": "create:block/track/ascending",
+  "textures": {
+    "0": "tfc:block/track/ash/standard_track_ash",
+    "1": "tfc:block/track/ash/standard_track_mip_ash",
+    "particle": "tfc:block/track/ash/standard_track_crossing_ash"
+  }
+}

@@ -1,0 +1,108 @@
+/*
+ * Steam 'n' Rails
+ * Copyright (c) 2022-2024 The Railways Team
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.railwayteam.railways.mixin;
+
+import com.railwayteam.railways.config.CRConfigs;
+import com.railwayteam.railways.registry.CREdgePointTypes;
+import com.zurrtum.create.content.trains.graph.EdgePointType;
+import com.zurrtum.create.content.trains.graph.TrackGraphLocation;
+import com.zurrtum.create.infrastructure.component.BezierTrackPointLocation;
+import com.zurrtum.create.content.trains.track.TrackBlock;
+import com.zurrtum.create.content.trains.track.TrackShape;
+import com.zurrtum.create.content.trains.track.TrackTargetingBlockItem;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.gen.Invoker;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiConsumer;
+
+@Mixin(value = TrackTargetingBlockItem.class, remap = false)
+public class MixinTrackTargetingBlockItem {
+
+    @Shadow private EdgePointType<?> type;
+    private static final List<TrackShape> acceptableShapes = List.of(
+        TrackShape.XO,
+        TrackShape.ZO,
+        TrackShape.PD,
+        TrackShape.ND,
+        TrackShape.AN,
+        TrackShape.AS,
+        TrackShape.AE,
+        TrackShape.AW
+    );
+
+    @ModifyArg(method = "useOn", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/BlockPos;closerThan(Lnet/minecraft/core/Vec3i;D)Z"), index = 1, remap = true)
+    private double changeCloserThan(double original) {
+        if (type == CREdgePointTypes.SWITCH) {
+            return CRConfigs.server().switchPlacementRange.get();
+        }
+        return original;
+    }
+
+    @Inject(method = "withGraphLocation", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/trains/track/ITrackBlock;getTrackAxes(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Ljava/util/List;", remap = true), cancellable = true)
+    private static void checkGraphLocation(Level level, BlockPos pos, boolean front, BezierTrackPointLocation targetBezier, EdgePointType<?> type,
+                                           BiConsumer<TrackTargetingBlockItem.OverlapResult, TrackGraphLocation> callback, CallbackInfo ci) {
+        if (type != CREdgePointTypes.COUPLER && type != CREdgePointTypes.SWITCH) // prevent coupler on turns
+            return;
+        TrackTargetingBlockItem.OverlapResult NOT_STRAIGHT = TrackTargetingBlockItem.OverlapResult.valueOf("NOT_STRAIGHT");
+        if (targetBezier != null) {
+            callback.accept(NOT_STRAIGHT, null);
+            ci.cancel();
+        }
+
+        TrackShape shape = level.getBlockState(pos).getValue(TrackBlock.SHAPE);
+        if (!acceptableShapes.contains(shape) || (type == CREdgePointTypes.SWITCH && shape.getAxes().stream().anyMatch(v -> v.y > 0))) { // prevent switch placement on slopes
+            callback.accept(NOT_STRAIGHT, null);
+            ci.cancel();
+        }
+    }
+
+    @Mixin(value = TrackTargetingBlockItem.OverlapResult.class, remap = false)
+    public static class MixinOverlapResult {
+        @Shadow
+        @Final
+        @Mutable
+        private static TrackTargetingBlockItem.OverlapResult[] $VALUES;
+
+        @Invoker("<init>")
+        public static TrackTargetingBlockItem.OverlapResult railways$createType(String internalName, int ordinal, String feedback) {
+            throw new AssertionError();
+        }
+
+        @Inject(
+                method = "<clinit>",
+                at = @At("TAIL")
+        )
+        private static void railways$addTypes(CallbackInfo ci) {
+            ArrayList<TrackTargetingBlockItem.OverlapResult> types = new ArrayList<>(List.of($VALUES));
+            types.add(railways$createType("NOT_STRAIGHT", $VALUES.length, "track_target.not_straight"));
+            $VALUES = types.toArray(TrackTargetingBlockItem.OverlapResult[]::new);
+        }
+    }
+}

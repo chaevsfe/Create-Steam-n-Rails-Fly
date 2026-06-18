@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "railways:item/link_and_pin_linkless"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.railwayteam.railways.fabric_mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "client.BlockElementDeserializerMixin",
+    "client.MixinCurvedTrackInteraction",
+    "client.MixinObjGeometryModelMesh",
+    "client.MixinSectionCompiler",
+    "client.MixinSegmentAngles",
+    "client.MixinTrackVisual",
+    "client.MixinRadialToolboxMenu",
+    "client.MixinToolboxHandlerClient",
+    "client.MixinToolboxScreen",
+    "conductor_possession.MixinGameRenderer",
+    "conductor_possession.MixinLocalPlayer",
+    "conductor_possession.MixinMinecraft"
+  ],
+  "mixins": [
+    "MixinBezierConnection",
+    "MixinBlockEntityType",
+    "MixinCopycatBlockEntity",
+    "conductor_possession.MixinEntity",
+    "conductor_possession.ServerPlayerMixin",
+    "MixinTrackBlock",
+    "MixinTrackBlockEntity",
+    "MixinToolboxHandler"
+  ],
+  "injectors": {
+    "defaultRequire": 1,
+    "maxShiftBy": 5
+  }
+}
