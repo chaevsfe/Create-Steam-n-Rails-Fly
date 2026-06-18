@@ -19,9 +19,11 @@
 package com.railwayteam.railways.content.conductor.vent;
 
 import com.railwayteam.railways.content.conductor.ClientHandler;
+import com.railwayteam.railways.registry.CRBlocks;
 import com.zurrtum.create.AllBlocks;
 import com.zurrtum.create.client.infrastructure.model.CopycatModel;
 import com.zurrtum.create.content.decoration.copycat.CopycatBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.util.RandomSource;
@@ -46,9 +48,13 @@ public class CopycatVentModel extends CopycatModel {
             model.collectParts(random, parts);
             return;
         }
-        // No material applied yet — stay transparent (copycat_base is a visible placeholder cube, skip it)
-        if (material.is(AllBlocks.COPYCAT_BASE))
+        // No material applied — show the vent grate shape as default (matches item model)
+        if (material.is(AllBlocks.COPYCAT_BASE)) {
+            BlockState visibleState = CRBlocks.CONDUCTOR_VENT.get().defaultBlockState()
+                    .setValue(VentBlock.CONDUCTOR_VISIBLE, true);
+            getModelOf(visibleState).collectParts(random, parts);
             return;
+        }
         // Show whatever block the copycat is set to
         addModelParts(world, pos, material, random, getModelOf(material), parts);
     }
