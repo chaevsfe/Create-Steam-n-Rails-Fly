@@ -46,10 +46,14 @@ public class CopycatVentModel extends CopycatModel {
             model.collectParts(random, parts);
             return;
         }
-        // No material applied — render nothing, matching Create's copycat_panel behavior.
-        // Create's own copycat_panel blockstate maps to minecraft:block/air (invisible) with no material.
-        if (material.is(AllBlocks.COPYCAT_BASE))
+        // No material applied — show the hollow-frame copycat indicator (create:block/copycat_base
+        // is a transparent-center border texture). The false-state blockstate points to
+        // railways:block/copycat_vent (cube_all + cutout_mipped) so model.collectParts gives
+        // the frame outline, matching the item model and looking "see-through" in the center.
+        if (material.is(AllBlocks.COPYCAT_BASE)) {
+            model.collectParts(random, parts);
             return;
+        }
         // Show whatever block the copycat is set to
         addModelParts(world, pos, material, random, getModelOf(material), parts);
     }
