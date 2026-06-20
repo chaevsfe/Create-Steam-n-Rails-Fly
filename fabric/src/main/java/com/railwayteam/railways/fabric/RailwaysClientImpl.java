@@ -30,6 +30,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientWorldEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
@@ -37,6 +38,7 @@ import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -58,6 +60,12 @@ public class RailwaysClientImpl implements ClientModInitializer {
 		ConductorCapItemRenderer.register();
 		CRParticleTypes.registerFactories();
 		registerClientEvents();
+
+		// Register vent block for CUTOUT chunk section so the hollow-frame copycat_base
+		// texture renders with proper alpha transparency (opaque frame, transparent center).
+		BlockRenderLayerMap.putBlock(
+				com.railwayteam.railways.registry.CRBlocks.CONDUCTOR_VENT.get(),
+				ChunkSectionLayer.CUTOUT);
 	}
 
 	private static void registerClientEvents() {
