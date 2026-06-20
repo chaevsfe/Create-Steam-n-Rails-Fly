@@ -749,6 +749,7 @@ public class CRBlocks {
             .transform(copycat())
             .transform(BuilderTransformers.conductorVent())
             .properties(p -> p.isSuffocating((state, level, pos) -> false))
+            .properties(BlockBehaviour.Properties::noOcclusion)
             .lang("Vent Block")
             .item()
             .transform(customItemModel("copycat_vent"))
