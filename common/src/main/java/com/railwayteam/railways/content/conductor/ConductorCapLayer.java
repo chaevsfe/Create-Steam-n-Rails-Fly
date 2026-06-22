@@ -32,6 +32,8 @@ public class ConductorCapLayer extends RenderLayer<ConductorRenderState, Conduct
 
         poseStack.pushPose();
         getParentModel().getHead().translateAndRotate(poseStack);
+        // Clear the conductor's 0.2-pixel outer head layer so the crown does not intersect the forehead.
+        poseStack.translate(0.0F, 0.0F, -0.25F / 16.0F);
         submitter.submitModel((Model) capModel, state, poseStack, entityCutoutNoCull(cap.textureId),
             packedLight, LivingEntityRenderer.getOverlayCoords(state, 0), -1, null);
         poseStack.popPose();

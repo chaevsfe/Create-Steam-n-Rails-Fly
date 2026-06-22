@@ -49,10 +49,16 @@ public class ConductorCapModel<T extends LivingEntity> extends Model implements 
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition mesh = new MeshDefinition();
 		PartDefinition root = mesh.getRoot();
-		root.addOrReplaceChild("cap",
+		PartDefinition cap = root.addOrReplaceChild("cap",
 			CubeListBuilder.create().texOffs(0, 0)
 				.addBox(-4.5F, -9.0F, -4.0F, 9.0F, 3.0F, 9.0F, new CubeDeformation(0.0F)),
 			PartPose.ZERO);
+
+		cap.addOrReplaceChild("brim",
+			CubeListBuilder.create().texOffs(6, 12)
+				.addBox(-4.5F, 3.8F, -3.0F, 9.0F, 0.02F, 3.0F, new CubeDeformation(0.0F)),
+			PartPose.offsetAndRotation(0.0F, -10.0F, -4.0F, 0.2618F, 0.0F, 0.0F));
+
 		return LayerDefinition.create(mesh, 64, 64);
 	}
 
