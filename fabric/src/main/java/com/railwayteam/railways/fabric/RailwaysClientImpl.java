@@ -26,6 +26,7 @@ import com.railwayteam.railways.content.buffer.headstock.fabric.CopycatHeadstock
 import com.railwayteam.railways.content.conductor.fabric.ConductorCapItemRenderer;
 import com.railwayteam.railways.events.ClientEvents;
 import com.railwayteam.railways.registry.CRParticleTypes;
+import com.zurrtum.create.content.trains.track.TrackMaterial;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -60,12 +61,21 @@ public class RailwaysClientImpl implements ClientModInitializer {
 		ConductorCapItemRenderer.register();
 		CRParticleTypes.registerFactories();
 		registerClientEvents();
+		registerTrackRenderLayers();
 
 		// Register vent block for CUTOUT chunk section so the hollow-frame copycat_base
 		// texture renders with proper alpha transparency (opaque frame, transparent center).
 		BlockRenderLayerMap.putBlock(
 				com.railwayteam.railways.registry.CRBlocks.CONDUCTOR_VENT.get(),
 				ChunkSectionLayer.CUTOUT);
+	}
+
+	private static void registerTrackRenderLayers() {
+		for (TrackMaterial material : TrackMaterial.ALL.values()) {
+			if (Railways.MOD_ID.equals(material.getId().getNamespace())) {
+				BlockRenderLayerMap.putBlock(material.getBlock(), ChunkSectionLayer.CUTOUT);
+			}
+		}
 	}
 
 	private static void registerClientEvents() {
