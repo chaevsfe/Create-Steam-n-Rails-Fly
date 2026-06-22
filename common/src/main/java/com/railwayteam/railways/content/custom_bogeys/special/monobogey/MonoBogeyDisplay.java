@@ -45,7 +45,7 @@ public class MonoBogeyDisplay implements BogeyDisplay {
         shafts = prov.create(AllPartialModels.SHAFT, 4);
     }
     public void update(CompoundTag bogeyData, float wheelAngle) {
-        boolean upsideDown = bogeyData.getBoolean(UPSIDE_DOWN_KEY);
+        boolean upsideDown = bogeyData.getBoolean(UPSIDE_DOWN_KEY).orElse(false);
         boolean specialUpsideDown = !inContraption && upsideDown; // tile entity renderer needs special handling
 
         frame.rotateZDegrees(specialUpsideDown ? 180 : 0)

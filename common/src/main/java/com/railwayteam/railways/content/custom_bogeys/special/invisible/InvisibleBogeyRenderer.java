@@ -18,11 +18,15 @@
 
 package com.railwayteam.railways.content.custom_bogeys.special.invisible;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.zurrtum.create.client.content.trains.bogey.BogeyBlockEntityRenderer.BogeyRenderState;
 import com.zurrtum.create.client.content.trains.bogey.BogeyRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.nbt.CompoundTag;
+import org.jetbrains.annotations.Nullable;
 
 public class InvisibleBogeyRenderer implements BogeyRenderer {
-    public void render(CompoundTag bogeyData, float wheelAngle, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay, boolean inContraption) {}
+    @Override
+    public BogeyRenderState getRenderData(@Nullable CompoundTag bogeyData, float wheelAngle, float partialTick,
+                                          int packedLight, boolean inContraption) {
+        return (poseStack, queue) -> {};
+    }
 }

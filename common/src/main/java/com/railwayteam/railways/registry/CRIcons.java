@@ -1,10 +1,19 @@
 package com.railwayteam.railways.registry;
 
+import com.railwayteam.railways.Railways;
 import com.zurrtum.create.client.foundation.gui.AllIcons;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.resources.Identifier;
 
 public class CRIcons extends AllIcons {
+    public static final Identifier ICON_ATLAS = Railways.asResource("textures/gui/icons.png");
+
     private static int x = 0;
     private static int y = -1;
+
+    private final int crIconX;
+    private final int crIconY;
 
     public static final CRIcons I_SEARCH_DOWN = newRow(), I_SEARCH_UP = next();
     public static final CRIcons I_COUPLING_BOTH = newRow(), I_COUPLING_COUPLE = next(), I_COUPLING_DECOUPLE = next();
@@ -15,6 +24,13 @@ public class CRIcons extends AllIcons {
 
     public CRIcons(int x, int y) {
         super(x, y);
+        this.crIconX = x * 16;
+        this.crIconY = y * 16;
+    }
+
+    @Override
+    public void render(GuiGraphics graphics, int x, int y) {
+        graphics.blit(RenderPipelines.GUI_TEXTURED, ICON_ATLAS, x, y, crIconX, crIconY, 16, 16, 256, 256);
     }
 
     private static CRIcons next() {

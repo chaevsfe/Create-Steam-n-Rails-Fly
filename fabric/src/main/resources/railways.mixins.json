@@ -6,6 +6,7 @@
   "client": [
     "client.BlockElementDeserializerMixin",
     "client.MixinCurvedTrackInteraction",
+    "client.MixinKeyboardHandler",
     "client.MixinObjGeometryModelMesh",
     "client.MixinSectionCompiler",
     "client.MixinSegmentAngles",
@@ -23,6 +24,7 @@
     "MixinCopycatBlockEntity",
     "conductor_possession.MixinEntity",
     "conductor_possession.ServerPlayerMixin",
+    "MixinStationBlockEntity",
     "MixinTrackBlock",
     "MixinTrackBlockEntity",
     "MixinToolboxHandler"

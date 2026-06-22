@@ -26,9 +26,14 @@ import com.railwayteam.railways.content.conductor.ConductorEntityModel;
 import com.railwayteam.railways.content.conductor.ConductorRenderer;
 import com.railwayteam.railways.content.conductor.vent.CopycatVentModel;
 import com.zurrtum.create.client.AllModels;
+import com.zurrtum.create.client.AllBlockEntityRenders;
+import com.zurrtum.create.client.content.trains.bogey.BogeyBlockEntityRenderer;
+import com.zurrtum.create.client.content.trains.bogey.BogeyBlockEntityVisual;
 import com.railwayteam.railways.content.custom_tracks.casing.CasingRenderUtils;
 import com.railwayteam.railways.ponder.CRPonderPlugin;
 import com.railwayteam.railways.registry.CRBlockPartials;
+import com.railwayteam.railways.registry.CRBlockEntities;
+import com.railwayteam.railways.registry.CRBogeyStyleRenders;
 import com.zurrtum.create.client.ponder.foundation.PonderIndex;
 import com.railwayteam.railways.registry.CRCommandsClient;
 import com.railwayteam.railways.registry.CRDevCaps;
@@ -42,6 +47,8 @@ import com.railwayteam.railways.registry.CRContainerTypes;
 import com.railwayteam.railways.util.CustomTrackOverlayRendering;
 import com.railwayteam.railways.util.DevCapeUtils;
 import com.zurrtum.create.client.AllTrackMaterialModels;
+import com.zurrtum.create.client.AllTrackRenders;
+import com.zurrtum.create.client.content.trains.track.StandardTrackBlockRenderer;
 import com.zurrtum.create.client.flywheel.lib.model.baked.PartialModel;
 import com.zurrtum.create.content.trains.track.TrackMaterial;
 import dev.architectury.injectables.annotations.ExpectPlatform;
@@ -82,6 +89,8 @@ public class RailwaysClient {
 
     CRKeys.register();
     CRBlockPartials.init();
+    CRBogeyStyleRenders.register();
+    registerBogeyBlockEntityRenders();
     CRContainerTypes.registerScreens();
 
     AllModels.register(com.railwayteam.railways.registry.CRBlocks.CONDUCTOR_VENT.get(), CopycatVentModel::new);
@@ -99,6 +108,17 @@ public class RailwaysClient {
     registerTrackModels();
   }
 
+  private static void registerBogeyBlockEntityRenders() {
+    AllBlockEntityRenders.visual(CRBlockEntities.BOGEY.get(),
+      BogeyBlockEntityRenderer::new, BogeyBlockEntityVisual::new);
+    AllBlockEntityRenders.visual(CRBlockEntities.MONO_BOGEY.get(),
+      BogeyBlockEntityRenderer::new, BogeyBlockEntityVisual::new);
+    AllBlockEntityRenders.visual(CRBlockEntities.INVISIBLE_BOGEY.get(),
+      BogeyBlockEntityRenderer::new, BogeyBlockEntityVisual::new);
+    AllBlockEntityRenders.visual(CRBlockEntities.INVISIBLE_MONO_BOGEY.get(),
+      BogeyBlockEntityRenderer::new, BogeyBlockEntityVisual::new);
+  }
+
   /**
    * Create only assigns a render {@link AllTrackMaterialModels.TrackModelHolder} to its own track
    * materials, so addon tracks have a null model holder and render no curves or placement preview.
@@ -111,6 +131,7 @@ public class RailwaysClient {
     for (TrackMaterial material : TrackMaterial.ALL.values()) {
       if (!Railways.MOD_ID.equals(material.getId().getNamespace()))
         continue;
+      AllTrackRenders.register(material.getBlock(), StandardTrackBlockRenderer::new);
       if (material.modelHolder != null)
         continue;
       if (CRTrackMaterials.CRTrackType.MONORAIL.equals(CRTrackMaterials.getType(material))) {
