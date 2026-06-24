@@ -164,10 +164,12 @@ public class BogeyMenuScreen extends AbstractSimiScreen {
 		float casingTextureSize = casingScale * 16 + casingPadding;
 		float casingCenterX = x + background.width + 31;
 		float casingCenterY = y + background.height - 11;
-		GuiGameElement.of(AllBlocks.RAILWAY_CASING.defaultBlockState())
-			.scale(casingScale)
-			.padding(casingPadding)
-			.rotate(-22, 63, 0)
+		GuiGameElement.GuiBlockStateRenderBuilder casingPreview = GuiGameElement.of(AllBlocks.RAILWAY_CASING.defaultBlockState());
+		GuiGameElement.GuiRenderBuilder<?> casingTransform = casingPreview;
+		casingTransform.scale(casingScale);
+		casingTransform.padding(casingPadding);
+		casingTransform.rotate(-22, 63, 0);
+		casingPreview
 			.at(casingCenterX - casingTextureSize / 2, casingCenterY - casingTextureSize / 2)
 			.render(guiGraphics);
 
