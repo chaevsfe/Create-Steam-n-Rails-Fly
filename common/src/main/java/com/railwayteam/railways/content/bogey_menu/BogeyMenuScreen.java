@@ -241,7 +241,6 @@ public class BogeyMenuScreen extends AbstractSimiScreen {
 				return wheelAngle;
 			}
 		};
-		bogeyBE.setBogeyStyle(renderStyle);
 
 		// EntityBlockRenderState multiplies modelScale by 16. Keep the original
 		// pixels-per-block scale, but give long bogeys a larger texture to avoid clipping.

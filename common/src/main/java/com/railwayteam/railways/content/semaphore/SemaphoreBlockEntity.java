@@ -37,10 +37,11 @@ import com.zurrtum.create.client.catnip.lang.Lang;
 import com.zurrtum.create.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,14 +70,16 @@ public class SemaphoreBlockEntity extends SmartBlockEntity implements IOverridab
         return cachedWasUpsideDown;
     }
 
-        protected void read(CompoundTag tag, boolean clientPacket) {
-        
-        cachedWasUpsideDown = tag.getBoolean("CachedWasUpsideDown").orElse(false);
+    @Override
+    protected void read(ValueInput input, boolean clientPacket) {
+        super.read(input, clientPacket);
+        cachedWasUpsideDown = input.getBooleanOr("CachedWasUpsideDown", false);
     }
 
-        protected void write(CompoundTag tag, boolean clientPacket) {
-        
-        tag.putBoolean("CachedWasUpsideDown", cachedWasUpsideDown);
+    @Override
+    protected void write(ValueOutput output, boolean clientPacket) {
+        super.write(output, clientPacket);
+        output.putBoolean("CachedWasUpsideDown", cachedWasUpsideDown);
     }
     public void addBehaviours(List<BlockEntityBehaviour<?>> behaviours) {
 

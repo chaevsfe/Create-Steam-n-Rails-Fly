@@ -11,6 +11,7 @@
 package com.railwayteam.railways.content.conductor;
 
 import com.railwayteam.railways.Railways;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HeadedModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
@@ -24,6 +25,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Vector3f;
 
 public class ConductorCapModel<T extends LivingEntity> extends Model implements HeadedModel {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(Railways.asResource("conductor_cap"), "main");
@@ -43,7 +45,30 @@ public class ConductorCapModel<T extends LivingEntity> extends Model implements 
 	}
 
 	public static ConductorCapModel<?> of(ItemStack stack, HumanoidModel<?> base, LivingEntity entity) {
-		return new ConductorCapModel<>(base.head);
+		ConductorCapModel<?> model = new ConductorCapModel<>(Minecraft.getInstance().getEntityModels().bakeLayer(LAYER_LOCATION));
+		model.setProperties(base);
+		return model;
+	}
+
+	public void setProperties(HumanoidModel<?> base) {
+		copyPart(base.hat, cap);
+		float s = 1 / 16f;
+		cap.offsetScale(new Vector3f(s, s, s));
+		cap.offsetPos(new Vector3f(0, 0, -10 / 16f));
+	}
+
+	private static void copyPart(ModelPart source, ModelPart target) {
+		target.x = source.x;
+		target.y = source.y;
+		target.z = source.z;
+		target.xRot = source.xRot;
+		target.yRot = source.yRot;
+		target.zRot = source.zRot;
+		target.xScale = source.xScale;
+		target.yScale = source.yScale;
+		target.zScale = source.zScale;
+		target.visible = source.visible;
+		target.skipDraw = source.skipDraw;
 	}
 
 	public static LayerDefinition createBodyLayer() {

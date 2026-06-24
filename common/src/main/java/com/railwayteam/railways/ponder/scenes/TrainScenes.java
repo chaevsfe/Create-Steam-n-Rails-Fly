@@ -144,7 +144,7 @@ public class TrainScenes {
         scene.idle(10);
         scene.special().movePointOfInterest(new Vec3(0,3,8));
 
-        ElementLink<WorldSectionElement> trainElement = scene.world().showIndependentSection(train1, null);
+        ElementLink<WorldSectionElement> trainElement = scene.world().showIndependentSection(train1, Direction.DOWN);
         ElementLink<ParrotElement> birb1 =
                 scene.special().createBirb(util.vector().centerOf(18, 3, 7), ParrotPose.FacePointOfInterestPose::new);
         scene.world().moveSection(trainElement, util.vector().of(4, 0, 0), 0);
@@ -160,7 +160,7 @@ public class TrainScenes {
 
         scene.idle(35);
 
-        ElementLink<WorldSectionElement> trainElement2 = scene.world().showIndependentSection(train3, null);
+        ElementLink<WorldSectionElement> trainElement2 = scene.world().showIndependentSection(train3, Direction.DOWN);
         ElementLink<ParrotElement> birb2 =
                 scene.special().createBirb(util.vector().centerOf(18, 3, 7), ParrotPose.FacePointOfInterestPose::new);
         scene.world().moveSection(trainElement2, util.vector().of(4, 0, 6), 0);
@@ -189,8 +189,8 @@ public class TrainScenes {
         scene.world().changeSignalState(signal4, SignalBlockEntity.SignalState.RED);
         scene.idle(5);
 
-        scene.world().hideIndependentSection(trainElement, null);
-        scene.special().hideElement(birb1, null);
+        scene.world().hideIndependentSection(trainElement, Direction.UP);
+        scene.special().hideElement(birb1, Direction.UP);
         scene.idle(10);
 
         scene.world().moveSection(trainElement2, util.vector().of(-11.5, 0, 0), 40);
@@ -319,7 +319,7 @@ public class TrainScenes {
 
         scene.idle(30);
 
-        ElementLink<WorldSectionElement> trainElement3 = scene.world().showIndependentSection(train2, null);
+        ElementLink<WorldSectionElement> trainElement3 = scene.world().showIndependentSection(train2, Direction.DOWN);
         scene.world().rotateSection(trainElement3, 0, 45, 0, 0);
         scene.world().moveSection(trainElement3, util.vector().of(4, 0, -6), 0);
         scene.world().moveSection(trainElement3, util.vector().of(-14, 0, 14), 40);
@@ -369,7 +369,7 @@ public class TrainScenes {
                 .text("When 2 semaphores are placed on a non-brass signal, they both close simultaneously");
         scene.idle(80);
 
-        trainElement = scene.world().showIndependentSection(train1, null);
+        trainElement = scene.world().showIndependentSection(train1, Direction.DOWN);
         scene.world().rotateSection(trainElement, 0, 45, 0, 0);
         scene.world().moveSection(trainElement, util.vector().of(4, 0, -9), 0);
         scene.world().moveSection(trainElement, util.vector().of(-9, 0, 9), 40);

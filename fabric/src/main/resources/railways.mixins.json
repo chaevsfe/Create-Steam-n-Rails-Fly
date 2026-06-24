@@ -21,6 +21,7 @@
   "mixins": [
     "MixinBezierConnection",
     "MixinBlockEntityType",
+    "MixinCarriage",
     "MixinCopycatBlockEntity",
     "conductor_possession.MixinEntity",
     "conductor_possession.ServerPlayerMixin",

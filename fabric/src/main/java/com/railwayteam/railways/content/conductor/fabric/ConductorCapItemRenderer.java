@@ -25,11 +25,13 @@ import com.railwayteam.railways.content.conductor.ConductorCapModel;
 import com.railwayteam.railways.registry.CRItems;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 
@@ -49,8 +51,19 @@ public class ConductorCapItemRenderer implements ArmorRenderer {
 		if (!(stack.getItem() instanceof ConductorCapItem cap))
 			return;
 
-		ConductorCapModel<?> model = new ConductorCapModel<>(contextModel.getHead());
+		ConductorCapModel<?> model = new ConductorCapModel<>(
+			Minecraft.getInstance().getEntityModels().bakeLayer(ConductorCapModel.LAYER_LOCATION));
+		matrices.pushPose();
+		contextModel.getHead().translateAndRotate(matrices);
+		// Match the conductor entity cap: render in head-local space so pitch, yaw, and roll all follow the head.
+		matrices.translate(0.0F, 0.0F, -0.25F / 16.0F);
 		submitter.submitModel((Model) model, state, matrices, ConductorCapLayer.entityCutoutNoCull(cap.textureId),
 			light, LivingEntityRenderer.getOverlayCoords(state, 0), -1, null);
+		matrices.popPose();
+	}
+
+	@Override
+	public boolean shouldRenderDefaultHeadItem(LivingEntity entity, ItemStack stack) {
+		return false;
 	}
 }
