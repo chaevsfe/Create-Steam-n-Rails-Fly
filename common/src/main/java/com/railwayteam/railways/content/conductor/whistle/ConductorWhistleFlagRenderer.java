@@ -1,6 +1,6 @@
 /*
  * Steam 'n' Rails
- * Copyright (c) 2022-2025 The Railways Team
+ * Copyright (c) 2022-2026 The Railways Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,15 +19,56 @@
 package com.railwayteam.railways.content.conductor.whistle;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.railwayteam.railways.util.compat.SmartBlockEntityRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import com.railwayteam.railways.registry.CRBlockPartials;
+import com.zurrtum.create.client.catnip.render.CachedBuffers;
+import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
+import com.zurrtum.create.client.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
-public class ConductorWhistleFlagRenderer extends SmartBlockEntityRenderer<ConductorWhistleFlagBlockEntity> {
-    public ConductorWhistleFlagRenderer(BlockEntityRendererProvider.Context context) {
-        super(context);
-    }
+public class ConductorWhistleFlagRenderer
+	extends SmartBlockEntityRenderer<ConductorWhistleFlagBlockEntity, ConductorWhistleFlagRenderer.FlagRenderState> {
 
-    protected void renderSafe(ConductorWhistleFlagBlockEntity te, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
-    }
+	public ConductorWhistleFlagRenderer(BlockEntityRendererProvider.Context context) {
+		super(context);
+	}
+
+	@Override
+	public FlagRenderState createRenderState() {
+		return new FlagRenderState();
+	}
+
+	@Override
+	public void extractRenderState(ConductorWhistleFlagBlockEntity be, FlagRenderState state,
+								   float tickProgress, Vec3 cameraPos,
+								   @Nullable net.minecraft.client.renderer.feature.ModelFeatureRenderer.CrumblingOverlay crumbling) {
+		super.extractRenderState(be, state, tickProgress, cameraPos, crumbling);
+		if (be.isRemoved())
+			return;
+
+		state.flag = CachedBuffers.partial(CRBlockPartials.CONDUCTOR_WHISTLE_FLAGS.get(be.getColor()),
+			Blocks.AIR.defaultBlockState());
+	}
+
+	@Override
+	public void submit(FlagRenderState state, PoseStack matrices, SubmitNodeCollector queue,
+					   CameraRenderState cameraState) {
+		super.submit(state, matrices, queue, cameraState);
+
+		if (state.flag != null) {
+			queue.submitCustomGeometry(matrices, RenderTypes.cutoutMovingBlock(),
+				(pose, consumer) -> state.flag
+					.light(state.lightCoords)
+					.renderInto(pose, consumer));
+		}
+	}
+
+	public static class FlagRenderState extends SmartBlockEntityRenderer.SmartRenderState {
+		public @Nullable SuperByteBuffer flag;
+	}
 }

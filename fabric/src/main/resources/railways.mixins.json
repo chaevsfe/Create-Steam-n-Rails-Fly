@@ -23,6 +23,7 @@
     "MixinBlockEntityType",
     "MixinCarriage",
     "MixinCopycatBlockEntity",
+    "MixinNavigation",
     "conductor_possession.MixinEntity",
     "conductor_possession.ServerPlayerMixin",
     "MixinStationBlockEntity",

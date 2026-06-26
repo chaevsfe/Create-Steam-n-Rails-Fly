@@ -18,6 +18,7 @@
 
 package com.railwayteam.railways.content.conductor.whistle;
 
+import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.content.conductor.ConductorEntity;
 import com.zurrtum.create.Create;
 import com.zurrtum.create.api.contraption.transformable.TransformableBlockEntity;
@@ -31,16 +32,19 @@ import com.zurrtum.create.content.trains.track.TrackTargetingBehaviour;
 import com.zurrtum.create.foundation.blockEntity.SmartBlockEntity;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import java.util.List;
 
 public class ConductorWhistleFlagBlockEntity extends SmartBlockEntity implements TransformableBlockEntity {
+
+    private static final String LOG_PREFIX = "[ConductorWhistleFlag]";
 
     public TrackTargetingBehaviour<GlobalStation> station;
     private boolean tickedOnce = false;
@@ -63,30 +67,47 @@ public class ConductorWhistleFlagBlockEntity extends SmartBlockEntity implements
         if (level.isClientSide())
             return;
 
-        if (station.getEdgePoint() == null)
+        if (station.getEdgePoint() == null) {
+            Railways.LOGGER.info("{} lazyTick: no edge point yet at {}; targetTrack={} validTrack={}",
+                LOG_PREFIX, getBlockPos(), station.getGlobalPosition(), station.hasValidTrack());
             station.tick();
-        if (station.getEdgePoint() != null)
+            Railways.LOGGER.info("{} lazyTick: edge point after tick at {} -> {}",
+                LOG_PREFIX, getBlockPos(), station.getEdgePoint() == null ? "<none>" : station.getEdgePoint().getId());
+        }
+        if (station.getEdgePoint() != null) {
             station.getEdgePoint().name = targetStationName();
+            Railways.LOGGER.info("{} lazyTick: station active at {} name={}",
+                LOG_PREFIX, getBlockPos(), station.getEdgePoint().name);
+        }
 
         if (tickedOnce) {
             boolean found = false;
             for (Train train : Create.RAILWAYS.trains.values()) {
                 Schedule schedule = train.runtime == null ? null : train.runtime.getSchedule();
                 if (schedule != null && schedule.entries.size() == 1 && schedule.entries.get(0).instruction instanceof DestinationInstruction destInst &&
-                        destInst.getData() != null && destInst.getData().getString("Text").equals(targetStationName())) {
+                        destInst.getData() != null && destInst.getData().getStringOr("Text", "").equals(targetStationName())) {
                     if (!train.runtime.completed) {
                         found = true;
+                        Railways.LOGGER.info("{} lazyTick: keeping flag at {}; train={} still targets {} completed={} navDestination={}",
+                            LOG_PREFIX, getBlockPos(), train.id, targetStationName(), train.runtime.completed,
+                            train.navigation.destination == null ? "<none>" : train.navigation.destination.name);
                         break;
                     } else {
+                        Railways.LOGGER.info("{} lazyTick: discarding completed auto schedule for train={} at flag {}",
+                            LOG_PREFIX, train.id, getBlockPos());
                         train.runtime.discardSchedule();
                     }
                 }
             }
             if (!found) {
+                Railways.LOGGER.info("{} lazyTick: removing flag at {}; no train schedule targets {}",
+                    LOG_PREFIX, getBlockPos(), targetStationName());
                 level.setBlock(this.getBlockPos(), Blocks.AIR.defaultBlockState(), 3);
                 return;
             }
         } else {
+            Railways.LOGGER.info("{} lazyTick: first tick complete at {}; stationName={}",
+                LOG_PREFIX, getBlockPos(), targetStationName());
             tickedOnce = true;
         }
     }
@@ -98,13 +119,15 @@ public class ConductorWhistleFlagBlockEntity extends SmartBlockEntity implements
         behaviours.add(station);
     }
 
-        protected void write(CompoundTag tag, boolean clientPacket) {
-        
-        tag.putByte("SelectedColor", ConductorEntity.idFrom(color));
+    @Override
+    protected void write(ValueOutput output, boolean clientPacket) {
+        super.write(output, clientPacket);
+        output.putByte("SelectedColor", ConductorEntity.idFrom(color));
     }
 
-        protected void read(CompoundTag tag, boolean clientPacket) {
-        
-        color = ConductorEntity.colorFrom(tag.getByte("SelectedColor").orElse((byte) 0));
+    @Override
+    protected void read(ValueInput input, boolean clientPacket) {
+        super.read(input, clientPacket);
+        color = ConductorEntity.colorFrom(input.getByteOr("SelectedColor", (byte) 0));
     }
 }
