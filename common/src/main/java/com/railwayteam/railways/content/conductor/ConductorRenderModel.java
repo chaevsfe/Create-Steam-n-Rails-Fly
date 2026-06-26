@@ -64,6 +64,17 @@ public class ConductorRenderModel extends EntityModel<ConductorRenderState> impl
         rightLeg.zRot = 0.0F;
         leftLeg.zRot = 0.0F;
 
+        if (state.isRiding) {
+            rightArm.xRot += (-(float) Math.PI / 2f);
+            leftArm.xRot += (-(float) Math.PI / 2f);
+            rightLeg.xRot = -1.4137167F;
+            rightLeg.yRot = (-(float) Math.PI / 20f);
+            rightLeg.zRot = 0.07853982F;
+            leftLeg.xRot = -1.4137167F;
+            leftLeg.yRot = ((float) Math.PI / 20f);
+            leftLeg.zRot = -0.07853982F;
+        }
+
         body.xRot = 0.0f;
         head.y = 10.0f;
         body.y = 19.0f;

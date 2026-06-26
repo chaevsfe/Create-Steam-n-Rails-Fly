@@ -33,6 +33,7 @@ public class ConductorRenderer extends MobRenderer<ConductorEntity, ConductorRen
         state.job = conductor.getJob();
         state.texture = textureFor(conductor, state.headStack);
 
+        state.isRiding = conductor.isPassenger();
         state.isHoldingSchedules = conductor.isHoldingSchedulesClient();
 
         state.isCarryingToolbox = conductor.isCarryingToolbox();

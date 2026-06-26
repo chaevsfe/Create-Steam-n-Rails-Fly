@@ -541,6 +541,13 @@ public class ConductorEntity extends AbstractGolem {
         super(type, level);
     }
 
+    @Override
+    public Vec3 getVehicleAttachmentPoint(Entity vehicle) {
+        // Raise the attachment point to the leg-body junction (5 model units = 5/16 blocks)
+        // so the conductor's butt lands on the seat surface rather than its feet.
+        return new Vec3(0, 5.0 / 16.0, 0);
+    }
+
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 20.0)

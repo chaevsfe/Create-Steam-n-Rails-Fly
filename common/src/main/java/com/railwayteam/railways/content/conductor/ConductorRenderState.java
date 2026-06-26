@@ -13,6 +13,9 @@ public class ConductorRenderState extends LivingEntityRenderState {
     public ConductorEntity.Job job = ConductorEntity.Job.DEFAULT;
     public Identifier texture = Railways.asResource("textures/entity/conductor.png");
 
+    // riding/sitting pose
+    public boolean isRiding = false;
+
     // flag layer
     public boolean isHoldingSchedules = false;
 
