@@ -2,6 +2,8 @@
 	"credit": "Made with Blockbench",
 	"parent": "create:block/track_overlay/station",
 	"textures": {
-		"1": "railways:block/track_switch_indicator_left_straight"
+		"1": "railways:block/track_switch_indicator_left_straight",
+		"1_2": "railways:block/track_switch_indicator_left_straight",
+		"particle": "railways:block/track_switch_indicator_left_straight"
 	}
 }

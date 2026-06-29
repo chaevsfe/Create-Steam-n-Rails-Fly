@@ -236,6 +236,16 @@ public abstract class TrackSwitchBlock extends HorizontalDirectionalBlock implem
     if (AllTags.AllItemTags.WRENCH.matches(itemInHand))
       return InteractionResult.PASS;
 
+    return useSwitch(level, pos, player);
+  }
+
+  @SuppressWarnings("deprecation")
+  protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
+                                                      @NotNull Player player, @NotNull BlockHitResult hit) {
+    return useSwitch(level, pos, player);
+  }
+
+  private @NotNull InteractionResult useSwitch(@NotNull Level level, @NotNull BlockPos pos, @NotNull Player player) {
     if (level.isClientSide()) {
       return InteractionResult.SUCCESS;
     }

@@ -11,10 +11,14 @@
 package com.railwayteam.railways.content.switches;
 
 import com.railwayteam.railways.content.switches.TrackSwitchBlock.SwitchState;
+import com.railwayteam.railways.mixin_interfaces.ISwitchDisabledEdge;
 import com.railwayteam.railways.registry.CREdgePointTypes;
+import com.zurrtum.create.catnip.data.Couple;
 import com.zurrtum.create.content.trains.graph.DimensionPalette;
 import com.zurrtum.create.content.trains.graph.EdgePointType;
+import com.zurrtum.create.content.trains.graph.TrackEdge;
 import com.zurrtum.create.content.trains.graph.TrackGraph;
+import com.zurrtum.create.content.trains.graph.TrackNode;
 import com.zurrtum.create.content.trains.graph.TrackNodeLocation;
 import com.zurrtum.create.content.trains.signal.SingleBlockEntityEdgePoint;
 import net.minecraft.nbt.CompoundTag;
@@ -28,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class TrackSwitch extends SingleBlockEntityEdgePoint {
 	private static int selectionPriorityTicker;
@@ -126,7 +131,7 @@ public class TrackSwitch extends SingleBlockEntityEdgePoint {
 	}
 
 	public boolean setSwitchState(@NotNull SwitchState state) {
-		if (!isStateValid(state))
+		if (state == null || !isStateValid(state))
 			return false;
 		if (switchState != state) {
 			switchState = state;
@@ -137,13 +142,13 @@ public class TrackSwitch extends SingleBlockEntityEdgePoint {
 	}
 
 	public @NotNull SwitchState getSwitchState() {
-		return switchState;
+		return switchState == null ? SwitchState.NORMAL : switchState;
 	}
 
 	public @Nullable TrackNodeLocation getSwitchTarget() {
 		if (exits.isEmpty())
 			return null;
-		int index = switch (switchState) {
+		int index = switch (getSwitchState()) {
 			case NORMAL -> 0;
 			case REVERSE_LEFT -> Math.min(1, exits.size() - 1);
 			case REVERSE_RIGHT -> exits.size() - 1;
@@ -164,7 +169,7 @@ public class TrackSwitch extends SingleBlockEntityEdgePoint {
 	}
 
 	public void write(CompoundTag nbt, DimensionPalette dimensions) {
-		nbt.putString("SwitchState", switchState.getSerializedName());
+		nbt.putString("SwitchState", getSwitchState().getSerializedName());
 		nbt.putBoolean("Automatic", automatic);
 		nbt.putBoolean("Locked", locked);
 		nbt.putBoolean("AutoTrainsSwitch", autoTrainsSwitch);
@@ -172,10 +177,16 @@ public class TrackSwitch extends SingleBlockEntityEdgePoint {
 
 	public void write(FriendlyByteBuf buffer, DimensionPalette dimensions) {
 		super.write(buffer, dimensions);
-		buffer.writeInt(switchState.ordinal());
+		buffer.writeInt(getSwitchState().ordinal());
 		buffer.writeBoolean(automatic);
 		buffer.writeBoolean(locked);
 		buffer.writeBoolean(autoTrainsSwitch);
+		boolean hasPoint = switchPoint != null;
+		buffer.writeBoolean(hasPoint);
+		if (hasPoint) {
+			switchPoint.send(buffer, dimensions);
+			buffer.writeCollection(exits, (buf, loc) -> loc.send(buf, dimensions));
+		}
 	}
 
 	public void read(CompoundTag nbt, boolean migration, DimensionPalette dimensions) {
@@ -196,6 +207,12 @@ public class TrackSwitch extends SingleBlockEntityEdgePoint {
 		automatic = buffer.readBoolean();
 		locked = buffer.readBoolean();
 		autoTrainsSwitch = buffer.readBoolean();
+		if (buffer.readBoolean()) {
+			updateExits(
+				TrackNodeLocation.receive(buffer, dimensions),
+				buffer.readList(buf -> TrackNodeLocation.receive(buf, dimensions))
+			);
+		}
 	}
 
 	boolean doForceTickClient() {
@@ -206,11 +223,132 @@ public class TrackSwitch extends SingleBlockEntityEdgePoint {
 	}
 
 	public void tick(TrackGraph graph, boolean preTrains) {
+		if (preTrains) {
+			updateEdges(graph);
+			if (automatic)
+				switchForEdges(graph);
+		}
 	}
 
 	public void updateEdges(TrackGraph graph) {
+		updateEdges(graph, false);
 	}
 
 	public void setEdgesActive(TrackGraph graph) {
+		updateEdges(graph, true);
+	}
+
+	private void updateEdges(TrackGraph graph, boolean forceActive) {
+		TrackNodeLocation from = switchPoint;
+		for (TrackNodeLocation to : exits) {
+			if (to == null)
+				continue;
+
+			TrackNode toNode = graph.locateNode(to);
+			Map<TrackNode, TrackEdge> connections = graph.getConnectionsFrom(toNode);
+			if (connections == null)
+				continue;
+
+			TrackNode closestFromNode = null;
+			TrackEdge closestEdge = null;
+			double closestDistance = Double.MAX_VALUE;
+			for (Map.Entry<TrackNode, TrackEdge> otherEnd : connections.entrySet()) {
+				double distance = otherEnd.getKey().getLocation().distSqr(from);
+				if (distance < closestDistance) {
+					closestDistance = distance;
+					closestEdge = otherEnd.getValue();
+					closestFromNode = otherEnd.getKey();
+				}
+			}
+
+			boolean enabled = forceActive || getSwitchTarget() == to;
+			boolean autoSelectable = !forceActive && automatic && !locked && autoTrainsSwitch;
+			if (closestEdge != null)
+				updateSwitchEdge(closestEdge, enabled, autoSelectable);
+
+			if (closestFromNode != null) {
+				TrackEdge reverseEdge = graph.getConnection(Couple.create(closestFromNode, toNode));
+				if (reverseEdge != null)
+					updateSwitchEdge(reverseEdge, enabled, autoSelectable);
+			}
+		}
+	}
+
+	private static void updateSwitchEdge(TrackEdge edge, boolean enabled, boolean autoSelectable) {
+		ISwitchDisabledEdge switchEdge = (ISwitchDisabledEdge) edge.getEdgeData();
+		switchEdge.setEnabled(enabled);
+		switchEdge.setAutomatic(autoSelectable);
+	}
+
+	private void switchForEdges(TrackGraph graph) {
+		TrackNodeLocation from = switchPoint;
+		TrackNodeLocation highestPriorityExit = null;
+		int highestPriority = -100;
+		for (TrackNodeLocation to : exits) {
+			if (to == null)
+				continue;
+
+			TrackNode toNode = graph.locateNode(to);
+			Map<TrackNode, TrackEdge> connections = graph.getConnectionsFrom(toNode);
+			if (connections == null)
+				continue;
+
+			TrackNode closestFromNode = null;
+			TrackEdge closestEdge = null;
+			double closestDistance = Double.MAX_VALUE;
+			for (Map.Entry<TrackNode, TrackEdge> otherEnd : connections.entrySet()) {
+				double distance = otherEnd.getKey().getLocation().distSqr(from);
+				if (distance < closestDistance) {
+					closestDistance = distance;
+					closestEdge = otherEnd.getValue();
+					closestFromNode = otherEnd.getKey();
+				}
+			}
+
+			if (closestEdge != null) {
+				ISwitchDisabledEdge switchEdge = (ISwitchDisabledEdge) closestEdge.getEdgeData();
+				if (switchEdge.isAutomaticallySelected()) {
+					if (switchEdge.getAutomaticallySelectedPriority() > highestPriority) {
+						highestPriorityExit = to;
+						highestPriority = switchEdge.getAutomaticallySelectedPriority();
+					}
+					switchEdge.ackAutomaticSelection();
+				}
+			}
+
+			if (closestFromNode != null) {
+				TrackEdge reverseEdge = graph.getConnection(Couple.create(closestFromNode, toNode));
+				if (reverseEdge != null) {
+					ISwitchDisabledEdge reverseSwitchEdge = (ISwitchDisabledEdge) reverseEdge.getEdgeData();
+					if (reverseSwitchEdge.isAutomaticallySelected()) {
+						if (reverseSwitchEdge.getAutomaticallySelectedPriority() > highestPriority) {
+							highestPriorityExit = to;
+							highestPriority = reverseSwitchEdge.getAutomaticallySelectedPriority();
+						}
+						reverseSwitchEdge.ackAutomaticSelection();
+					}
+				}
+			}
+		}
+
+		if (highestPriorityExit != null) {
+			for (SwitchState state : SwitchState.values()) {
+				if (highestPriorityExit == getSwitchTarget(state)) {
+					setSwitchState(state);
+					break;
+				}
+			}
+		}
+	}
+
+	private @Nullable TrackNodeLocation getSwitchTarget(SwitchState state) {
+		if (exits.isEmpty())
+			return null;
+		int index = switch (state) {
+			case NORMAL -> 0;
+			case REVERSE_LEFT -> Math.min(1, exits.size() - 1);
+			case REVERSE_RIGHT -> exits.size() - 1;
+		};
+		return exits.get(index);
 	}
 }
