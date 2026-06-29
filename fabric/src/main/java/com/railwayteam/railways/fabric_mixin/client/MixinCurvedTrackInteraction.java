@@ -2,6 +2,7 @@ package com.railwayteam.railways.fabric_mixin.client;
 
 import com.railwayteam.railways.content.custom_tracks.casing.CasingChecker;
 import com.railwayteam.railways.content.custom_tracks.casing.SlabUseOnCurvePacket;
+import com.railwayteam.railways.content.handcar.HandcarItem;
 import com.railwayteam.railways.registry.CRPackets;
 import com.railwayteam.railways.registry.CRTrackMaterials;
 import com.railwayteam.railways.util.AdventureUtils;
@@ -50,6 +51,12 @@ public abstract class MixinCurvedTrackInteraction {
             return;
 
         ItemStack held = player.getMainHandItem();
+        if (held.getItem() instanceof HandcarItem handcar && handcar.useOnCurve(result, held)) {
+            player.swing(InteractionHand.MAIN_HAND);
+            cir.setReturnValue(true);
+            return;
+        }
+
         if (!held.isEmpty()) {
             if (!(held.getItem() instanceof BlockItem block))
                 return;
