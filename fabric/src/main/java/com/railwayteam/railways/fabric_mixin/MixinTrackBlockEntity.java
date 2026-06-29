@@ -1,5 +1,8 @@
 package com.railwayteam.railways.fabric_mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.content.custom_tracks.casing.CasingChecker;
 import com.railwayteam.railways.content.custom_tracks.casing.CasingCollisionUtils;
 import com.railwayteam.railways.mixin_interfaces.IHasTrackCasing;
@@ -25,7 +28,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import net.minecraft.world.level.storage.ValueInput;
+
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.function.Consumer;
 
 @Mixin(value = TrackBlockEntity.class, remap = false)
 public abstract class MixinTrackBlockEntity extends SmartBlockEntity implements IHasTrackCasing {
@@ -110,5 +117,25 @@ public abstract class MixinTrackBlockEntity extends SmartBlockEntity implements 
         if (railways$trackCasing == null || railways$isAlternateModel || level instanceof SchematicLevel)
             return;
         CasingCollisionUtils.manageTracks((TrackBlockEntity) (Object) this, false);
+    }
+
+    /**
+     * Old ponder schematics (pre-Create-Fly) saved BezierConnection data in a different NBT format.
+     * Create Fly's BezierConnection constructor calls orElseThrow() on required codec fields, crashing
+     * when those fields are absent. Wrap the forEach so each entry is skipped (with a warning) rather
+     * than crashing the whole ponder scene load.
+     */
+    @SuppressWarnings("unchecked")
+    @WrapOperation(method = "read",
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/ValueInput$ValueInputList;forEach(Ljava/util/function/Consumer;)V"),
+        remap = false)
+    private void railways$safeLoadBezierConnections(ValueInput.ValueInputList list, Consumer<?> consumer, Operation<Void> original) {
+        for (ValueInput item : list) {
+            try {
+                ((Consumer<Object>) consumer).accept(item);
+            } catch (NoSuchElementException e) {
+                Railways.LOGGER.warn("railways: Skipping BezierConnection with incompatible format (old schematic?): {}", e.getMessage());
+            }
+        }
     }
 }

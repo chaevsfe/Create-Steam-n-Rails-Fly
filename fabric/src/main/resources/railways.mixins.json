@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "client.BlockElementDeserializerMixin",
+    "client.MixinBogeyBlockEntityVisual",
     "client.MixinCurvedTrackInteraction",
     "client.MixinKeyboardHandler",
     "client.MixinObjGeometryModelMesh",
