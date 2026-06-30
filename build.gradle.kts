@@ -56,7 +56,6 @@ val buildNumber = System.getenv("GITHUB_RUN_NUMBER")?.toInt()
 val removeDevMixinAnyway = System.getenv("REMOVE_DEV_MIXIN_ANYWAY")?.toBoolean() ?: false
 // whether the build should include dev commands, even in a non-dev environment
 val includeDevCommands = !isRelease && System.getenv("INCLUDE_DEV_COMMANDS")?.toBoolean() ?: false
-val artifactNameSuffix = "-r2"
 val gitHash = "\"${calculateGitHash() + (if (hasUnstaged()) "-modified" else "")}\""
 
 if (!isRelease && removeDevMixinAnyway) {
@@ -88,9 +87,8 @@ allprojects {
     base.archivesName.set("archives_base_name"())
     group = "maven_group"()
 
-    // Formats the mod version to include the loader, Minecraft version, and build number (if present)
-    // example: 1.0.0+fabric-1.19.2-build.100 (or -local)
-    val build = buildNumber?.let { "-build.${it}" } ?: "-local"
+    // Formats the mod version to include the loader and Minecraft version.
+    // example: 1.0.0+fabric-mc1.19.2
 
     var gitBranchLabel = "";
     if (!isRelease && "mod_version"().endsWith("-alpha")) {
@@ -98,7 +96,7 @@ allprojects {
         gitBranchLabel = "-" + calculateGitBranch().replace("/", "_")
     }
 
-    version = "${"mod_version"()}${gitBranchLabel}+${project.name}-mc${"minecraft_version"() + if (isRelease) "" else build}"
+    version = "${"mod_version"()}${gitBranchLabel}+${project.name}-mc${"minecraft_version"()}"
 
     tasks.withType<JavaCompile>().configureEach {
         options.encoding = "UTF-8"
@@ -186,7 +184,7 @@ subprojects {
             val appendix = archiveAppendix.orNull?.takeIf { it.isNotEmpty() }?.let { "-$it" } ?: ""
             val version = archiveVersion.orNull?.takeIf { it.isNotEmpty() }?.let { "-$it" } ?: ""
             val classifier = archiveClassifier.orNull?.takeIf { it.isNotEmpty() }?.let { "-$it" } ?: ""
-            "${archiveBaseName.get()}$appendix$version$classifier$artifactNameSuffix.${archiveExtension.get()}"
+            "${archiveBaseName.get()}$appendix$version$classifier.${archiveExtension.get()}"
         })
     }
 
@@ -237,12 +235,6 @@ subprojects {
             include("resourcepacks/")
         }
 
-        // Trim -build.X+mcX.XX.X from version string
-        //val createFabricVersion: String = Regex("(\\d+\\.\\d+\\.\\d+-\\w)").find("create_fabric_version"())?.value.toString()
-
-        val createForgeVersion = "create_forge_version"().split("-")[0]
-        val createForgeVersionRange = (rootProject.ext["create_forge_version_range"] as String?) ?: createForgeVersion
-
         // set up properties for filling into metadata
         val properties = mapOf(
                 "version" to version,
@@ -250,16 +242,13 @@ subprojects {
                 "fabric_api_version" to "fabric_api_version"(),
                 "fabric_loader_version" to "fabric_loader_version"(),
                 "voicechat_api_version" to "voicechat_api_version"(),
-                "forge_version" to "forge_version"().split(".")[0], // only specify major version of forge
-                "create_forge_version" to createForgeVersion,
-                "create_forge_version_range" to createForgeVersionRange,
                 "create_fabric_version" to "create_fabric_version"(),
                 "create_fabric_version_range" to "create_fabric_version_range"(),
         )
 
         inputs.properties(properties)
 
-        filesMatching(listOf("fabric.mod.json", "META-INF/mods.toml")) {
+        filesMatching("fabric.mod.json") {
             expand(properties)
         }
     }
@@ -288,7 +277,6 @@ subprojects {
         }
     }
 
-    val isFabric = project.name == "fabric"
     val releaseType =
         if (version.toString().contains("alpha")) {
             ReleaseType.ALPHA;
@@ -303,27 +291,19 @@ subprojects {
         changelog = ChangelogText.getChangelogText(rootProject).toString()
         type = releaseType
         displayName = "Steam 'n' Rails ${"mod_version"()} $capitalizedName ${"minecraft_version"()} C${"create_display_version"()}"
-        if (isFabric) {
-            modLoaders.add("fabric")
-            modLoaders.add("quilt")
-        } else {
-            modLoaders.add("forge")
-            modLoaders.add("neoforge")
-        }
+        modLoaders.add("fabric")
+        modLoaders.add("quilt")
 
-        val createVersionType = if (project.name == "fabric") "create-fly" else "create"
         curseforge {
             projectId = "curseforge_id"()
             accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
             minecraftVersions.add("minecraft_version"())
 
             requires {
-                slug = createVersionType
+                slug = "create-fly"
             }
 
-            if (isFabric) {
-                requires("fabric-api")
-            }
+            requires("fabric-api")
         }
 
         modrinth {
@@ -332,12 +312,10 @@ subprojects {
             minecraftVersions.add("minecraft_version"())
 
             requires {
-                slug = createVersionType
+                slug = "create-fly"
             }
 
-            if (isFabric) {
-                requires("fabric-api")
-            }
+            requires("fabric-api")
         }
     }
 }
@@ -425,11 +403,11 @@ fun <T> getValueFromAnnotation(annotation: AnnotationNode?, key: String): T? {
 
 tasks.register("railwaysPublish") {
     when (val platform = System.getenv("PLATFORM")) {
-        "both" -> {
-            dependsOn(tasks.build, ":fabric:publish", ":forge:publish", ":common:publish", ":fabric:publishMods", ":forge:publishMods")
+        null, "", "fabric" -> {
+            dependsOn(":fabric:build", ":fabric:publish", ":fabric:publishMods")
         }
-        "fabric", "forge" -> {
-            dependsOn("${platform}:build", "${platform}:publish", "${platform}:publishMods")
+        else -> {
+            throw GradleException("Unsupported PLATFORM '$platform'; this project only publishes Fabric builds.")
         }
     }
 }
@@ -453,12 +431,10 @@ fun Project.setupRepositories() {
         }
         maven("https://maven.maxhenkel.de/repository/public") // Simple Voice Chat
         maven("https://maven.jamieswhiteshirt.com/libs-release") // Reach Entity Attributes
-        exclusiveMaven("https://thedarkcolour.github.io/KotlinForForge/", "thedarkcolour") // KFF (Hex Casting dependency)
         maven("https://maven.terraformersmc.com/releases/") // Mod Menu, EMI
-        maven("https://mvn.devos.one/snapshots/") // Create Fabric, Porting Lib, Forge Tags, Milk Lib, Registrate Fabric
+        maven("https://mvn.devos.one/snapshots/") // Create Fabric, Porting Lib, Milk Lib, Registrate Fabric
         maven("https://mvn.devos.one/releases/") // Porting Lib
         maven("https://maven.cafeteria.dev/releases") // Fake Player API
-        maven("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/") // forge config api port
         exclusiveMaven("https://maven.ladysnake.org/releases", "dev.onyxstudios.cardinal-components-api") // Cardinal Components (Hex Casting dependency)
         maven("https://jitpack.io/") { // Mixin Extras, Fabric ASM
             content {
