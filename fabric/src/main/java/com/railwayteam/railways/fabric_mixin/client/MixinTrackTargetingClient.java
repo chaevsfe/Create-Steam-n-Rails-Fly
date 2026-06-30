@@ -1,6 +1,7 @@
 package com.railwayteam.railways.fabric_mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.railwayteam.railways.content.switches.TrackSwitchDebugVisualizer;
 import com.railwayteam.railways.util.CustomTrackOverlayRendering;
 import com.zurrtum.create.client.catnip.render.SuperRenderTypeBuffer;
 import com.zurrtum.create.client.content.trains.track.TrackTargetingClient;
@@ -33,6 +34,12 @@ public abstract class MixinTrackTargetingClient {
 
     @Shadow
     static BezierTrackPointLocation lastHoveredBezierSegment;
+
+    @Inject(method = "render", at = @At("HEAD"))
+    private static void railways$renderSwitchHints(Minecraft mc, PoseStack ms, SuperRenderTypeBuffer buffer,
+                                                   Vec3 camera, CallbackInfo ci) {
+        TrackSwitchDebugVisualizer.visualizePotentialLocations();
+    }
 
     @Inject(
         method = "render",

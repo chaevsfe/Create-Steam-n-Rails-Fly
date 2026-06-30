@@ -13,6 +13,7 @@
     "client.MixinSegmentAngles",
     "client.MixinTrackVisual",
     "client.MixinTrackTargetingClient",
+    "client.MixinTrainHUD",
     "client.MixinRadialToolboxMenu",
     "client.MixinSlidingDoorRenderer",
     "client.MixinToolboxHandlerClient",
@@ -22,12 +23,14 @@
     "conductor_possession.MixinMinecraft"
   ],
   "mixins": [
+    "MixinCarriageContraptionEntity",
     "MixinBezierConnection",
     "MixinBlockEntityType",
     "MixinCarriage",
     "MixinCopycatBlockEntity",
     "MixinEdgeData",
     "MixinNavigation",
+    "MixinNavigationSearchable",
     "MixinTrackEdge",
     "MixinTravellingPoint",
     "MixinTrainHandcar",

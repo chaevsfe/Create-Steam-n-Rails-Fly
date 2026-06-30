@@ -1,6 +1,6 @@
 /*
  * Steam 'n' Rails
- * Copyright (c) 2022-2026 The Railways Team
+ * Copyright (c) 2022-2025 The Railways Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,31 +16,29 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.railwayteam.railways.mixin.client;
+package com.railwayteam.railways.fabric_mixin.client;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.railwayteam.railways.content.switches.TrainHUDSwitchExtension;
-import com.railwayteam.railways.mixin_interfaces.ITrueMaxSpeedTrain;
-import com.zurrtum.create.content.trains.TrainHUD;
-import com.zurrtum.create.content.trains.entity.Train;
+import com.zurrtum.create.client.content.trains.TrainHUD;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = TrainHUD.class, remap = false)
 public class MixinTrainHUD {
     @Inject(method = "tick", at = @At("HEAD"))
-    private static void tickHook(CallbackInfo ci) {
+    private static void railways$tickHook(Minecraft mc, CallbackInfo ci) {
         TrainHUDSwitchExtension.tickAnimation();
     }
 
-    @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/trains/entity/Train;maxSpeed()F"))
-    private static float unlimitMaxSpeed(Train instance, Operation<Float> original) {
-        ((ITrueMaxSpeedTrain) instance).railways$setLimitBypass(true);
-        float result = original.call(instance);
-        ((ITrueMaxSpeedTrain) instance).railways$setLimitBypass(false);
-        return result;
+    @Inject(method = "renderOverlay", at = @At("HEAD"))
+    private static void railways$renderOverlayHook(Minecraft mc, GuiGraphics graphics, DeltaTracker deltaTracker, CallbackInfoReturnable<Boolean> ci) {
+        TrainHUDSwitchExtension.renderOverlay(graphics, deltaTracker.getGameTimeDeltaPartialTick(false),
+                mc.getWindow().getGuiScaledWidth(), mc.getWindow().getGuiScaledHeight());
     }
 }
