@@ -3,12 +3,12 @@
   "id": "railways",
   "version": "${version}",
   "name": "Create: Steam 'n' Rails",
-  "description": "Customization and extension of Create rail systems and steam system",
+  "description": "Unofficial port of Create: Steam 'n' Rails to Create Fly 1.21.11",
   "authors": [
-    "The Railways Team"
+    "R2bEEaton"
   ],
   "contact": {
-    "sources": "https://github.com/Layers-of-Railways/Railway/"
+    "sources": "https://github.com/R2bEEaton-Minecraft/Railway/"
   },
   "license": ["LGPL v3"],
   "icon": "assets/railways/icon.png",
@@ -37,9 +37,8 @@
   "custom": {
     "modmenu": {
       "links": {
-        "Modrinth": "https://modrinth.com/mod/create-steam-n-rails",
-        "CurseForge": "https://curseforge.com/minecraft/mc-mods/create-steam-n-rails",
-        "Discord": "https://discord.gg/md78MGbEfK"
+        "Modrinth": "https://modrinth.com/mod/steam-n-rails-fly",
+        "CurseForge": "https://curseforge.com/minecraft/mc-mods/steam-n-rails-fly"
       }
     }
   }
