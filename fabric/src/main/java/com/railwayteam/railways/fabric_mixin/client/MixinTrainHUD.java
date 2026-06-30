@@ -20,6 +20,7 @@ package com.railwayteam.railways.fabric_mixin.client;
 
 import com.railwayteam.railways.content.switches.TrainHUDSwitchExtension;
 import com.zurrtum.create.client.content.trains.TrainHUD;
+import com.zurrtum.create.content.trains.entity.CarriageContraptionEntity;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -33,6 +34,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinTrainHUD {
     @Inject(method = "tick", at = @At("HEAD"))
     private static void railways$tickHook(Minecraft mc, CallbackInfo ci) {
+        if (mc.player != null && !(mc.player.getVehicle() instanceof CarriageContraptionEntity))
+            TrainHUDSwitchExtension.clearSwitchState();
         TrainHUDSwitchExtension.tickAnimation();
     }
 
