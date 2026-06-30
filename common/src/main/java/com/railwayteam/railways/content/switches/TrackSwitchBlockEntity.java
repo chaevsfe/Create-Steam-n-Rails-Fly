@@ -49,7 +49,6 @@ import com.zurrtum.create.catnip.math.VecHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.Level;
@@ -57,6 +56,8 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.ApiStatus;
@@ -250,7 +251,7 @@ public class TrackSwitchBlockEntity extends SmartBlockEntity implements Transfor
                 .map(e -> e.node2.getLocation())
                 .collect(toSet());
 
-        if (Math.abs(loc.position - (edge.getLength()-0.5)) > 0.5) {
+        if (Math.abs(loc.position - (edge.getLength() - 0.5)) > 0.5) {
             exits = Set.of();
         }
 
@@ -468,30 +469,34 @@ public class TrackSwitchBlockEntity extends SmartBlockEntity implements Transfor
         }
     }
 
-        protected void write(CompoundTag tag, boolean clientPacket) {
-        
+    @Override
+    protected void write(ValueOutput output, boolean clientPacket) {
+        super.write(output, clientPacket);
+
         if (clientPacket)
-            tag.putString("SwitchState", (state == null ? SwitchState.NORMAL : state).getSerializedName());
-        tag.putInt("AnalogOutput", lastAnalogOutput);
+            output.putString("SwitchState", (state == null ? SwitchState.NORMAL : state).getSerializedName());
+        output.putInt("AnalogOutput", lastAnalogOutput);
         byte previousPowerState = 0;
         for (int i = 0; i < 6; i++) {
             previousPowerState |= (previousPower[i] ? 1 : 0) << i;
         }
-        tag.putByte("PreviousPowerState", previousPowerState);
+        output.putByte("PreviousPowerState", previousPowerState);
     }
 
-        protected void read(CompoundTag tag, boolean clientPacket) {
-        
+    @Override
+    protected void read(ValueInput input, boolean clientPacket) {
+        super.read(input, clientPacket);
+
         if (clientPacket) {
-            String switchState = tag.getString("SwitchState").orElse("").toUpperCase(Locale.ROOT);
+            String switchState = input.getStringOr("SwitchState", "").toUpperCase(Locale.ROOT);
             try {
                 state = SwitchState.valueOf(switchState);
             } catch (IllegalArgumentException e) {
                 Railways.LOGGER.error("Failed to read SwitchState", e);
             }
         }
-        lastAnalogOutput = tag.getInt("AnalogOutput").orElse(0);
-        byte previousPowerState = tag.getByte("PreviousPowerState").orElse((byte) 0);
+        lastAnalogOutput = input.getIntOr("AnalogOutput", 0);
+        byte previousPowerState = input.getByteOr("PreviousPowerState", (byte) 0);
         for (int i = 0; i < 6; i++) {
             previousPower[i] = (previousPowerState & (1 << i)) != 0;
         }

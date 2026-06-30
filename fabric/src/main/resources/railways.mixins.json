@@ -12,6 +12,7 @@
     "client.MixinSectionCompiler",
     "client.MixinSegmentAngles",
     "client.MixinTrackVisual",
+    "client.MixinTrackTargetingClient",
     "client.MixinRadialToolboxMenu",
     "client.MixinSlidingDoorRenderer",
     "client.MixinToolboxHandlerClient",
@@ -35,6 +36,8 @@
     "MixinStationBlockEntity",
     "MixinTrackBlock",
     "MixinTrackBlockEntity",
+    "MixinTrackTargetingBlockItem",
+    "MixinTrackTargetingBlockItem$MixinOverlapResult",
     "MixinToolboxHandler"
   ],
   "injectors": {
