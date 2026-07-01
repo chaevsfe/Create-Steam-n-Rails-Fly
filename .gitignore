@@ -43,3 +43,8 @@ PORT_HANDOFF.md
 /development_assets/venv/
 /common/src/main/resources/assets/minecraft/textures/block/
 /.architectury-transformer/
+
+last_run_console.txt
+last_run_error.txt
+.vscode/*
+net/*
