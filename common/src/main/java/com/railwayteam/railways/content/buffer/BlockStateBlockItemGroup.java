@@ -129,7 +129,10 @@ public class BlockStateBlockItemGroup<C, T extends BlockStateBlockItemGroup.ISty
 
             items.put(v, itemTransformer.apply(itemBuilder)
                 .lang(v.getLangName(context))
-                .onRegisterAfter(Registries.ITEM, i -> ItemDescription.useKey(i, tooltipKey))
+                .onRegisterAfter(Registries.ITEM, i -> {
+                    if (Env.CLIENT.isCurrent())
+                        ItemDescription.useKey(i, tooltipKey);
+                })
                 .tag(cycleTag)
                 .register());
             primary = false;

@@ -20,6 +20,7 @@ package com.railwayteam.railways.registry;
 
 import com.railwayteam.railways.ModSetup;
 import com.railwayteam.railways.Railways;
+import com.railwayteam.railways.multiloader.Env;
 import com.railwayteam.railways.base.data.BuilderTransformers;
 import com.railwayteam.railways.content.buffer.BlockStateBlockItem;
 import com.railwayteam.railways.content.buffer.BlockStateBlockItemGroup;
@@ -137,6 +138,15 @@ public class CRBlocks {
 
     private static final CreateRegistrate REGISTRATE = Railways.registrate();
 
+    /**
+     * ItemDescription is a client-only Create Fly class; tooltip descriptions only matter for
+     * rendering, so skip this entirely on a dedicated server rather than crash trying to load it.
+     */
+    private static void useTooltipDescriptionKey(net.minecraft.world.level.ItemLike item, String key) {
+        if (Env.CLIENT.isCurrent())
+            ItemDescription.useKey(item, key);
+    }
+
     private static BlockEntry<TrackBlock> makeTrack(TrackMaterial material) {
         return makeTrack(material, (c, p) -> {
         });
@@ -186,7 +196,7 @@ public class CRBlocks {
             .build()
             .onRegisterAfter(Registries.ITEM, block -> {
                 if (isPhantomTrack(material))
-                    ItemDescription.useKey(block, "block.railways.track_phantom");
+                    useTooltipDescriptionKey(block, "block.railways.track_phantom");
             })
             .register();
     }
@@ -236,9 +246,9 @@ public class CRBlocks {
                 .tag(cycleTag)
             .onRegisterAfter(Registries.ITEM, v -> {
                 if (styled)
-                    ItemDescription.useKey(v, "block.railways.smokestack");
+                    useTooltipDescriptionKey(v, "block.railways.smokestack");
                 else
-                    ItemDescription.useKey(v, "block.railways.smokestack_caboosestyle");
+                    useTooltipDescriptionKey(v, "block.railways.smokestack_caboosestyle");
             })
             .build()
             .register();
@@ -286,7 +296,7 @@ public class CRBlocks {
             .tab(CRCreativeModeTabs.getBaseTabKey())
             .tag(cycleTag)
             .build()
-            .onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.railways.smokestack"))
+            .onRegisterAfter(Registries.ITEM, v -> useTooltipDescriptionKey(v, "block.railways.smokestack"))
             .register();
 
         BlockEntry<SmokeStackExtenderBlock> EXTENDER = REGISTRATE.block("smokestack_" + variant + "_extension", p -> new SmokeStackExtenderBlock(p, rotType, shape, cycleGroupSupplier, baseSupplier, variationType.property, variationType.defaultPart))
@@ -530,7 +540,7 @@ public class CRBlocks {
             .item(HandcarItem::new)
             .properties(p -> p.stacksTo(1))
             .build()
-            .onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.railways.handcar"))
+            .onRegisterAfter(Registries.ITEM, v -> useTooltipDescriptionKey(v, "block.railways.handcar"))
             .lang("Handcar")
             .register();
 
@@ -771,7 +781,7 @@ public class CRBlocks {
         .transform(BuilderTransformers.variantBufferItem())
         .transform(customItemModel())
         .build()
-        .onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.railways.track_buffer"))
+        .onRegisterAfter(Registries.ITEM, v -> useTooltipDescriptionKey(v, "block.railways.track_buffer"))
         .register();
 
     public static final BlockEntry<NarrowTrackBufferBlock> TRACK_BUFFER_NARROW = REGISTRATE.block("buffer_narrow", NarrowTrackBufferBlock::new)
@@ -844,7 +854,7 @@ public class CRBlocks {
         .item()
         .transform(BuilderTransformers.variantBufferItem())
         .build()
-        .onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.railways.buffer"))
+        .onRegisterAfter(Registries.ITEM, v -> useTooltipDescriptionKey(v, "block.railways.buffer"))
         .register();
 
     public static final BlockEntry<GenericDyeableSingleBufferBlock> SMALL_BUFFER = REGISTRATE.block("small_buffer", GenericDyeableSingleBufferBlock.createFactory(CRShapes.SMALL_BUFFER))
@@ -857,7 +867,7 @@ public class CRBlocks {
         .item()
         .transform(BuilderTransformers.variantBufferItem())
         .build()
-        .onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.railways.buffer"))
+        .onRegisterAfter(Registries.ITEM, v -> useTooltipDescriptionKey(v, "block.railways.buffer"))
         .register();
 
     public static final BlockEntry<HeadstockBlock> HEADSTOCK = REGISTRATE.block("headstock", HeadstockBlock::new)

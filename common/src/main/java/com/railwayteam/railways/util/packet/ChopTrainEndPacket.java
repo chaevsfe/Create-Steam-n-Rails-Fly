@@ -18,15 +18,10 @@
 
 package com.railwayteam.railways.util.packet;
 
-import com.railwayteam.railways.mixin.AccessorTrain;
 import com.railwayteam.railways.multiloader.S2CPacket;
-import com.zurrtum.create.client.CreateClient;
 import com.zurrtum.create.content.trains.entity.Train;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.Level;
 
 import java.util.UUID;
 
@@ -51,22 +46,7 @@ public class ChopTrainEndPacket implements S2CPacket {
         buffer.writeInt(this.numberOfCarriages);
         buffer.writeBoolean(this.doubleEnded);
     }
-    @Environment(EnvType.CLIENT)
     public void handle(Minecraft mc) {
-        Level level = mc.level;
-        if (level != null) {
-            Train train = CreateClient.RAILWAYS.trains.get(trainId);
-            if (train != null) {
-                for (int i = 0; i < numberOfCarriages; i++) {
-                    train.carriages.remove(train.carriages.size() - 1);
-                    train.carriageSpacing.remove(train.carriageSpacing.size() - 1);
-                }
-                double[] originalStress = ((AccessorTrain) train).railways$getStress();
-                double[] newStress = new double[originalStress.length - numberOfCarriages];
-                System.arraycopy(originalStress, 0, newStress, 0, newStress.length);
-                ((AccessorTrain) train).railways$setStress(newStress);
-                train.doubleEnded = doubleEnded;
-            }
-        }
+        ClientPacketHandlers.handleChopTrainEnd(mc, trainId, numberOfCarriages, doubleEnded);
     }
 }

@@ -28,9 +28,8 @@ import com.railwayteam.railways.content.palettes.PalettesColor;
 import com.railwayteam.railways.content.palettes.PalettesFlywheelBlock;
 import com.railwayteam.railways.content.palettes.RotatedPillarWindowBlock;
 import com.railwayteam.railways.content.palettes.boiler.BoilerBlock;
-import com.railwayteam.railways.content.palettes.ct.BoilerCTBehaviour;
-import com.railwayteam.railways.content.palettes.ct.PalettesPillarCTBehaviour;
 import com.railwayteam.railways.content.palettes.doors.HingedDoorBlock;
+import com.railwayteam.railways.multiloader.Env;
 import com.railwayteam.railways.content.palettes.doors.PalettesSlidingDoorBlock;
 import com.railwayteam.railways.content.palettes.hazard_stripes.HazardStripesBlock;
 import com.railwayteam.railways.content.palettes.painting.PaintFluid;
@@ -43,9 +42,8 @@ import com.zurrtum.create.content.contraptions.behaviour.TrapdoorMovingInteracti
 import com.zurrtum.create.content.decoration.MetalLadderBlock;
 import com.zurrtum.create.content.decoration.slidingDoor.SlidingDoorMovementBehaviour;
 import com.zurrtum.create.content.kinetics.flywheel.FlywheelBlock;
-import com.zurrtum.create.client.foundation.block.connected.SimpleCTBehaviour;
-import com.zurrtum.create.foundation.data.CreateRegistrate;
 import com.zurrtum.create.client.foundation.item.ItemDescription;
+import com.zurrtum.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.loot.RegistrateBlockLootTables;
@@ -85,12 +83,20 @@ import java.util.function.Supplier;
 import static com.railwayteam.railways.util.TextUtils.*;
 import static com.railwayteam.railways.util.CreateBehaviourCompat.interactionBehaviour;
 import static com.railwayteam.railways.util.CreateBehaviourCompat.movementBehaviour;
-import static com.zurrtum.create.foundation.data.CreateRegistrate.connectedTextures;
 import static com.zurrtum.create.foundation.data.ModelGen.customItemModel;
 
 public class CRPalettes {
     private static final CreateRegistrate REGISTRATE = Railways.registrate();
     private static final Map<Block, Pair<Styles, PalettesColor>> REVERSE_LOOKUP = new HashMap<>(Styles.values().length * PalettesColor.values().length, 2);
+
+    /**
+     * ItemDescription is a client-only Create Fly class; tooltip descriptions only matter for
+     * rendering, so skip this entirely on a dedicated server rather than crash trying to load it.
+     */
+    private static void useTooltipDescriptionKey(net.minecraft.world.level.ItemLike item, String key) {
+        if (Env.CLIENT.isCurrent())
+            ItemDescription.useKey(item, key);
+    }
 
     public static void register() { // registration order is important for a clean inventory layout
         ModSetup.usePalettesTab();
@@ -293,12 +299,11 @@ public class CRPalettes {
         return REGISTRATE.block(joinUnderscore(colorString, "slashed_locometal"), Block::new)
             .transform(transformer.get())
             .transform(BuilderTransformers.locoMetalBase(color, "slashed"))
-            .onRegister(connectedTextures(() -> new SimpleCTBehaviour(CRSpriteShifts.SLASHED_LOCOMETAL.get(color))))
             .lang(joinSpace(colorName, "Slashed Locometal"))
             .item()
             .transform(BuilderTransformers.locoMetalItem(color))
             .tag(tags)
-            .onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.railways.generic_radial"))
+            .onRegisterAfter(Registries.ITEM, v -> useTooltipDescriptionKey(v, "block.railways.generic_radial"))
             .build()
             .register();
     }
@@ -308,12 +313,11 @@ public class CRPalettes {
         return REGISTRATE.block(joinUnderscore(colorString, "riveted_locometal"), Block::new)
             .transform(transformer.get())
             .transform(BuilderTransformers.locoMetalBase(color, "riveted"))
-            .onRegister(connectedTextures(() -> new SimpleCTBehaviour(CRSpriteShifts.RIVETED_LOCOMETAL.get(color))))
             .lang(joinSpace(colorName, "Riveted Locometal"))
             .item()
             .transform(BuilderTransformers.locoMetalItem(color))
             .tag(tags)
-            .onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.railways.generic_radial"))
+            .onRegisterAfter(Registries.ITEM, v -> useTooltipDescriptionKey(v, "block.railways.generic_radial"))
             .build()
             .register();
     }
@@ -323,12 +327,11 @@ public class CRPalettes {
         return REGISTRATE.block(joinUnderscore(colorString, "locometal_vent"), Block::new)
             .transform(transformer.get())
             .transform(BuilderTransformers.locoMetalBase(color, "vent"))
-            .onRegister(connectedTextures(() -> new SimpleCTBehaviour(CRSpriteShifts.LOCOMETAL_VENT.get(color))))
             .lang(joinSpace(colorName, "Locometal Vent"))
             .item()
             .transform(BuilderTransformers.locoMetalItem(color))
             .tag(tags)
-            .onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.railways.generic_radial"))
+            .onRegisterAfter(Registries.ITEM, v -> useTooltipDescriptionKey(v, "block.railways.generic_radial"))
             .build()
             .register();
     }
@@ -338,12 +341,11 @@ public class CRPalettes {
         return REGISTRATE.block(joinUnderscore(colorString, "locometal_pillar"), RotatedPillarBlock::new)
             .transform(transformer.get())
             .transform(BuilderTransformers.locoMetalPillar(color))
-            .onRegister(connectedTextures(() -> new PalettesPillarCTBehaviour(CRSpriteShifts.RIVETED_LOCOMETAL_PILLAR.get(color))))
             .lang(joinSpace(colorName, "Locometal Pillar"))
             .item()
             .transform(BuilderTransformers.locoMetalItem(color))
             .tag(tags)
-            .onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.railways.generic_radial"))
+            .onRegisterAfter(Registries.ITEM, v -> useTooltipDescriptionKey(v, "block.railways.generic_radial"))
             .build()
             .register();
     }
@@ -362,12 +364,11 @@ public class CRPalettes {
         return REGISTRATE.block(joinUnderscore(colorString, wrappingName, "locometal_smokebox"), PalettesSmokeboxBlock::new)
             .transform(transformer.get())
             .transform(BuilderTransformers.locoMetalSmokeBox(color, wrapping))
-            .onRegister(connectedTextures(() -> new PalettesPillarCTBehaviour(CRSpriteShifts.getSmokebox(wrapping).get(color))))
             .lang(joinSpace(colorName, wrappingLangName, "Locometal Smokebox"))
             .item()
             .transform(BuilderTransformers.locoMetalItem(color))
             .tag(tags)
-            .onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.railways.generic_radial"))
+            .onRegisterAfter(Registries.ITEM, v -> useTooltipDescriptionKey(v, "block.railways.generic_radial"))
             .build()
             .register();
     }
@@ -381,7 +382,7 @@ public class CRPalettes {
             .item()
             .transform(BuilderTransformers.locoMetalItem(color))
             .tag(tags)
-            .onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.railways.generic_radial"))
+            .onRegisterAfter(Registries.ITEM, v -> useTooltipDescriptionKey(v, "block.railways.generic_radial"))
             .build()
             .register();
     }
@@ -395,7 +396,7 @@ public class CRPalettes {
             .item()
             .transform(BuilderTransformers.locoMetalItem(color))
             .tag(tags)
-            .onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.railways.generic_radial"))
+            .onRegisterAfter(Registries.ITEM, v -> useTooltipDescriptionKey(v, "block.railways.generic_radial"))
             .build()
             .register();
     }
@@ -409,7 +410,7 @@ public class CRPalettes {
             .item()
             .transform(BuilderTransformers.locoMetalItem(color))
             .tag(tags)
-            .onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.railways.generic_radial"))
+            .onRegisterAfter(Registries.ITEM, v -> useTooltipDescriptionKey(v, "block.railways.generic_radial"))
             .build()
             .register();
     }
@@ -419,7 +420,6 @@ public class CRPalettes {
         return REGISTRATE.block(joinUnderscore(colorString, "brass_wrapped_locometal"), Block::new)
             .transform(transformer.get())
             .transform(BuilderTransformers.locoMetalBase(color, "wrapped_slashed"))
-            .onRegister(connectedTextures(() -> new SimpleCTBehaviour(CRSpriteShifts.BRASS_WRAPPED_LOCOMETAL.get(color))))
             .lang(joinSpace(colorName, "Brass Wrapped Locometal"))
             .item()
             .transform(BuilderTransformers.locoMetalItem(color))
@@ -433,7 +433,6 @@ public class CRPalettes {
         return REGISTRATE.block(joinUnderscore(colorString, "copper_wrapped_locometal"), Block::new)
             .transform(transformer.get())
             .transform(BuilderTransformers.locoMetalBase(color, "copper_wrapped_slashed"))
-            .onRegister(connectedTextures(() -> new SimpleCTBehaviour(CRSpriteShifts.COPPER_WRAPPED_LOCOMETAL.get(color))))
             .lang(joinSpace(colorName, "Copper Wrapped Locometal"))
             .item()
             .transform(BuilderTransformers.locoMetalItem(color))
@@ -447,7 +446,6 @@ public class CRPalettes {
         return REGISTRATE.block(joinUnderscore(colorString, "iron_wrapped_locometal"), Block::new)
             .transform(transformer.get())
             .transform(BuilderTransformers.locoMetalBase(color, "iron_wrapped_slashed"))
-            .onRegister(connectedTextures(() -> new SimpleCTBehaviour(CRSpriteShifts.IRON_WRAPPED_LOCOMETAL.get(color))))
             .lang(joinSpace(colorName, "Iron Wrapped Locometal"))
             .item()
             .transform(BuilderTransformers.locoMetalItem(color))
@@ -461,7 +459,6 @@ public class CRPalettes {
         return REGISTRATE.block(joinUnderscore(colorString, "locometal_boiler"), BoilerBlock::new)
             .transform(transformer.get())
             .transform(BuilderTransformers.locoMetalBoiler(color, null))
-            .onRegister(connectedTextures(() -> new BoilerCTBehaviour(CRSpriteShifts.BOILER_SIDE.get(color))))
             .lang(joinSpace(colorName, "Locometal Boiler"))
             .item()
             .tag(tags)
@@ -475,7 +472,6 @@ public class CRPalettes {
         return REGISTRATE.block(joinUnderscore(colorString, "brass_wrapped_locometal_boiler"), BoilerBlock::new)
             .transform(transformer.get())
             .transform(BuilderTransformers.locoMetalBoiler(color, Wrapping.BRASS))
-            .onRegister(connectedTextures(() -> new BoilerCTBehaviour(CRSpriteShifts.BRASS_WRAPPED_BOILER_SIDE.get(color))))
             .lang(joinSpace(colorName, "Brass Wrapped Locometal Boiler"))
             .item()
             .tag(tags)
@@ -489,7 +485,6 @@ public class CRPalettes {
         return REGISTRATE.block(joinUnderscore(colorString, "copper_wrapped_locometal_boiler"), BoilerBlock::new)
             .transform(transformer.get())
             .transform(BuilderTransformers.locoMetalBoiler(color, Wrapping.COPPER))
-            .onRegister(connectedTextures(() -> new BoilerCTBehaviour(CRSpriteShifts.COPPER_WRAPPED_BOILER_SIDE.get(color))))
             .lang(joinSpace(colorName, "Copper Wrapped Locometal Boiler"))
             .item()
             .tag(tags)
@@ -503,7 +498,6 @@ public class CRPalettes {
         return REGISTRATE.block(joinUnderscore(colorString, "iron_wrapped_locometal_boiler"), BoilerBlock::new)
             .transform(transformer.get())
             .transform(BuilderTransformers.locoMetalBoiler(color, Wrapping.IRON))
-            .onRegister(connectedTextures(() -> new BoilerCTBehaviour(CRSpriteShifts.IRON_WRAPPED_BOILER_SIDE.get(color))))
             .lang(joinSpace(colorName, "Iron Wrapped Locometal Boiler"))
             .item()
             .tag(tags)
@@ -611,11 +605,10 @@ public class CRPalettes {
                 .tag(BlockTags.IMPERMEABLE)
                 .removeTag(ProviderType.BLOCK_TAGS, AllTags.AllBlockTags.WRENCH_PICKUP.tag)
                 .loot(RegistrateBlockLootTables::dropWhenSilkTouch)
-                .onRegister(connectedTextures(() -> new PalettesPillarCTBehaviour(CRSpriteShifts.WINDOWS.get(type).get(color))))
                 .item()
                 .transform(BuilderTransformers.locoMetalItem(color))
                 .tag(tags)
-                .onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.railways.generic_radial"))
+                .onRegisterAfter(Registries.ITEM, v -> useTooltipDescriptionKey(v, "block.railways.generic_radial"))
                 .build()
                 .register();
     }

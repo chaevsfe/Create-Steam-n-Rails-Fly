@@ -23,7 +23,6 @@ import com.railwayteam.railways.content.smokestack.particles.legacy.SmokeParticl
 import com.railwayteam.railways.content.smokestack.particles.puffs.PuffSmokeParticleData;
 import com.zurrtum.create.foundation.particle.ICustomParticleData;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import com.zurrtum.create.client.catnip.lang.Lang;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -31,6 +30,7 @@ import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 
+import java.util.Locale;
 import java.util.function.Supplier;
 
 public enum CRParticleTypes {
@@ -44,7 +44,7 @@ public enum CRParticleTypes {
 	private final ParticleEntry<?> entry;
 
 	<D extends ParticleOptions> CRParticleTypes(Supplier<? extends ICustomParticleData<D>> typeFactory) {
-		String name = Lang.asId(name());
+		String name = name().toLowerCase(Locale.ROOT);
 		entry = new ParticleEntry<>(name, typeFactory);
 	}
 

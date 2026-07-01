@@ -26,7 +26,6 @@ import com.railwayteam.railways.registry.CRBlockPartials;
 import com.railwayteam.railways.registry.CREdgePointTypes;
 import com.railwayteam.railways.registry.CRIcons;
 import com.zurrtum.create.api.contraption.transformable.TransformableBlockEntity;
-import com.zurrtum.create.client.api.goggles.IHaveGoggleInformation;
 import com.zurrtum.create.content.contraptions.StructureTransform;
 import com.zurrtum.create.content.trains.graph.TrackEdge;
 import com.zurrtum.create.content.trains.graph.TrackGraph;
@@ -35,21 +34,16 @@ import com.zurrtum.create.content.trains.graph.TrackNodeLocation;
 import com.zurrtum.create.content.trains.track.TrackTargetingBehaviour;
 import com.zurrtum.create.foundation.blockEntity.SmartBlockEntity;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
-import com.zurrtum.create.client.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.zurrtum.create.client.foundation.blockEntity.behaviour.scrollValue.INamedIconOptions;
 import com.zurrtum.create.client.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
 import com.zurrtum.create.client.foundation.gui.AllIcons;
 import com.zurrtum.create.client.flywheel.lib.model.baked.PartialModel;
 import com.zurrtum.create.client.flywheel.lib.transform.TransformStack;
 import com.zurrtum.create.catnip.animation.LerpedFloat;
-import com.zurrtum.create.client.catnip.lang.Lang;
-import com.zurrtum.create.client.catnip.lang.LangBuilder;
 import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.catnip.math.VecHelper;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -75,7 +69,7 @@ import static java.util.stream.Collectors.toSet;
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
 
 
-public class TrackSwitchBlockEntity extends SmartBlockEntity implements TransformableBlockEntity, IHaveGoggleInformation {
+public class TrackSwitchBlockEntity extends SmartBlockEntity implements TransformableBlockEntity {
     public TrackTargetingBehaviour<TrackSwitch> edgePoint;
     private SwitchState state;
     private int lastAnalogOutput = 0;
@@ -118,7 +112,7 @@ public class TrackSwitchBlockEntity extends SmartBlockEntity implements Transfor
 
         AutoMode(AllIcons icon) {
             this.icon = icon;
-            this.translationKey = "railways.switch.auto_mode." + Lang.asId(name());
+            this.translationKey = "railways.switch.auto_mode." + name().toLowerCase(Locale.ROOT);
         }
         public AllIcons getIcon() {
             return icon;
@@ -256,21 +250,6 @@ public class TrackSwitchBlockEntity extends SmartBlockEntity implements Transfor
         }
 
         sw.updateExits(edge.node2.getLocation(), exits);
-    }
-
-    private static LangBuilder b() {
-        return Lang.builder(Railways.MOD_ID);
-    }
-    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        b().translate("tooltip.switch.header").forGoggles(tooltip);
-        b().translate("tooltip.switch.state")
-                .style(ChatFormatting.YELLOW)
-                .forGoggles(tooltip);
-        b().translate("switch.state." + getState().getSerializedName())
-                .style(ChatFormatting.YELLOW)
-                .forGoggles(tooltip);
-
-        return true;
     }
 
     private final int clientLazyTickRate = 10;

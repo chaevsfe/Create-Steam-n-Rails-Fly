@@ -1,13 +1,11 @@
 package com.railwayteam.railways.util.packet;
 
-import com.railwayteam.railways.content.minecarts.MinecartJukebox;
 import com.railwayteam.railways.multiloader.S2CPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 
 public class JukeboxCartPacket implements S2CPacket {
     private final int id;
@@ -29,12 +27,6 @@ public class JukeboxCartPacket implements S2CPacket {
     }
 
     public void handle(Minecraft mc) {
-        Level level = mc.level;
-        if (level == null)
-            return;
-
-        Entity target = level.getEntity(this.id);
-        if (target instanceof MinecartJukebox juke)
-            juke.insertRecord(this.record);
+        ClientPacketHandlers.handleJukeboxCart(mc, id, record);
     }
 }

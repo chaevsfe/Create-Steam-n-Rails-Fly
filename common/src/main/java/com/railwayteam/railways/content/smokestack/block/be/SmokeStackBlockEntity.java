@@ -18,20 +18,16 @@
 
 package com.railwayteam.railways.content.smokestack.block.be;
 
-import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.content.smokestack.SmokeEmissionParams;
 import com.railwayteam.railways.content.smokestack.block.SmokeStackBlock;
 import com.railwayteam.railways.content.smokestack.block.variable.SmokeStackExtenderBlock;
 import com.railwayteam.railways.content.smokestack.block.variable.VariableSmokeStackBlock;
 import com.railwayteam.railways.util.ColorUtils;
-import com.zurrtum.create.client.api.goggles.IHaveGoggleInformation;
 import com.zurrtum.create.foundation.blockEntity.SmartBlockEntity;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
-import com.zurrtum.create.client.catnip.lang.Lang;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.util.RandomSource;
@@ -45,7 +41,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class SmokeStackBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
+public class SmokeStackBlockEntity extends SmartBlockEntity {
     protected @Nullable DyeColor color = null;
     protected boolean isSoul = false;
     protected int height = 0;
@@ -93,20 +89,6 @@ public class SmokeStackBlockEntity extends SmartBlockEntity implements IHaveGogg
         if (height > 0) {
             output.putInt("height", height);
         }
-    }
-    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        if (isSoul) {
-            Lang.builder(Railways.MOD_ID)
-                .translate("smokestack.goggle.tooltip", Component.translatable("railways.smokestack.goggle.tooltip.style.soul"))
-                .forGoggles(tooltip);
-        } else {
-            DyeColor color = this.color != null ? this.color : DyeColor.BLACK;
-            Lang.builder(Railways.MOD_ID)
-                .translate("smokestack.goggle.tooltip.color", Component.translatable("color.minecraft." + color.getName()))
-                .forGoggles(tooltip);
-        }
-
-        return true;
     }
     public ItemStack getIcon(boolean isPlayerSneaking) {
         if (color != null)

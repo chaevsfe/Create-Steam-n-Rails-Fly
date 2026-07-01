@@ -18,22 +18,15 @@
 
 package com.railwayteam.railways.content.custom_bogeys.blocks.base.be;
 
-import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.content.custom_bogeys.blocks.base.CRBogeyBlock;
 import com.railwayteam.railways.registry.CRBogeyStyles;
-import com.zurrtum.create.client.api.goggles.IHaveGoggleInformation;
 import com.zurrtum.create.content.trains.bogey.AbstractBogeyBlockEntity;
 import com.zurrtum.create.content.trains.bogey.BogeyStyle;
-import com.zurrtum.create.client.catnip.lang.Lang;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.List;
-
-public class CRBogeyBlockEntity extends AbstractBogeyBlockEntity implements IHaveGoggleInformation {
+public class CRBogeyBlockEntity extends AbstractBogeyBlockEntity {
     public CRBogeyBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
@@ -41,11 +34,5 @@ public class CRBogeyBlockEntity extends AbstractBogeyBlockEntity implements IHav
         if (getBlockState().getBlock() instanceof CRBogeyBlock bogeyBlock)
             return bogeyBlock.getDefaultStyle();
         return CRBogeyStyles.SINGLEAXLE;
-    }
-    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        Lang.builder(Railways.MOD_ID)
-                .add(Component.empty().append(getStyle().displayName).withStyle(ChatFormatting.GOLD))
-                .forGoggles(tooltip);
-        return true;
     }
 }

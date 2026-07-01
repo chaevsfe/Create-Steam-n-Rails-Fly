@@ -19,9 +19,9 @@
 package com.railwayteam.railways.compat;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import com.zurrtum.create.client.catnip.lang.Lang;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -65,7 +65,7 @@ public enum Mods {
 	 * @return the mod id
 	 */
 	public String asId() {
-		return Lang.asId(name());
+		return name().toLowerCase(Locale.ROOT);
 	}
 
 	public String asFabricId() {

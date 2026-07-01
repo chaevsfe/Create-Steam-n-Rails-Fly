@@ -18,6 +18,10 @@
     "client.MixinSlidingDoorRenderer",
     "client.MixinToolboxHandlerClient",
     "client.MixinToolboxScreen",
+    "client.MixinTrackCouplerBlockEntityGoggles",
+    "client.MixinCRBogeyBlockEntityGoggles",
+    "client.MixinSmokeStackBlockEntityGoggles",
+    "client.MixinTrackSwitchBlockEntityGoggles",
     "conductor_possession.MixinGameRenderer",
     "conductor_possession.MixinLocalPlayer",
     "conductor_possession.MixinMinecraft"

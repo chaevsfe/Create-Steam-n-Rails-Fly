@@ -58,15 +58,7 @@ public class CameraMovePacket implements C2SPacket, S2CPacket {
 
     @Override
     public void handle(Minecraft mc) {
-        if (mc.level == null) return;
-        if (!(mc.level.getEntity(id) instanceof ConductorEntity conductor)) return;
-        if (mc.getCameraEntity() != conductor) return;
-
-        conductor.syncPacketPositionCodec(x, y, z);
-        conductor.setPos(x, y, z);
-        conductor.setYRot(yaw);
-        conductor.setXRot(pitch);
-        conductor.setOnGround(onGround);
+        ClientPacketHandlers.handleCameraMove(mc, id, x, y, z, yaw, pitch, onGround);
     }
 
     private static boolean containsInvalidValues(double x, double y, double z, float yaw, float pitch) {

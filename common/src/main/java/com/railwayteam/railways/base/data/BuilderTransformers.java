@@ -36,6 +36,7 @@ import com.railwayteam.railways.content.custom_bogeys.special.monobogey.MonoBoge
 import com.railwayteam.railways.content.custom_tracks.casing.CasingCollisionBlock;
 import com.railwayteam.railways.content.custom_tracks.generic_crossing.GenericCrossingBlock;
 import com.railwayteam.railways.content.handcar.HandcarBlock;
+import com.railwayteam.railways.multiloader.Env;
 import com.railwayteam.railways.content.palettes.PalettesColor;
 import com.railwayteam.railways.content.palettes.RotatedPillarWindowBlock;
 import com.railwayteam.railways.content.palettes.boiler.BoilerBlock;
@@ -269,7 +270,10 @@ public class BuilderTransformers {
             .tag(CRTags.AllBlockTags.LOCOMETAL_BOILERS.tag)
             .tag(AllTags.AllBlockTags.COPYCAT_DENY.tag)
             .transform(pickaxeOnly())
-            .onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.railways.boiler"));
+            .onRegisterAfter(Registries.ITEM, v -> {
+                if (Env.CLIENT.isCurrent())
+                    ItemDescription.useKey(v, "block.railways.boiler");
+            });
     }
 
     public static <B extends DoorBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> locometalDoor(PalettesColor color, String type, TagKey<Item>[] itemTags, TagKey<Block>[] blockTags) {

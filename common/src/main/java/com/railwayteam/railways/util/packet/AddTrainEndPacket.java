@@ -18,15 +18,10 @@
 
 package com.railwayteam.railways.util.packet;
 
-import com.railwayteam.railways.mixin.AccessorTrain;
 import com.railwayteam.railways.multiloader.S2CPacket;
-import com.zurrtum.create.client.CreateClient;
 import com.zurrtum.create.content.trains.entity.Train;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.Level;
 
 import java.util.UUID;
 
@@ -55,31 +50,7 @@ public class AddTrainEndPacket implements S2CPacket {
         buffer.writeInt(this.middleSpacing);
         buffer.writeBoolean(this.doubleEnded);
     }
-    @Environment(EnvType.CLIENT)
     public void handle(Minecraft mc) {
-        Level level = mc.level;
-        if (level != null) {
-            Train train = CreateClient.RAILWAYS.trains.get(trainId);
-            Train backTrain = CreateClient.RAILWAYS.trains.get(backTrainId);
-            if (train != null && backTrain != null) {
-                train.carriages.addAll(backTrain.carriages);
-                backTrain.carriages.clear();
-
-                train.carriageSpacing.add(middleSpacing);
-                train.carriageSpacing.addAll(backTrain.carriageSpacing);
-                backTrain.carriageSpacing.clear();
-
-                double[] newStress = new double[((AccessorTrain) train).railways$getStress().length + ((AccessorTrain) backTrain).railways$getStress().length + 1];
-                System.arraycopy(((AccessorTrain) train).railways$getStress(), 0, newStress, 0, ((AccessorTrain) train).railways$getStress().length);
-                newStress[((AccessorTrain) train).railways$getStress().length] = 0;
-                System.arraycopy(((AccessorTrain) backTrain).railways$getStress(), 0, newStress, ((AccessorTrain) train).railways$getStress().length + 1, ((AccessorTrain) backTrain).railways$getStress().length);
-                ((AccessorTrain) train).railways$setStress(newStress);
-                train.doubleEnded = doubleEnded;
-
-                train.carriages.forEach(c -> c.setTrain(train));
-
-                CreateClient.RAILWAYS.trains.remove(backTrainId);
-            }
-        }
+        ClientPacketHandlers.handleAddTrainEnd(mc, trainId, backTrainId, middleSpacing, doubleEnded);
     }
 }

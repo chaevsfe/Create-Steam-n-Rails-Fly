@@ -20,6 +20,7 @@ package com.railwayteam.railways;
 
 import com.railwayteam.railways.compat.tracks.mods.*;
 import com.railwayteam.railways.content.custom_tracks.casing.CasingCollisionUtils;
+import com.railwayteam.railways.multiloader.Env;
 import com.railwayteam.railways.registry.*;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 
@@ -48,7 +49,7 @@ public class ModSetup {
     CRCreativeModeTabs.register();
     CRItems.register();
     CRFluids.register();
-    CRSpriteShifts.register();
+    Env.CLIENT.runIfCurrent(() -> CRSpriteShifts::register);
     CRDisplaySources.register();
     CRDisplayTargets.register();
     CRBlockEntities.register();

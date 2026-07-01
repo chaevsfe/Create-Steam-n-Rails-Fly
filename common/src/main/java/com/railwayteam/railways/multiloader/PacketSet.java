@@ -146,8 +146,23 @@ public abstract class PacketSet {
 			return;
 		}
 		Function<FriendlyByteBuf, S2CPacket> factory = s2cPackets.get(i);
-		S2CPacket packet = factory.apply(buf);
+		// TEMPORARY diagnostic: see PacketSetImpl.RailwaysPayload#decode.
+		S2CPacket packet;
+		try {
+			packet = factory.apply(buf);
+		} catch (Throwable t) {
+			Railways.LOGGER.error("S2C Packet #{} ({}) failed to decode, readableBytes was {}", i, s2cTypeName(i), buf.readableBytes(), t);
+			throw t;
+		}
 		mc.execute(() -> packet.handle(mc));
+	}
+
+	private String s2cTypeName(int i) {
+		for (var entry : s2cTypes.object2IntEntrySet()) {
+			if (entry.getIntValue() == i)
+				return entry.getKey().getName();
+		}
+		return "unknown";
 	}
 
 	@Internal

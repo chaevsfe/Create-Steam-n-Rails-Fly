@@ -25,19 +25,17 @@ import com.railwayteam.railways.base.registration.MultiRegistryCallback;
 import com.railwayteam.railways.compat.Mods;
 import com.railwayteam.railways.config.CRConfigs;
 import com.railwayteam.railways.multiloader.CommandRegistrar;
+import com.railwayteam.railways.multiloader.Env;
 import com.railwayteam.railways.multiloader.Loader;
 import com.railwayteam.railways.registry.CRAdvancements;
 import com.railwayteam.railways.registry.CRCommands;
 import com.railwayteam.railways.registry.CRPackets;
 import com.railwayteam.railways.util.Utils;
+import com.railwayteam.railways.content.item.RailwaysTooltipModifiers;
 import com.zurrtum.create.CreateBuildInfo;
 import com.zurrtum.create.foundation.data.CreateRegistrate;
-import com.zurrtum.create.client.foundation.item.ItemDescription;
-import com.zurrtum.create.client.foundation.item.KineticStats;
-import com.zurrtum.create.client.foundation.item.TooltipModifier;
 import com.tterrag.registrate.providers.ProviderType;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import com.zurrtum.create.client.catnip.lang.FontHelper;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
@@ -68,8 +66,7 @@ public class Railways {
   private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MOD_ID);
 
   static {
-    REGISTRATE.setTooltipModifierFactory(item -> new ItemDescription.Modifier(item, FontHelper.Palette.STANDARD_CREATE)
-        .andThen(TooltipModifier.mapNull(KineticStats.create(item))));
+    Env.CLIENT.runIfCurrent(() -> RailwaysTooltipModifiers::register);
   }
 
   private static void migrateConfig(Path path, Function<String, String> converter) {

@@ -20,13 +20,9 @@ package com.railwayteam.railways.util.packet;
 
 import com.railwayteam.railways.content.coupling.coupler.TrackCouplerBlockEntity;
 import com.railwayteam.railways.multiloader.S2CPacket;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class TrackCouplerClientInfoPacket implements S2CPacket {
     final BlockPos blockPos;
@@ -45,13 +41,7 @@ public class TrackCouplerClientInfoPacket implements S2CPacket {
         buffer.writeBlockPos(blockPos);
         buffer.writeNbt(info.write());
     }
-    @Environment(EnvType.CLIENT)
     public void handle(Minecraft mc) {
-        Level level = mc.level;
-        if (level != null) {
-            BlockEntity te = level.getBlockEntity(blockPos);
-            if (te instanceof TrackCouplerBlockEntity couplerTile)
-                couplerTile.setClientInfo(info);
-        }
+        ClientPacketHandlers.handleTrackCouplerClientInfo(mc, blockPos, info);
     }
 }

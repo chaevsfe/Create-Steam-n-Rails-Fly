@@ -18,6 +18,7 @@
 
 package com.railwayteam.railways.multiloader.fabric;
 
+import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.multiloader.C2SPacket;
 import com.railwayteam.railways.multiloader.PacketSet;
 import com.railwayteam.railways.multiloader.PlayerSelection;
@@ -95,8 +96,23 @@ public class PacketSetImpl extends PacketSet {
 	public record RailwaysPayload(CustomPacketPayload.Type<RailwaysPayload> type, byte[] data) implements CustomPacketPayload {
 		public static final StreamCodec<RegistryFriendlyByteBuf, RailwaysPayload> STREAM_CODEC = StreamCodec.ofMember(
 			RailwaysPayload::write,
-			RailwaysPayload::new
+			RailwaysPayload::decode
 		);
+
+		// TEMPORARY diagnostic: vanilla swallows the real exception behind a generic
+		// "Failed to decode packet 'clientbound/minecraft:custom_payload'" disconnect reason.
+		// Log it here so we can see what's actually going wrong.
+		private static RailwaysPayload decode(RegistryFriendlyByteBuf buf) {
+			int readableBefore = buf.readableBytes();
+			try {
+				Identifier id = buf.readIdentifier();
+				byte[] data = buf.readByteArray();
+				return new RailwaysPayload(payloadType(id), data);
+			} catch (Throwable t) {
+				Railways.LOGGER.error("RailwaysPayload decode failed, readableBytes was {}", readableBefore, t);
+				throw t;
+			}
+		}
 
 		private RailwaysPayload(RegistryFriendlyByteBuf buf) {
 			this(payloadType(buf.readIdentifier()), buf.readByteArray());

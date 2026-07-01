@@ -26,11 +26,11 @@ import com.railwayteam.railways.mixin_interfaces.IOccupiedCouplers;
 import com.railwayteam.railways.multiloader.PlayerSelection;
 import com.railwayteam.railways.registry.CREdgePointTypes;
 import com.railwayteam.railways.registry.CRPackets;
-import com.railwayteam.railways.util.MinRespectingScrollValueBehaviour;
+import com.railwayteam.railways.multiloader.Env;
+import com.zurrtum.create.foundation.blockEntity.behaviour.scrollValue.ServerScrollValueBehaviour;
 import com.railwayteam.railways.util.packet.TrackCouplerClientInfoPacket;
 import com.zurrtum.create.Create;
 import com.zurrtum.create.api.contraption.transformable.TransformableBlockEntity;
-import com.zurrtum.create.client.api.goggles.IHaveGoggleInformation;
 import com.zurrtum.create.content.contraptions.StructureTransform;
 import com.zurrtum.create.content.trains.entity.Carriage;
 import com.zurrtum.create.content.trains.entity.CarriageBogey;
@@ -46,11 +46,8 @@ import com.zurrtum.create.foundation.blockEntity.SmartBlockEntity;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
 import com.zurrtum.create.client.foundation.blockEntity.behaviour.CenteredSideValueBoxTransform;
 import com.zurrtum.create.catnip.data.Couple;
-import com.zurrtum.create.client.catnip.lang.Lang;
-import com.zurrtum.create.client.catnip.lang.LangBuilder;
 import com.zurrtum.create.catnip.math.VecHelper;
 import com.zurrtum.create.catnip.nbt.NBTHelper;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -71,7 +68,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
-public class TrackCouplerBlockEntity extends SmartBlockEntity implements TransformableBlockEntity, IHaveGoggleInformation {
+public class TrackCouplerBlockEntity extends SmartBlockEntity implements TransformableBlockEntity {
 
     private BlockState cachedTrackState = null;
     private BlockState cachedSecondaryTrackState = null;
@@ -86,7 +83,7 @@ public class TrackCouplerBlockEntity extends SmartBlockEntity implements Transfo
 
     public TrackTargetingBehaviour<TrackCoupler> edgePoint;
     public TrackTargetingBehaviour<TrackCoupler> secondEdgePoint;
-    protected MinRespectingScrollValueBehaviour edgeSpacingScroll;
+    protected ServerScrollValueBehaviour edgeSpacingScroll;
 
     protected int cachedEffectiveEdgeSpacing = 5;
 
@@ -120,17 +117,15 @@ public class TrackCouplerBlockEntity extends SmartBlockEntity implements Transfo
     public void addBehaviours(List<BlockEntityBehaviour<?>> behaviours) {
         behaviours.add(edgePoint = new TrackTargetingBehaviour<>(this, CREdgePointTypes.COUPLER));
         behaviours.add(secondEdgePoint = new SecondaryTrackTargetingBehaviour<>(this, CREdgePointTypes.COUPLER));
-        edgeSpacingScroll = new MinRespectingScrollValueBehaviour(Component.translatable("railways.coupler.edge_spacing"), this, new TrackCouplerValueBoxTransform(true)) {
+        edgeSpacingScroll = new ServerScrollValueBehaviour(this) {
             public String getClipboardKey() {
                 return "Coupler";
             }
         };
         edgeSpacingScroll.between(3, 15);
-        edgeSpacingScroll.withFormatter(i -> String.valueOf(Component.translatable("railways.coupler.edge_spacing.meters")));
-        edgeSpacingScroll.withFormatter(i -> i + "m");
         edgeSpacingScroll.withCallback(i -> this.edgeSpacing = i);
-        edgeSpacingScroll.requiresWrench();
         behaviours.add(edgeSpacingScroll);
+        Env.CLIENT.runIfCurrent(() -> () -> behaviours.add(TrackCouplerBlockEntityClientBehaviours.createEdgeSpacingScroll(this)));
     }
     public void tick() {
         super.tick();
@@ -515,7 +510,7 @@ public class TrackCouplerBlockEntity extends SmartBlockEntity implements Transfo
         secondEdgePoint.transform(blockEntity, structureTransform);
     }
 
-    private static class TrackCouplerValueBoxTransform extends CenteredSideValueBoxTransform {
+    static class TrackCouplerValueBoxTransform extends CenteredSideValueBoxTransform {
 
         public TrackCouplerValueBoxTransform(boolean vertical) {
             super((state, d) -> d.getAxis().isVertical() == vertical);
@@ -586,53 +581,4 @@ public class TrackCouplerBlockEntity extends SmartBlockEntity implements Transfo
         }
     }
 
-    private static LangBuilder b() {
-        return Lang.builder(Railways.MOD_ID);
-    }
-
-    /**
-     * this method will be called when looking at a BlockEntity that implemented this
-     * interface
-     *
-     * @param tooltip
-     * @param isPlayerSneaking
-     * @return {@code true} if the tooltip creation was successful and should be
-     * displayed, or {@code false} if the overlay should not be displayed
-     */
-    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        b().translate("tooltip.coupler.header").forGoggles(tooltip);
-        b().translate("tooltip.coupler.mode")
-                .style(ChatFormatting.YELLOW)
-                .forGoggles(tooltip);
-        b().translate("coupler.mode." + getAllowedOperationMode().getSerializedName())
-                .style(ChatFormatting.YELLOW)
-                .forGoggles(tooltip);
-
-        String train1 = clientInfo == null ? "None" : clientInfo.trainName1;
-        String train2 = clientInfo == null ? "None" : clientInfo.trainName2;
-        OperationMode operationMode = clientInfo == null ? OperationMode.NONE : clientInfo.mode;
-        b().translate("tooltip.coupler.train1", train1)
-                .style(ChatFormatting.GOLD)
-                .forGoggles(tooltip);
-        b().translate("tooltip.coupler.train2", train2)
-                .style(ChatFormatting.GOLD)
-                .forGoggles(tooltip);
-
-        b().translate("tooltip.coupler.action." + operationMode.name().toLowerCase(Locale.ROOT))
-                .style(ChatFormatting.GREEN)
-                .forGoggles(tooltip);
-        if (clientInfo != null) {
-            if (clientInfo.error != null) {
-                b().add(clientInfo.error)
-                        .style(ChatFormatting.DARK_RED)
-                        .forGoggles(tooltip);
-            }
-            if (clientInfo.error2 != null && CRConfigs.client().showExtendedCouplerDebug.get()) {
-                b().add(clientInfo.error2)
-                        .style(ChatFormatting.DARK_PURPLE)
-                        .forGoggles(tooltip);
-            }
-        }
-        return true;
-    }
 }
