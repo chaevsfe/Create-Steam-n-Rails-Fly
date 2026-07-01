@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/cyan/wrapped_brass",
+  "result": {
+    "id": "railways:cyan_brass_wrapped_locometal",
+    "count": 1
+  }
+}

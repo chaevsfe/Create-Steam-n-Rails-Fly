@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/royal_blue/base",
+  "result": {
+    "id": "railways:royal_blue_locometal_pillar",
+    "count": 1
+  }
+}

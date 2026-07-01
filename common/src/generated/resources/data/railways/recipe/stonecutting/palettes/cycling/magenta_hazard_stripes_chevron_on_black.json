@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/magenta/hazard_stripes_black",
+  "result": {
+    "id": "railways:magenta_hazard_stripes_chevron_on_black",
+    "count": 1
+  }
+}

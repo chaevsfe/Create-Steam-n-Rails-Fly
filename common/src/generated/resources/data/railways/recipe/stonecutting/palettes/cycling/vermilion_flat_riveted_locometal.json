@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/vermilion/base",
+  "result": {
+    "id": "railways:vermilion_flat_riveted_locometal",
+    "count": 1
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "tfc"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "tfc"
+    }
+  ],
+  "ingredient": "tfc:wood/planks/blackwood_slab",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_tfc_blackwood"
+        }
+      ],
+      "target": "railways:track_incomplete_tfc_blackwood",
+      "ingredient": "#railways:internal/track_rods"
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_tfc_blackwood"
+        }
+      ],
+      "target": "railways:track_incomplete_tfc_blackwood",
+      "ingredient": "#railways:internal/track_rods"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_tfc_blackwood"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_tfc_blackwood"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_tfc_blackwood"
+  },
+  "result": {
+    "id": "railways:track_tfc_blackwood"
+  }
+}

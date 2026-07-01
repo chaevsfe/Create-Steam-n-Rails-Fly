@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/dripstone/wrapped_iron",
+  "result": {
+    "id": "railways:dripstone_iron_wrapped_locometal",
+    "count": 1
+  }
+}

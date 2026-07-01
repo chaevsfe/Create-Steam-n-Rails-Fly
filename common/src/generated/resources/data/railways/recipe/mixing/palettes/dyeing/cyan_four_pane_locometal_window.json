@@ -1,0 +1,18 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    "#railways:palettes/dye_groups/four_pane_window"
+  ],
+  "results": [
+    {
+      "id": "railways:cyan_four_pane_locometal_window"
+    }
+  ],
+  "fluid_ingredients": [
+    {
+      "fluid": "railways:paint",
+      "amount": 10125,
+      "type": "fluid_stack"
+    }
+  ]
+}

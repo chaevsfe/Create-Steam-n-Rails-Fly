@@ -1,0 +1,18 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    "#railways:palettes/dye_groups/hazard_stripes_diagonal_white"
+  ],
+  "results": [
+    {
+      "id": "railways:royal_blue_hazard_stripes_diagonal_on_white"
+    }
+  ],
+  "fluid_ingredients": [
+    {
+      "fluid": "railways:paint",
+      "amount": 10125,
+      "type": "fluid_stack"
+    }
+  ]
+}

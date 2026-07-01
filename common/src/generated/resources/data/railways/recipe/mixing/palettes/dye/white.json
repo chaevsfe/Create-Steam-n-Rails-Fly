@@ -1,0 +1,20 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    "#railways:internal/dyes/white_dyes",
+    "#railways:binding_agents"
+  ],
+  "fluid_results": [
+    {
+      "id": "railways:paint",
+      "amount": 81000
+    }
+  ],
+  "fluid_ingredients": [
+    {
+      "amount": 81000,
+      "type": "fluid_stack",
+      "fluid": "minecraft:water"
+    }
+  ]
+}

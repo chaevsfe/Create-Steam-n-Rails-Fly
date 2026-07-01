@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/brown/wrapped_iron",
+  "result": {
+    "id": "railways:brown_iron_wrapped_locometal",
+    "count": 1
+  }
+}

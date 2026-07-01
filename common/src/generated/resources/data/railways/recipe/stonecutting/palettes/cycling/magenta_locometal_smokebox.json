@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/magenta/base",
+  "result": {
+    "id": "railways:magenta_locometal_smokebox",
+    "count": 1
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/dripstone/wrapped_copper",
+  "result": {
+    "id": "railways:dripstone_copper_wrapped_locometal_smokebox",
+    "count": 1
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "twilightforest"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "twilightforest"
+    }
+  ],
+  "ingredient": "railways:track_twilightforest_transwood",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "results": [
+        {
+          "id": "railways:track_incomplete_twilightforest_transwood_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_twilightforest_transwood_wide",
+      "processing_time": 50
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_twilightforest_transwood_wide"
+        }
+      ],
+      "target": "railways:track_incomplete_twilightforest_transwood_wide",
+      "ingredient": "twilightforest:transformation_slab"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_twilightforest_transwood_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_twilightforest_transwood_wide"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_twilightforest_transwood_wide"
+  },
+  "result": {
+    "id": "railways:track_twilightforest_transwood_wide"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/gray/base",
+  "result": {
+    "id": "railways:gray_flat_slashed_locometal",
+    "count": 1
+  }
+}

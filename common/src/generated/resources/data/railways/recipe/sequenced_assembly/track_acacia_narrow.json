@@ -1,0 +1,42 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": "minecraft:acacia_slab",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "results": [
+        {
+          "id": "railways:track_incomplete_acacia_narrow"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_acacia_narrow",
+      "processing_time": 50
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_acacia_narrow"
+        }
+      ],
+      "target": "railways:track_incomplete_acacia_narrow",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_acacia_narrow"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_acacia_narrow"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_acacia_narrow"
+  },
+  "result": {
+    "id": "railways:track_acacia_narrow"
+  }
+}

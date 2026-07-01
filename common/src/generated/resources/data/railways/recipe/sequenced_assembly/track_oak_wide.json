@@ -1,0 +1,42 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": "railways:track_oak",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "results": [
+        {
+          "id": "railways:track_incomplete_oak_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_oak_wide",
+      "processing_time": 50
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_oak_wide"
+        }
+      ],
+      "target": "railways:track_incomplete_oak_wide",
+      "ingredient": "minecraft:oak_slab"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_oak_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_oak_wide"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_oak_wide"
+  },
+  "result": {
+    "id": "railways:track_oak_wide"
+  }
+}

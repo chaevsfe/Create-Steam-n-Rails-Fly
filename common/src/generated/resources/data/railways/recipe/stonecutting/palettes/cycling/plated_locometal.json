@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/netherite/base",
+  "result": {
+    "id": "railways:plated_locometal",
+    "count": 1
+  }
+}

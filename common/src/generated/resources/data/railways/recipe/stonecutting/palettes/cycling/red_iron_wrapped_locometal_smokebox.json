@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/red/wrapped_iron",
+  "result": {
+    "id": "railways:red_iron_wrapped_locometal_smokebox",
+    "count": 1
+  }
+}

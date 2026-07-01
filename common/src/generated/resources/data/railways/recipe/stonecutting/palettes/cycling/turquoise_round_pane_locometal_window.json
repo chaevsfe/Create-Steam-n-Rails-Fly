@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/turquoise/windows",
+  "result": {
+    "id": "railways:turquoise_round_pane_locometal_window",
+    "count": 1
+  }
+}

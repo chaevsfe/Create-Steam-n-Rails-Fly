@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/pink/base",
+  "result": {
+    "id": "railways:pink_plated_locometal",
+    "count": 1
+  }
+}

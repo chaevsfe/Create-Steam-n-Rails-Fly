@@ -1,0 +1,21 @@
+{
+  "type": "create:mixing",
+  "heatRequirement": "heated",
+  "ingredients": [
+    "minecraft:granite",
+    "#railways:binding_agents"
+  ],
+  "fluid_results": [
+    {
+      "id": "railways:paint",
+      "amount": 81000
+    }
+  ],
+  "fluid_ingredients": [
+    {
+      "amount": 81000,
+      "type": "fluid_stack",
+      "fluid": "minecraft:water"
+    }
+  ]
+}

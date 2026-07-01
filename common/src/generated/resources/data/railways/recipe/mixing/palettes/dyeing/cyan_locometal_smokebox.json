@@ -1,0 +1,18 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    "#railways:palettes/dye_groups/smokebox"
+  ],
+  "results": [
+    {
+      "id": "railways:cyan_locometal_smokebox"
+    }
+  ],
+  "fluid_ingredients": [
+    {
+      "fluid": "railways:paint",
+      "amount": 10125,
+      "type": "fluid_stack"
+    }
+  ]
+}

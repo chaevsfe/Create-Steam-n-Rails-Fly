@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "byg"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "byg"
+    }
+  ],
+  "ingredient": "byg:sythian_slab",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "results": [
+        {
+          "id": "railways:track_incomplete_byg_sythian_narrow"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_byg_sythian_narrow",
+      "processing_time": 50
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_byg_sythian_narrow"
+        }
+      ],
+      "target": "railways:track_incomplete_byg_sythian_narrow",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_byg_sythian_narrow"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_byg_sythian_narrow"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_byg_sythian_narrow"
+  },
+  "result": {
+    "id": "railways:track_byg_sythian_narrow"
+  }
+}

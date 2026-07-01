@@ -70,10 +70,8 @@ public class HingedDoorBlock extends DoorBlock implements IWrenchable {
             Level level = context.getLevel();
             BlockPos posBelow = context.getClickedPos().below();
             return IWrenchable.super.onSneakWrenched(level.getBlockState(posBelow), new UseOnContext(
-                level,
                 context.getPlayer(),
                 context.getHand(),
-                context.getItemInHand(),
                 new BlockHitResult(
                     context.getClickLocation().add(0, -1, 0),
                     context.getClickedFace(),

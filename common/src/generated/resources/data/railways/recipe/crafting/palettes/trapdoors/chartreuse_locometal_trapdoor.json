@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#minecraft:wooden_trapdoors",
+    "railways:chartreuse_riveted_locometal"
+  ],
+  "result": {
+    "id": "railways:chartreuse_locometal_trapdoor"
+  }
+}

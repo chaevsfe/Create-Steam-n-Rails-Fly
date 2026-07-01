@@ -1,0 +1,43 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": "minecraft:red_wool",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "results": [
+        {
+          "id": "railways:red_incomplete_conductor_cap"
+        }
+      ],
+      "ingredient": "railways:red_incomplete_conductor_cap",
+      "processing_time": 50
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:red_incomplete_conductor_cap"
+        }
+      ],
+      "target": "railways:red_incomplete_conductor_cap",
+      "ingredient": "create:precision_mechanism"
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:red_incomplete_conductor_cap"
+        }
+      ],
+      "target": "railways:red_incomplete_conductor_cap",
+      "ingredient": "#railways:internal/string"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:red_incomplete_conductor_cap"
+  },
+  "result": {
+    "id": "railways:red_conductor_cap"
+  }
+}

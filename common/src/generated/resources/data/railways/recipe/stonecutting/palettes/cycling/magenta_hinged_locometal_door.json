@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/magenta/doors",
+  "result": {
+    "id": "railways:magenta_hinged_locometal_door",
+    "count": 1
+  }
+}

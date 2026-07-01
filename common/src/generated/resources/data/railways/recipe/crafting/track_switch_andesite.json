@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": "create:andesite_casing",
+    "L": "minecraft:lever",
+    "W": "create:cogwheel"
+  },
+  "pattern": [
+    "L",
+    "C",
+    "W"
+  ],
+  "result": {
+    "id": "railways:track_switch_andesite"
+  },
+  "show_notification": true
+}

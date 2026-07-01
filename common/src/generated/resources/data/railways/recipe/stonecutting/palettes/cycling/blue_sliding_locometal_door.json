@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/blue/doors",
+  "result": {
+    "id": "railways:blue_sliding_locometal_door",
+    "count": 1
+  }
+}

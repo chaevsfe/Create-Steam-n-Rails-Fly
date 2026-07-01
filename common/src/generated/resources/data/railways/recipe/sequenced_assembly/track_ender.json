@@ -1,0 +1,42 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": "minecraft:end_stone_brick_slab",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_ender"
+        }
+      ],
+      "target": "railways:track_incomplete_ender",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_ender"
+        }
+      ],
+      "target": "railways:track_incomplete_ender",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_ender"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_ender"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_ender"
+  },
+  "result": {
+    "id": "railways:track_ender"
+  }
+}

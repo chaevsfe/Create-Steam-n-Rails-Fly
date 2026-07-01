@@ -1,7 +1,13 @@
 {
   "replace": false,
   "values": [
-    "railways:red_locometal_end_ladder",
-    "railways:red_locometal_rung_ladder"
+    {
+      "id": "railways:red_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:red_locometal_rung_ladder",
+      "required": false
+    }
   ]
 }

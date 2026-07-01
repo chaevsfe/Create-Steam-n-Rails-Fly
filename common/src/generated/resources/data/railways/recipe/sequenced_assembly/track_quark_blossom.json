@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "quark"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "quark"
+    }
+  ],
+  "ingredient": "quark:blossom_planks_slab",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_quark_blossom"
+        }
+      ],
+      "target": "railways:track_incomplete_quark_blossom",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_quark_blossom"
+        }
+      ],
+      "target": "railways:track_incomplete_quark_blossom",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_quark_blossom"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_quark_blossom"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_quark_blossom"
+  },
+  "result": {
+    "id": "railways:track_quark_blossom"
+  }
+}

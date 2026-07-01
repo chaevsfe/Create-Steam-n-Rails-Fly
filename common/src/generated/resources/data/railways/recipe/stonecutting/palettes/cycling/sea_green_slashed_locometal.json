@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/sea_green/base",
+  "result": {
+    "id": "railways:sea_green_slashed_locometal",
+    "count": 1
+  }
+}

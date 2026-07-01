@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "create_dd"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create_dd"
+    }
+  ],
+  "ingredient": "railways:track_create_dd_rose",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "results": [
+        {
+          "id": "railways:track_incomplete_create_dd_rose_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_create_dd_rose_wide",
+      "processing_time": 50
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_create_dd_rose_wide"
+        }
+      ],
+      "target": "railways:track_incomplete_create_dd_rose_wide",
+      "ingredient": "create_dd:rose_slab"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_create_dd_rose_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_create_dd_rose_wide"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_create_dd_rose_wide"
+  },
+  "result": {
+    "id": "railways:track_create_dd_rose_wide"
+  }
+}

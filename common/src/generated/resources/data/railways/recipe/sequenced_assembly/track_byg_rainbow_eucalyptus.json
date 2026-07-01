@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "byg"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "byg"
+    }
+  ],
+  "ingredient": "byg:rainbow_eucalyptus_slab",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_byg_rainbow_eucalyptus"
+        }
+      ],
+      "target": "railways:track_incomplete_byg_rainbow_eucalyptus",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_byg_rainbow_eucalyptus"
+        }
+      ],
+      "target": "railways:track_incomplete_byg_rainbow_eucalyptus",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_byg_rainbow_eucalyptus"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_byg_rainbow_eucalyptus"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_byg_rainbow_eucalyptus"
+  },
+  "result": {
+    "id": "railways:track_byg_rainbow_eucalyptus"
+  }
+}

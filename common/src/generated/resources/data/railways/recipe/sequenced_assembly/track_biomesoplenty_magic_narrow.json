@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "biomesoplenty"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "biomesoplenty"
+    }
+  ],
+  "ingredient": "biomesoplenty:magic_slab",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "results": [
+        {
+          "id": "railways:track_incomplete_biomesoplenty_magic_narrow"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_biomesoplenty_magic_narrow",
+      "processing_time": 50
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_biomesoplenty_magic_narrow"
+        }
+      ],
+      "target": "railways:track_incomplete_biomesoplenty_magic_narrow",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_biomesoplenty_magic_narrow"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_biomesoplenty_magic_narrow"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_biomesoplenty_magic_narrow"
+  },
+  "result": {
+    "id": "railways:track_biomesoplenty_magic_narrow"
+  }
+}

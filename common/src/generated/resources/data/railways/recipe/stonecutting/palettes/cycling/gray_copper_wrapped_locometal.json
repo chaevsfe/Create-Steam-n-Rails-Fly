@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/gray/wrapped_copper",
+  "result": {
+    "id": "railways:gray_copper_wrapped_locometal",
+    "count": 1
+  }
+}

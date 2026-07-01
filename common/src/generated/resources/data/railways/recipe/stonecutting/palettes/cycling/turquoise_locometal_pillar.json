@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/turquoise/base",
+  "result": {
+    "id": "railways:turquoise_locometal_pillar",
+    "count": 1
+  }
+}

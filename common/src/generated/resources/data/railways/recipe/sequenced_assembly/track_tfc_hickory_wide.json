@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "tfc"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "tfc"
+    }
+  ],
+  "ingredient": "railways:track_tfc_hickory",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "results": [
+        {
+          "id": "railways:track_incomplete_tfc_hickory_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_tfc_hickory_wide",
+      "processing_time": 50
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_tfc_hickory_wide"
+        }
+      ],
+      "target": "railways:track_incomplete_tfc_hickory_wide",
+      "ingredient": "tfc:wood/planks/hickory_slab"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_tfc_hickory_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_tfc_hickory_wide"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_tfc_hickory_wide"
+  },
+  "result": {
+    "id": "railways:track_tfc_hickory_wide"
+  }
+}

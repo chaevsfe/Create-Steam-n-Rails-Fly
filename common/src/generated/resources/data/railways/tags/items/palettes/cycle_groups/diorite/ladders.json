@@ -1,7 +1,13 @@
 {
   "replace": false,
   "values": [
-    "railways:diorite_locometal_end_ladder",
-    "railways:diorite_locometal_rung_ladder"
+    {
+      "id": "railways:diorite_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:diorite_locometal_rung_ladder",
+      "required": false
+    }
   ]
 }

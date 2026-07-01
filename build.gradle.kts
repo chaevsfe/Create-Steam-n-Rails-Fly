@@ -39,10 +39,10 @@ import me.modmuss50.mpp.ReleaseType
 plugins {
     java
     `maven-publish`
-    id("architectury-plugin") version "3.4-SNAPSHOT"
-    id("dev.architectury.loom") version "1.14.+" apply false
+    id("architectury-plugin") version "3.5.169"
+    id("dev.architectury.loom") version "1.17.487" apply false
     id("me.modmuss50.mod-publish-plugin") version "0.7.4" apply false // https://github.com/modmuss50/mod-publish-plugin
-    id("com.github.johnrengelman.shadow") version "8.1.1" apply false
+    id("com.gradleup.shadow") version "9.4.3" apply false
     id("dev.ithundxr.silk") version "0.11.15" // https://github.com/IThundxr/silk
     id("net.kyori.blossom") version "2.1.0" apply false // https://github.com/KyoriPowered/blossom
     id("org.jetbrains.gradle.plugin.idea-ext") version "1.1.8" // https://github.com/JetBrains/gradle-idea-ext-plugin
@@ -57,6 +57,61 @@ val removeDevMixinAnyway = System.getenv("REMOVE_DEV_MIXIN_ANYWAY")?.toBoolean()
 // whether the build should include dev commands, even in a non-dev environment
 val includeDevCommands = !isRelease && System.getenv("INCLUDE_DEV_COMMANDS")?.toBoolean() ?: false
 val gitHash = "\"${calculateGitHash() + (if (hasUnstaged()) "-modified" else "")}\""
+
+repositories {
+    maven("https://api.modrinth.com/maven") {
+        content {
+            includeGroup("maven.modrinth")
+        }
+    }
+}
+
+val patchedCreateFlyJar = layout.projectDirectory.file("gradle/patched-deps/create-fly-${"create_fabric_version"()}-dev-patched.jar")
+
+fun resolveCreateFlyDevJar(): File {
+    return configurations.detachedConfiguration(
+        dependencies.create("maven.modrinth:create-fly:${"create_fabric_version"()}")
+    ).also {
+        it.isTransitive = false
+    }.singleFile
+}
+
+fun patchCreateFlyDevJar(sourceJar: File, outputFile: File) {
+    outputFile.parentFile.mkdirs()
+
+    JarFile(sourceJar).use { jar ->
+        JarOutputStream(outputFile.outputStream()).use { out ->
+            jar.entries().asIterator().forEach { entry ->
+                if (entry.isDirectory)
+                    return@forEach
+
+                var data = jar.getInputStream(entry).readAllBytes()
+                if (entry.name.endsWith(".class"))
+                    data = patchCreateFlyMixinDescriptors(entry.name, data)
+
+                out.putNextEntry(JarEntry(entry.name))
+                out.write(data)
+                out.closeEntry()
+            }
+        }
+    }
+}
+
+if (!patchedCreateFlyJar.asFile.isFile) {
+    patchCreateFlyDevJar(resolveCreateFlyDevJar(), patchedCreateFlyJar.asFile)
+}
+
+val patchCreateFlyDevJarTask = tasks.register("patchCreateFlyDevJar") {
+    outputs.file(patchedCreateFlyJar)
+
+    doLast {
+        patchCreateFlyDevJar(resolveCreateFlyDevJar(), patchedCreateFlyJar.asFile)
+    }
+}
+val patchedCreateFlyFiles = files(patchedCreateFlyJar).also {
+    it.builtBy(patchCreateFlyDevJarTask)
+}
+extra["patchedCreateFlyFiles"] = patchedCreateFlyFiles
 
 if (!isRelease && removeDevMixinAnyway) {
     println("Removing dev mixins, even though it's not a release build")
@@ -188,7 +243,7 @@ subprojects {
         })
     }
 
-    apply(plugin = "com.github.johnrengelman.shadow")
+    apply(plugin = "com.gradleup.shadow")
     apply(plugin = "me.modmuss50.mod-publish-plugin")
 
     architectury {
@@ -363,6 +418,61 @@ fun transformClass(bytes: ByteArray): ByteArray {
     //node.fields.removeIf { fieldNode: FieldNode -> removeIfDevMixin(fieldNode.visibleAnnotations) }
 
     return ClassWriter(0).also { node.accept(it) }.toByteArray()
+}
+
+fun patchCreateFlyMixinDescriptors(entryName: String, bytes: ByteArray): ByteArray {
+    val replacements = when (entryName) {
+        "com/zurrtum/create/mixin/EntityMixin.class",
+        "com/zurrtum/create/client/mixin/EntityMixin.class" -> mapOf(
+            "method_5873" to "method_5873(Lnet/minecraft/class_1297;ZZ)Z"
+        )
+        "com/zurrtum/create/client/mixin/MinecraftClientMixin.class" -> mapOf(
+            "method_18096" to "method_18096(Lnet/minecraft/class_437;ZZ)V"
+        )
+        else -> return bytes
+    }
+
+    val node = ClassNode()
+    ClassReader(bytes).accept(node, 0)
+    var changed = false
+
+    for (method in node.methods) {
+        changed = patchMixinAnnotationMethods(method.visibleAnnotations, replacements) || changed
+        changed = patchMixinAnnotationMethods(method.invisibleAnnotations, replacements) || changed
+    }
+
+    if (!changed)
+        return bytes
+
+    return ClassWriter(0).also { node.accept(it) }.toByteArray()
+}
+
+fun patchMixinAnnotationMethods(annotations: List<AnnotationNode>?, replacements: Map<String, String>): Boolean {
+    if (annotations == null)
+        return false
+
+    var changed = false
+    for (annotation in annotations) {
+        val values = annotation.values ?: continue
+        var i = 0
+        while (i < values.size - 1) {
+            if (values[i] == "method") {
+                @Suppress("UNCHECKED_CAST")
+                val methods = values[i + 1] as? MutableList<Any>
+                if (methods != null) {
+                    for (j in methods.indices) {
+                        val replacement = replacements[methods[j] as? String]
+                        if (replacement != null) {
+                            methods[j] = replacement
+                            changed = true
+                        }
+                    }
+                }
+            }
+            i += 2
+        }
+    }
+    return changed
 }
 
 fun removeIfDevMixin(nodeName: String, visibleAnnotations: List<AnnotationNode>?): Boolean {

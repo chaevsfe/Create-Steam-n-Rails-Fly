@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/netherite/wrapped_brass",
+  "result": {
+    "id": "railways:wrapped_locometal_smokebox",
+    "count": 1
+  }
+}

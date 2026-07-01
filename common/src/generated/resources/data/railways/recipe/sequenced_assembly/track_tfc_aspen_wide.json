@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "tfc"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "tfc"
+    }
+  ],
+  "ingredient": "railways:track_tfc_aspen",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "results": [
+        {
+          "id": "railways:track_incomplete_tfc_aspen_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_tfc_aspen_wide",
+      "processing_time": 50
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_tfc_aspen_wide"
+        }
+      ],
+      "target": "railways:track_incomplete_tfc_aspen_wide",
+      "ingredient": "tfc:wood/planks/aspen_slab"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_tfc_aspen_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_tfc_aspen_wide"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_tfc_aspen_wide"
+  },
+  "result": {
+    "id": "railways:track_tfc_aspen_wide"
+  }
+}

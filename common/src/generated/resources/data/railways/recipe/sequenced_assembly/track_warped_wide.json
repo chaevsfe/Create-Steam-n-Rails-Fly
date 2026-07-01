@@ -1,0 +1,42 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": "railways:track_warped",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "results": [
+        {
+          "id": "railways:track_incomplete_warped_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_warped_wide",
+      "processing_time": 50
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_warped_wide"
+        }
+      ],
+      "target": "railways:track_incomplete_warped_wide",
+      "ingredient": "minecraft:warped_slab"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_warped_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_warped_wide"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_warped_wide"
+  },
+  "result": {
+    "id": "railways:track_warped_wide"
+  }
+}

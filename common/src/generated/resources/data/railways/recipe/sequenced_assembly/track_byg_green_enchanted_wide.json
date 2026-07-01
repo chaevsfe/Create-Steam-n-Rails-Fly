@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "byg"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "byg"
+    }
+  ],
+  "ingredient": "railways:track_byg_green_enchanted",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "results": [
+        {
+          "id": "railways:track_incomplete_byg_green_enchanted_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_byg_green_enchanted_wide",
+      "processing_time": 50
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_byg_green_enchanted_wide"
+        }
+      ],
+      "target": "railways:track_incomplete_byg_green_enchanted_wide",
+      "ingredient": "byg:green_enchanted_slab"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_byg_green_enchanted_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_byg_green_enchanted_wide"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_byg_green_enchanted_wide"
+  },
+  "result": {
+    "id": "railways:track_byg_green_enchanted_wide"
+  }
+}

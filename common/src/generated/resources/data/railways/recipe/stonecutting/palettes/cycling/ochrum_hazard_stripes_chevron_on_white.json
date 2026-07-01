@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/ochrum/hazard_stripes_white",
+  "result": {
+    "id": "railways:ochrum_hazard_stripes_chevron_on_white",
+    "count": 1
+  }
+}

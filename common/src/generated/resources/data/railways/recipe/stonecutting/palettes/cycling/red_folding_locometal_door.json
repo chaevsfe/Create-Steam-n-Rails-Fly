@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/red/doors",
+  "result": {
+    "id": "railways:red_folding_locometal_door",
+    "count": 1
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": "minecraft:spruce_slab",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_spruce"
+        }
+      ],
+      "target": "railways:track_incomplete_spruce",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_spruce"
+        }
+      ],
+      "target": "railways:track_incomplete_spruce",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_spruce"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_spruce"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_spruce"
+  },
+  "result": {
+    "id": "railways:track_spruce"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "#": "railways:chartreuse_copper_wrapped_locometal",
+    "/": "minecraft:blaze_rod",
+    "u": "minecraft:bucket"
+  },
+  "pattern": [
+    "  #  ",
+    " #u# ",
+    "#///#",
+    " #/# ",
+    "  #  "
+  ],
+  "result": {
+    "count": 4,
+    "id": "railways:chartreuse_copper_wrapped_locometal_boiler"
+  }
+}

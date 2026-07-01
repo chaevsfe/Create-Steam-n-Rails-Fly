@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/scorchia/doors",
+  "result": {
+    "id": "railways:scorchia_folding_locometal_door",
+    "count": 1
+  }
+}

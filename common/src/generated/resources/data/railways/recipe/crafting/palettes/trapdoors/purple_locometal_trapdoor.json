@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#minecraft:wooden_trapdoors",
+    "railways:purple_riveted_locometal"
+  ],
+  "result": {
+    "id": "railways:purple_locometal_trapdoor"
+  }
+}

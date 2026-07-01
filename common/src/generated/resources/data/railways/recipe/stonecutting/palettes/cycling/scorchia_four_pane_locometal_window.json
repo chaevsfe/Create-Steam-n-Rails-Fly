@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/scorchia/windows",
+  "result": {
+    "id": "railways:scorchia_four_pane_locometal_window",
+    "count": 1
+  }
+}

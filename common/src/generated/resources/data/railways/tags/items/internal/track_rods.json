@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:rods/wrought_iron",
+      "required": false
+    },
+    {
+      "id": "#forge:rods/zinc",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": "minecraft:jungle_slab",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_jungle"
+        }
+      ],
+      "target": "railways:track_incomplete_jungle",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_jungle"
+        }
+      ],
+      "target": "railways:track_incomplete_jungle",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_jungle"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_jungle"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_jungle"
+  },
+  "result": {
+    "id": "railways:track_jungle"
+  }
+}

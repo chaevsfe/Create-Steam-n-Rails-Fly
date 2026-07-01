@@ -3,23 +3,19 @@ package com.railwayteam.railways.registry;
 import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.content.conductor.ConductorCapItem;
 import com.zurrtum.create.content.processing.sequenced.SequencedAssemblyItem;
-import com.tterrag.registrate.util.entry.ItemEntry;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTab.TabVisibility;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 import java.util.ArrayList;
-import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -71,7 +67,6 @@ public class CRCreativeModeTabs {
             Predicate<Item> exclusionPredicate = makeExclusionPredicate();
             List<ItemOrdering> orderings = makeOrderings();
             Function<Item, ItemStack> stackFunc = makeStackFunc();
-            Function<Item, TabVisibility> visibilityFunc = makeVisibilityFunc();
             ResourceKey<CreativeModeTab> tab = this.tab.getKey();
 
             List<Item> items = new LinkedList<>();
@@ -81,7 +76,7 @@ public class CRCreativeModeTabs {
 
             addPlatformParityItems(tab, items);
             applyOrderings(items, orderings);
-            outputAll(output, items, stackFunc, visibilityFunc);
+            outputAll(output, items, stackFunc);
         }
 
         private static Predicate<Item> makeExclusionPredicate() {
@@ -103,18 +98,6 @@ public class CRCreativeModeTabs {
 
         private static Function<Item, ItemStack> makeStackFunc() {
             return ItemStack::new;
-        }
-
-        private static Function<Item, TabVisibility> makeVisibilityFunc() {
-            Map<Item, TabVisibility> visibilities = new IdentityHashMap<>();
-
-            for (ItemEntry<ConductorCapItem> entry : CRItems.ITEM_CONDUCTOR_CAP.values()) {
-                ConductorCapItem item = entry.get();
-                if (item.color != DyeColor.RED)
-                    visibilities.put(item, TabVisibility.SEARCH_TAB_ONLY);
-            }
-
-            return item -> visibilities.getOrDefault(item, TabVisibility.PARENT_AND_SEARCH_TABS);
         }
 
         private List<Item> collectItems(ResourceKey<CreativeModeTab> tab, Predicate<Item> classifier, boolean expected,
@@ -169,9 +152,9 @@ public class CRCreativeModeTabs {
             }
         }
 
-        private static void outputAll(CreativeModeTab.Output output, List<Item> items, Function<Item, ItemStack> stackFunc, Function<Item, TabVisibility> visibilityFunc) {
+        private static void outputAll(CreativeModeTab.Output output, List<Item> items, Function<Item, ItemStack> stackFunc) {
             for (Item item : items) {
-                output.accept(stackFunc.apply(item), visibilityFunc.apply(item));
+                output.accept(stackFunc.apply(item));
             }
         }
 

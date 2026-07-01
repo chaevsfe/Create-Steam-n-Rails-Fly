@@ -28,7 +28,7 @@ loom {
 
             name = "Minecraft Data"
             vmArg("-Dfabric-api.datagen")
-            vmArg("-Dfabric-api.datagen.output-dir=${common.file("src/generated/resources")}")
+            vmArg("-Dfabric-api.datagen.output-dir=${layout.buildDirectory.dir("generated/datagen").get().asFile}")
             vmArg("-Dfabric-api.datagen.modid=railways")
             vmArg("-Dporting_lib.datagen.existing_resources=${common.file("src/main/resources")}")
 
@@ -42,7 +42,7 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${"fabric_api_version"()}")
 
     // Create - dependencies are added transitively
-    modImplementation("maven.modrinth:create-fly:${"create_fabric_version"()}")
+    modImplementation(rootProject.extra["patchedCreateFlyFiles"]!!)
     compileOnly("com.tterrag.registrate:Registrate:MC1.20-1.3.11")
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
@@ -108,8 +108,8 @@ sourceSets.main {
     java {
         exclude("com/railwayteam/railways/base/data/fabric/CRTagGenImpl.java")
         exclude("com/railwayteam/railways/base/data/fabric/GeneratedEntriesProvider.java")
-        exclude("com/railwayteam/railways/base/data/recipe/fabric/**")
         exclude("com/railwayteam/railways/compat/emi/fabric/**")
+        exclude("com/railwayteam/railways/base/data/recipe/fabric/**")
         exclude("com/railwayteam/railways/content/buffer/fabric/BufferModel.java")
         exclude("com/railwayteam/railways/content/buffer/headstock/fabric/CopycatHeadstockBarsModel.java")
         exclude("com/railwayteam/railways/content/buffer/headstock/fabric/CopycatHeadstockModel.java")
@@ -122,7 +122,6 @@ sourceSets.main {
         exclude("com/railwayteam/railways/content/palettes/painting/fabric/PaintPitcherFluidStorage.java")
         exclude("com/railwayteam/railways/fabric/events/ClientEventsFabric.java")
         exclude("com/railwayteam/railways/fabric/mixin/**")
-        exclude("com/railwayteam/railways/fabric/RailwaysDataFabric.java")
     }
 }
 

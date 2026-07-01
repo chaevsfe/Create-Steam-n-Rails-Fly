@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/maroon/hazard_stripes_black",
+  "result": {
+    "id": "railways:maroon_hazard_stripes_diagonal_on_black",
+    "count": 1
+  }
+}

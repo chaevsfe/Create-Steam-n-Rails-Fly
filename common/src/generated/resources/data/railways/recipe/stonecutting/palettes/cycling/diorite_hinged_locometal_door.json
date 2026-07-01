@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/diorite/doors",
+  "result": {
+    "id": "railways:diorite_hinged_locometal_door",
+    "count": 1
+  }
+}

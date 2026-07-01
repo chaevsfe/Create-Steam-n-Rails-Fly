@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#railways:internal/glass/colorless",
+    "railways:orange_riveted_locometal"
+  ],
+  "result": {
+    "id": "railways:orange_single_pane_locometal_window"
+  }
+}

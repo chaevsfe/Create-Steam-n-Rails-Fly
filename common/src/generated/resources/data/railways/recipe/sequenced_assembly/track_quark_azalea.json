@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "quark"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "quark"
+    }
+  ],
+  "ingredient": "quark:azalea_planks_slab",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_quark_azalea"
+        }
+      ],
+      "target": "railways:track_incomplete_quark_azalea",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_quark_azalea"
+        }
+      ],
+      "target": "railways:track_incomplete_quark_azalea",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_quark_azalea"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_quark_azalea"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_quark_azalea"
+  },
+  "result": {
+    "id": "railways:track_quark_azalea"
+  }
+}

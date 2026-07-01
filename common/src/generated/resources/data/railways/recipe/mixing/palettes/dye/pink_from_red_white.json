@@ -1,0 +1,21 @@
+{
+  "type": "create:mixing",
+  "fluid_ingredients": [
+    {
+      "fluid": "railways:paint",
+      "amount": 10125,
+      "type": "fluid_stack"
+    },
+    {
+      "fluid": "railways:paint",
+      "amount": 10125,
+      "type": "fluid_stack"
+    }
+  ],
+  "fluid_results": [
+    {
+      "id": "railways:paint",
+      "amount": 20250
+    }
+  ]
+}

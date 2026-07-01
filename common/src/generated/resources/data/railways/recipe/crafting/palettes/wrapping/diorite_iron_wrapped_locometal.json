@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": "railways:diorite_slashed_locometal",
+    "d": "#railways:internal/ingots/iron_ingots"
+  },
+  "pattern": [
+    "###",
+    "#d#",
+    "###"
+  ],
+  "result": {
+    "count": 8,
+    "id": "railways:diorite_iron_wrapped_locometal"
+  },
+  "show_notification": true
+}

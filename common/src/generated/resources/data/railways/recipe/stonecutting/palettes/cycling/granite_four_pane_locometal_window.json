@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/granite/windows",
+  "result": {
+    "id": "railways:granite_four_pane_locometal_window",
+    "count": 1
+  }
+}

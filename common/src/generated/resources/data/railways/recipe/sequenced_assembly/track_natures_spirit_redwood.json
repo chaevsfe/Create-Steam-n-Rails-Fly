@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "natures_spirit"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "natures_spirit"
+    }
+  ],
+  "ingredient": "natures_spirit:redwood_slab",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_natures_spirit_redwood"
+        }
+      ],
+      "target": "railways:track_incomplete_natures_spirit_redwood",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_natures_spirit_redwood"
+        }
+      ],
+      "target": "railways:track_incomplete_natures_spirit_redwood",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_natures_spirit_redwood"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_natures_spirit_redwood"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_natures_spirit_redwood"
+  },
+  "result": {
+    "id": "railways:track_natures_spirit_redwood"
+  }
+}

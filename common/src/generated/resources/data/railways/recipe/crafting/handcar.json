@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": "create:andesite_casing",
+    "%": "create:andesite_alloy",
+    "*": "create:cogwheel",
+    "/": "minecraft:stick",
+    "C": "create:contraption_controls",
+    "_": "#minecraft:wooden_slabs"
+  },
+  "pattern": [
+    "/%/",
+    "_C_",
+    "#*#"
+  ],
+  "result": {
+    "id": "railways:handcar"
+  },
+  "show_notification": true
+}

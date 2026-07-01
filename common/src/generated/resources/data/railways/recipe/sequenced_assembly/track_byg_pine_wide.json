@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "byg"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "byg"
+    }
+  ],
+  "ingredient": "railways:track_byg_pine",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "results": [
+        {
+          "id": "railways:track_incomplete_byg_pine_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_byg_pine_wide",
+      "processing_time": 50
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_byg_pine_wide"
+        }
+      ],
+      "target": "railways:track_incomplete_byg_pine_wide",
+      "ingredient": "byg:pine_slab"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_byg_pine_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_byg_pine_wide"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_byg_pine_wide"
+  },
+  "result": {
+    "id": "railways:track_byg_pine_wide"
+  }
+}

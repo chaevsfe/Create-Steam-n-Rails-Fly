@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/maroon/base",
+  "result": {
+    "id": "railways:maroon_locometal_vent",
+    "count": 1
+  }
+}

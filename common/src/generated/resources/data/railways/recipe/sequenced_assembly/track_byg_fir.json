@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "byg"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "byg"
+    }
+  ],
+  "ingredient": "byg:fir_slab",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_byg_fir"
+        }
+      ],
+      "target": "railways:track_incomplete_byg_fir",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_byg_fir"
+        }
+      ],
+      "target": "railways:track_incomplete_byg_fir",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_byg_fir"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_byg_fir"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_byg_fir"
+  },
+  "result": {
+    "id": "railways:track_byg_fir"
+  }
+}

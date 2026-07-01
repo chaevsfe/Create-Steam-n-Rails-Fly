@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/olive_green/wrapped_brass",
+  "result": {
+    "id": "railways:olive_green_wrapped_locometal_smokebox",
+    "count": 1
+  }
+}

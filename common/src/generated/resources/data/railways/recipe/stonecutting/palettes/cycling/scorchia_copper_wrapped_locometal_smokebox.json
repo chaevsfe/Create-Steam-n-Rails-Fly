@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/scorchia/wrapped_copper",
+  "result": {
+    "id": "railways:scorchia_copper_wrapped_locometal_smokebox",
+    "count": 1
+  }
+}

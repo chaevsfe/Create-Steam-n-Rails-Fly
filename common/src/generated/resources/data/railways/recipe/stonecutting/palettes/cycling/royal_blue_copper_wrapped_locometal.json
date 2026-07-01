@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/royal_blue/wrapped_copper",
+  "result": {
+    "id": "railways:royal_blue_copper_wrapped_locometal",
+    "count": 1
+  }
+}

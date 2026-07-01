@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": "create:industrial_iron_block",
+    "I": "railways:small_buffer",
+    "_": "#railways:internal/plates/iron_plates"
+  },
+  "pattern": [
+    "#I_"
+  ],
+  "result": {
+    "count": 4,
+    "id": "railways:big_buffer"
+  },
+  "show_notification": true
+}

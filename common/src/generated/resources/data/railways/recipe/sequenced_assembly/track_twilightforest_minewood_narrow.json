@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "twilightforest"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "twilightforest"
+    }
+  ],
+  "ingredient": "twilightforest:mining_slab",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "results": [
+        {
+          "id": "railways:track_incomplete_twilightforest_minewood_narrow"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_twilightforest_minewood_narrow",
+      "processing_time": 50
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_twilightforest_minewood_narrow"
+        }
+      ],
+      "target": "railways:track_incomplete_twilightforest_minewood_narrow",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_twilightforest_minewood_narrow"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_twilightforest_minewood_narrow"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_twilightforest_minewood_narrow"
+  },
+  "result": {
+    "id": "railways:track_twilightforest_minewood_narrow"
+  }
+}

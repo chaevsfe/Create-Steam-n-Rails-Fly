@@ -1,0 +1,42 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": "minecraft:mangrove_slab",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_mangrove"
+        }
+      ],
+      "target": "railways:track_incomplete_mangrove",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_mangrove"
+        }
+      ],
+      "target": "railways:track_incomplete_mangrove",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_mangrove"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_mangrove"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_mangrove"
+  },
+  "result": {
+    "id": "railways:track_mangrove"
+  }
+}

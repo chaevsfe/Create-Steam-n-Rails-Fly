@@ -15,9 +15,18 @@
     "railways:wrapped_locometal_smokebox",
     "railways:copper_wrapped_locometal_smokebox",
     "railways:iron_wrapped_locometal_smokebox",
-    "railways:locometal_flywheel",
-    "railways:locometal_end_ladder",
-    "railways:locometal_rung_ladder",
+    {
+      "id": "railways:locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:locometal_rung_ladder",
+      "required": false
+    },
     "railways:locometal_trapdoor",
     "railways:hinged_locometal_door",
     "railways:sliding_locometal_door",
@@ -40,9 +49,18 @@
     "railways:brown_wrapped_locometal_smokebox",
     "railways:brown_copper_wrapped_locometal_smokebox",
     "railways:brown_iron_wrapped_locometal_smokebox",
-    "railways:brown_locometal_flywheel",
-    "railways:brown_locometal_end_ladder",
-    "railways:brown_locometal_rung_ladder",
+    {
+      "id": "railways:brown_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:brown_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:brown_locometal_rung_ladder",
+      "required": false
+    },
     "railways:brown_locometal_trapdoor",
     "railways:brown_hinged_locometal_door",
     "railways:brown_sliding_locometal_door",
@@ -65,9 +83,18 @@
     "railways:maroon_wrapped_locometal_smokebox",
     "railways:maroon_copper_wrapped_locometal_smokebox",
     "railways:maroon_iron_wrapped_locometal_smokebox",
-    "railways:maroon_locometal_flywheel",
-    "railways:maroon_locometal_end_ladder",
-    "railways:maroon_locometal_rung_ladder",
+    {
+      "id": "railways:maroon_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:maroon_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:maroon_locometal_rung_ladder",
+      "required": false
+    },
     "railways:maroon_locometal_trapdoor",
     "railways:maroon_hinged_locometal_door",
     "railways:maroon_sliding_locometal_door",
@@ -90,9 +117,18 @@
     "railways:red_wrapped_locometal_smokebox",
     "railways:red_copper_wrapped_locometal_smokebox",
     "railways:red_iron_wrapped_locometal_smokebox",
-    "railways:red_locometal_flywheel",
-    "railways:red_locometal_end_ladder",
-    "railways:red_locometal_rung_ladder",
+    {
+      "id": "railways:red_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:red_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:red_locometal_rung_ladder",
+      "required": false
+    },
     "railways:red_locometal_trapdoor",
     "railways:red_hinged_locometal_door",
     "railways:red_sliding_locometal_door",
@@ -115,9 +151,18 @@
     "railways:vermilion_wrapped_locometal_smokebox",
     "railways:vermilion_copper_wrapped_locometal_smokebox",
     "railways:vermilion_iron_wrapped_locometal_smokebox",
-    "railways:vermilion_locometal_flywheel",
-    "railways:vermilion_locometal_end_ladder",
-    "railways:vermilion_locometal_rung_ladder",
+    {
+      "id": "railways:vermilion_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:vermilion_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:vermilion_locometal_rung_ladder",
+      "required": false
+    },
     "railways:vermilion_locometal_trapdoor",
     "railways:vermilion_hinged_locometal_door",
     "railways:vermilion_sliding_locometal_door",
@@ -140,9 +185,18 @@
     "railways:orange_wrapped_locometal_smokebox",
     "railways:orange_copper_wrapped_locometal_smokebox",
     "railways:orange_iron_wrapped_locometal_smokebox",
-    "railways:orange_locometal_flywheel",
-    "railways:orange_locometal_end_ladder",
-    "railways:orange_locometal_rung_ladder",
+    {
+      "id": "railways:orange_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:orange_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:orange_locometal_rung_ladder",
+      "required": false
+    },
     "railways:orange_locometal_trapdoor",
     "railways:orange_hinged_locometal_door",
     "railways:orange_sliding_locometal_door",
@@ -165,9 +219,18 @@
     "railways:granite_wrapped_locometal_smokebox",
     "railways:granite_copper_wrapped_locometal_smokebox",
     "railways:granite_iron_wrapped_locometal_smokebox",
-    "railways:granite_locometal_flywheel",
-    "railways:granite_locometal_end_ladder",
-    "railways:granite_locometal_rung_ladder",
+    {
+      "id": "railways:granite_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:granite_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:granite_locometal_rung_ladder",
+      "required": false
+    },
     "railways:granite_locometal_trapdoor",
     "railways:granite_hinged_locometal_door",
     "railways:granite_sliding_locometal_door",
@@ -190,9 +253,18 @@
     "railways:dripstone_wrapped_locometal_smokebox",
     "railways:dripstone_copper_wrapped_locometal_smokebox",
     "railways:dripstone_iron_wrapped_locometal_smokebox",
-    "railways:dripstone_locometal_flywheel",
-    "railways:dripstone_locometal_end_ladder",
-    "railways:dripstone_locometal_rung_ladder",
+    {
+      "id": "railways:dripstone_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:dripstone_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:dripstone_locometal_rung_ladder",
+      "required": false
+    },
     "railways:dripstone_locometal_trapdoor",
     "railways:dripstone_hinged_locometal_door",
     "railways:dripstone_sliding_locometal_door",
@@ -215,9 +287,18 @@
     "railways:ochrum_wrapped_locometal_smokebox",
     "railways:ochrum_copper_wrapped_locometal_smokebox",
     "railways:ochrum_iron_wrapped_locometal_smokebox",
-    "railways:ochrum_locometal_flywheel",
-    "railways:ochrum_locometal_end_ladder",
-    "railways:ochrum_locometal_rung_ladder",
+    {
+      "id": "railways:ochrum_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:ochrum_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:ochrum_locometal_rung_ladder",
+      "required": false
+    },
     "railways:ochrum_locometal_trapdoor",
     "railways:ochrum_hinged_locometal_door",
     "railways:ochrum_sliding_locometal_door",
@@ -240,9 +321,18 @@
     "railways:yellow_wrapped_locometal_smokebox",
     "railways:yellow_copper_wrapped_locometal_smokebox",
     "railways:yellow_iron_wrapped_locometal_smokebox",
-    "railways:yellow_locometal_flywheel",
-    "railways:yellow_locometal_end_ladder",
-    "railways:yellow_locometal_rung_ladder",
+    {
+      "id": "railways:yellow_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:yellow_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:yellow_locometal_rung_ladder",
+      "required": false
+    },
     "railways:yellow_locometal_trapdoor",
     "railways:yellow_hinged_locometal_door",
     "railways:yellow_sliding_locometal_door",
@@ -265,9 +355,18 @@
     "railways:chartreuse_wrapped_locometal_smokebox",
     "railways:chartreuse_copper_wrapped_locometal_smokebox",
     "railways:chartreuse_iron_wrapped_locometal_smokebox",
-    "railways:chartreuse_locometal_flywheel",
-    "railways:chartreuse_locometal_end_ladder",
-    "railways:chartreuse_locometal_rung_ladder",
+    {
+      "id": "railways:chartreuse_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:chartreuse_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:chartreuse_locometal_rung_ladder",
+      "required": false
+    },
     "railways:chartreuse_locometal_trapdoor",
     "railways:chartreuse_hinged_locometal_door",
     "railways:chartreuse_sliding_locometal_door",
@@ -290,9 +389,18 @@
     "railways:olive_green_wrapped_locometal_smokebox",
     "railways:olive_green_copper_wrapped_locometal_smokebox",
     "railways:olive_green_iron_wrapped_locometal_smokebox",
-    "railways:olive_green_locometal_flywheel",
-    "railways:olive_green_locometal_end_ladder",
-    "railways:olive_green_locometal_rung_ladder",
+    {
+      "id": "railways:olive_green_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:olive_green_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:olive_green_locometal_rung_ladder",
+      "required": false
+    },
     "railways:olive_green_locometal_trapdoor",
     "railways:olive_green_hinged_locometal_door",
     "railways:olive_green_sliding_locometal_door",
@@ -315,9 +423,18 @@
     "railways:lime_wrapped_locometal_smokebox",
     "railways:lime_copper_wrapped_locometal_smokebox",
     "railways:lime_iron_wrapped_locometal_smokebox",
-    "railways:lime_locometal_flywheel",
-    "railways:lime_locometal_end_ladder",
-    "railways:lime_locometal_rung_ladder",
+    {
+      "id": "railways:lime_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:lime_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:lime_locometal_rung_ladder",
+      "required": false
+    },
     "railways:lime_locometal_trapdoor",
     "railways:lime_hinged_locometal_door",
     "railways:lime_sliding_locometal_door",
@@ -340,9 +457,18 @@
     "railways:green_wrapped_locometal_smokebox",
     "railways:green_copper_wrapped_locometal_smokebox",
     "railways:green_iron_wrapped_locometal_smokebox",
-    "railways:green_locometal_flywheel",
-    "railways:green_locometal_end_ladder",
-    "railways:green_locometal_rung_ladder",
+    {
+      "id": "railways:green_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:green_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:green_locometal_rung_ladder",
+      "required": false
+    },
     "railways:green_locometal_trapdoor",
     "railways:green_hinged_locometal_door",
     "railways:green_sliding_locometal_door",
@@ -365,9 +491,18 @@
     "railways:pine_green_wrapped_locometal_smokebox",
     "railways:pine_green_copper_wrapped_locometal_smokebox",
     "railways:pine_green_iron_wrapped_locometal_smokebox",
-    "railways:pine_green_locometal_flywheel",
-    "railways:pine_green_locometal_end_ladder",
-    "railways:pine_green_locometal_rung_ladder",
+    {
+      "id": "railways:pine_green_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:pine_green_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:pine_green_locometal_rung_ladder",
+      "required": false
+    },
     "railways:pine_green_locometal_trapdoor",
     "railways:pine_green_hinged_locometal_door",
     "railways:pine_green_sliding_locometal_door",
@@ -390,9 +525,18 @@
     "railways:cyan_wrapped_locometal_smokebox",
     "railways:cyan_copper_wrapped_locometal_smokebox",
     "railways:cyan_iron_wrapped_locometal_smokebox",
-    "railways:cyan_locometal_flywheel",
-    "railways:cyan_locometal_end_ladder",
-    "railways:cyan_locometal_rung_ladder",
+    {
+      "id": "railways:cyan_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:cyan_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:cyan_locometal_rung_ladder",
+      "required": false
+    },
     "railways:cyan_locometal_trapdoor",
     "railways:cyan_hinged_locometal_door",
     "railways:cyan_sliding_locometal_door",
@@ -415,9 +559,18 @@
     "railways:sea_green_wrapped_locometal_smokebox",
     "railways:sea_green_copper_wrapped_locometal_smokebox",
     "railways:sea_green_iron_wrapped_locometal_smokebox",
-    "railways:sea_green_locometal_flywheel",
-    "railways:sea_green_locometal_end_ladder",
-    "railways:sea_green_locometal_rung_ladder",
+    {
+      "id": "railways:sea_green_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:sea_green_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:sea_green_locometal_rung_ladder",
+      "required": false
+    },
     "railways:sea_green_locometal_trapdoor",
     "railways:sea_green_hinged_locometal_door",
     "railways:sea_green_sliding_locometal_door",
@@ -440,9 +593,18 @@
     "railways:turquoise_wrapped_locometal_smokebox",
     "railways:turquoise_copper_wrapped_locometal_smokebox",
     "railways:turquoise_iron_wrapped_locometal_smokebox",
-    "railways:turquoise_locometal_flywheel",
-    "railways:turquoise_locometal_end_ladder",
-    "railways:turquoise_locometal_rung_ladder",
+    {
+      "id": "railways:turquoise_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:turquoise_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:turquoise_locometal_rung_ladder",
+      "required": false
+    },
     "railways:turquoise_locometal_trapdoor",
     "railways:turquoise_hinged_locometal_door",
     "railways:turquoise_sliding_locometal_door",
@@ -465,9 +627,18 @@
     "railways:light_blue_wrapped_locometal_smokebox",
     "railways:light_blue_copper_wrapped_locometal_smokebox",
     "railways:light_blue_iron_wrapped_locometal_smokebox",
-    "railways:light_blue_locometal_flywheel",
-    "railways:light_blue_locometal_end_ladder",
-    "railways:light_blue_locometal_rung_ladder",
+    {
+      "id": "railways:light_blue_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:light_blue_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:light_blue_locometal_rung_ladder",
+      "required": false
+    },
     "railways:light_blue_locometal_trapdoor",
     "railways:light_blue_hinged_locometal_door",
     "railways:light_blue_sliding_locometal_door",
@@ -490,9 +661,18 @@
     "railways:blue_wrapped_locometal_smokebox",
     "railways:blue_copper_wrapped_locometal_smokebox",
     "railways:blue_iron_wrapped_locometal_smokebox",
-    "railways:blue_locometal_flywheel",
-    "railways:blue_locometal_end_ladder",
-    "railways:blue_locometal_rung_ladder",
+    {
+      "id": "railways:blue_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:blue_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:blue_locometal_rung_ladder",
+      "required": false
+    },
     "railways:blue_locometal_trapdoor",
     "railways:blue_hinged_locometal_door",
     "railways:blue_sliding_locometal_door",
@@ -515,9 +695,18 @@
     "railways:royal_blue_wrapped_locometal_smokebox",
     "railways:royal_blue_copper_wrapped_locometal_smokebox",
     "railways:royal_blue_iron_wrapped_locometal_smokebox",
-    "railways:royal_blue_locometal_flywheel",
-    "railways:royal_blue_locometal_end_ladder",
-    "railways:royal_blue_locometal_rung_ladder",
+    {
+      "id": "railways:royal_blue_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:royal_blue_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:royal_blue_locometal_rung_ladder",
+      "required": false
+    },
     "railways:royal_blue_locometal_trapdoor",
     "railways:royal_blue_hinged_locometal_door",
     "railways:royal_blue_sliding_locometal_door",
@@ -540,9 +729,18 @@
     "railways:purple_wrapped_locometal_smokebox",
     "railways:purple_copper_wrapped_locometal_smokebox",
     "railways:purple_iron_wrapped_locometal_smokebox",
-    "railways:purple_locometal_flywheel",
-    "railways:purple_locometal_end_ladder",
-    "railways:purple_locometal_rung_ladder",
+    {
+      "id": "railways:purple_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:purple_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:purple_locometal_rung_ladder",
+      "required": false
+    },
     "railways:purple_locometal_trapdoor",
     "railways:purple_hinged_locometal_door",
     "railways:purple_sliding_locometal_door",
@@ -565,9 +763,18 @@
     "railways:magenta_wrapped_locometal_smokebox",
     "railways:magenta_copper_wrapped_locometal_smokebox",
     "railways:magenta_iron_wrapped_locometal_smokebox",
-    "railways:magenta_locometal_flywheel",
-    "railways:magenta_locometal_end_ladder",
-    "railways:magenta_locometal_rung_ladder",
+    {
+      "id": "railways:magenta_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:magenta_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:magenta_locometal_rung_ladder",
+      "required": false
+    },
     "railways:magenta_locometal_trapdoor",
     "railways:magenta_hinged_locometal_door",
     "railways:magenta_sliding_locometal_door",
@@ -590,9 +797,18 @@
     "railways:pink_wrapped_locometal_smokebox",
     "railways:pink_copper_wrapped_locometal_smokebox",
     "railways:pink_iron_wrapped_locometal_smokebox",
-    "railways:pink_locometal_flywheel",
-    "railways:pink_locometal_end_ladder",
-    "railways:pink_locometal_rung_ladder",
+    {
+      "id": "railways:pink_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:pink_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:pink_locometal_rung_ladder",
+      "required": false
+    },
     "railways:pink_locometal_trapdoor",
     "railways:pink_hinged_locometal_door",
     "railways:pink_sliding_locometal_door",
@@ -615,9 +831,18 @@
     "railways:white_wrapped_locometal_smokebox",
     "railways:white_copper_wrapped_locometal_smokebox",
     "railways:white_iron_wrapped_locometal_smokebox",
-    "railways:white_locometal_flywheel",
-    "railways:white_locometal_end_ladder",
-    "railways:white_locometal_rung_ladder",
+    {
+      "id": "railways:white_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:white_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:white_locometal_rung_ladder",
+      "required": false
+    },
     "railways:white_locometal_trapdoor",
     "railways:white_hinged_locometal_door",
     "railways:white_sliding_locometal_door",
@@ -640,9 +865,18 @@
     "railways:diorite_wrapped_locometal_smokebox",
     "railways:diorite_copper_wrapped_locometal_smokebox",
     "railways:diorite_iron_wrapped_locometal_smokebox",
-    "railways:diorite_locometal_flywheel",
-    "railways:diorite_locometal_end_ladder",
-    "railways:diorite_locometal_rung_ladder",
+    {
+      "id": "railways:diorite_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:diorite_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:diorite_locometal_rung_ladder",
+      "required": false
+    },
     "railways:diorite_locometal_trapdoor",
     "railways:diorite_hinged_locometal_door",
     "railways:diorite_sliding_locometal_door",
@@ -665,9 +899,18 @@
     "railways:limestone_wrapped_locometal_smokebox",
     "railways:limestone_copper_wrapped_locometal_smokebox",
     "railways:limestone_iron_wrapped_locometal_smokebox",
-    "railways:limestone_locometal_flywheel",
-    "railways:limestone_locometal_end_ladder",
-    "railways:limestone_locometal_rung_ladder",
+    {
+      "id": "railways:limestone_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:limestone_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:limestone_locometal_rung_ladder",
+      "required": false
+    },
     "railways:limestone_locometal_trapdoor",
     "railways:limestone_hinged_locometal_door",
     "railways:limestone_sliding_locometal_door",
@@ -690,9 +933,18 @@
     "railways:light_gray_wrapped_locometal_smokebox",
     "railways:light_gray_copper_wrapped_locometal_smokebox",
     "railways:light_gray_iron_wrapped_locometal_smokebox",
-    "railways:light_gray_locometal_flywheel",
-    "railways:light_gray_locometal_end_ladder",
-    "railways:light_gray_locometal_rung_ladder",
+    {
+      "id": "railways:light_gray_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:light_gray_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:light_gray_locometal_rung_ladder",
+      "required": false
+    },
     "railways:light_gray_locometal_trapdoor",
     "railways:light_gray_hinged_locometal_door",
     "railways:light_gray_sliding_locometal_door",
@@ -715,9 +967,18 @@
     "railways:tuff_wrapped_locometal_smokebox",
     "railways:tuff_copper_wrapped_locometal_smokebox",
     "railways:tuff_iron_wrapped_locometal_smokebox",
-    "railways:tuff_locometal_flywheel",
-    "railways:tuff_locometal_end_ladder",
-    "railways:tuff_locometal_rung_ladder",
+    {
+      "id": "railways:tuff_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:tuff_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:tuff_locometal_rung_ladder",
+      "required": false
+    },
     "railways:tuff_locometal_trapdoor",
     "railways:tuff_hinged_locometal_door",
     "railways:tuff_sliding_locometal_door",
@@ -740,9 +1001,18 @@
     "railways:gray_wrapped_locometal_smokebox",
     "railways:gray_copper_wrapped_locometal_smokebox",
     "railways:gray_iron_wrapped_locometal_smokebox",
-    "railways:gray_locometal_flywheel",
-    "railways:gray_locometal_end_ladder",
-    "railways:gray_locometal_rung_ladder",
+    {
+      "id": "railways:gray_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:gray_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:gray_locometal_rung_ladder",
+      "required": false
+    },
     "railways:gray_locometal_trapdoor",
     "railways:gray_hinged_locometal_door",
     "railways:gray_sliding_locometal_door",
@@ -765,9 +1035,18 @@
     "railways:scorchia_wrapped_locometal_smokebox",
     "railways:scorchia_copper_wrapped_locometal_smokebox",
     "railways:scorchia_iron_wrapped_locometal_smokebox",
-    "railways:scorchia_locometal_flywheel",
-    "railways:scorchia_locometal_end_ladder",
-    "railways:scorchia_locometal_rung_ladder",
+    {
+      "id": "railways:scorchia_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:scorchia_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:scorchia_locometal_rung_ladder",
+      "required": false
+    },
     "railways:scorchia_locometal_trapdoor",
     "railways:scorchia_hinged_locometal_door",
     "railways:scorchia_sliding_locometal_door",
@@ -790,9 +1069,18 @@
     "railways:black_wrapped_locometal_smokebox",
     "railways:black_copper_wrapped_locometal_smokebox",
     "railways:black_iron_wrapped_locometal_smokebox",
-    "railways:black_locometal_flywheel",
-    "railways:black_locometal_end_ladder",
-    "railways:black_locometal_rung_ladder",
+    {
+      "id": "railways:black_locometal_flywheel",
+      "required": false
+    },
+    {
+      "id": "railways:black_locometal_end_ladder",
+      "required": false
+    },
+    {
+      "id": "railways:black_locometal_rung_ladder",
+      "required": false
+    },
     "railways:black_locometal_trapdoor",
     "railways:black_hinged_locometal_door",
     "railways:black_sliding_locometal_door",

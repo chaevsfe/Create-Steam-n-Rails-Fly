@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/lime/wrapped_copper",
+  "result": {
+    "id": "railways:lime_copper_wrapped_locometal",
+    "count": 1
+  }
+}

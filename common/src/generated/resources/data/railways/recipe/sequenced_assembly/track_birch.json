@@ -1,0 +1,42 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": "minecraft:birch_slab",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_birch"
+        }
+      ],
+      "target": "railways:track_incomplete_birch",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_birch"
+        }
+      ],
+      "target": "railways:track_incomplete_birch",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_birch"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_birch"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_birch"
+  },
+  "result": {
+    "id": "railways:track_birch"
+  }
+}

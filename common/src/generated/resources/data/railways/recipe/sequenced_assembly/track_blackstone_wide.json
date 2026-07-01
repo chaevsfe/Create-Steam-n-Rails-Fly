@@ -1,0 +1,42 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": "railways:track_blackstone",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "results": [
+        {
+          "id": "railways:track_incomplete_blackstone_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_blackstone_wide",
+      "processing_time": 50
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_blackstone_wide"
+        }
+      ],
+      "target": "railways:track_incomplete_blackstone_wide",
+      "ingredient": "minecraft:blackstone_slab"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_blackstone_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_blackstone_wide"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_blackstone_wide"
+  },
+  "result": {
+    "id": "railways:track_blackstone_wide"
+  }
+}

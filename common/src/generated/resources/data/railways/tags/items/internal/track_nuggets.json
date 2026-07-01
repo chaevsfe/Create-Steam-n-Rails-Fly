@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#railways:internal/nuggets/iron_nuggets",
+      "required": false
+    },
+    {
+      "id": "#railways:internal/nuggets/zinc_nuggets",
+      "required": false
+    }
+  ]
+}

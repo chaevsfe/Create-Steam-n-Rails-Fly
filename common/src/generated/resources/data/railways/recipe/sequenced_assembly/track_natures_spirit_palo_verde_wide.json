@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "natures_spirit"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "natures_spirit"
+    }
+  ],
+  "ingredient": "railways:track_natures_spirit_palo_verde",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "results": [
+        {
+          "id": "railways:track_incomplete_natures_spirit_palo_verde_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_natures_spirit_palo_verde_wide",
+      "processing_time": 50
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_natures_spirit_palo_verde_wide"
+        }
+      ],
+      "target": "railways:track_incomplete_natures_spirit_palo_verde_wide",
+      "ingredient": "natures_spirit:palo_verde_slab"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_natures_spirit_palo_verde_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_natures_spirit_palo_verde_wide"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_natures_spirit_palo_verde_wide"
+  },
+  "result": {
+    "id": "railways:track_natures_spirit_palo_verde_wide"
+  }
+}

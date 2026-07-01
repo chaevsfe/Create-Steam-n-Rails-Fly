@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/red/base",
+  "result": {
+    "id": "railways:red_locometal_vent",
+    "count": 1
+  }
+}

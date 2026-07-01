@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/maroon/doors",
+  "result": {
+    "id": "railways:maroon_folding_locometal_door",
+    "count": 1
+  }
+}

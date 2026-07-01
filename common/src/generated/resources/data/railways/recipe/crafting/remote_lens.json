@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "create:precision_mechanism",
+    "minecraft:ender_eye",
+    "#railways:internal/plates/brass_plates"
+  ],
+  "result": {
+    "id": "railways:remote_lens"
+  }
+}

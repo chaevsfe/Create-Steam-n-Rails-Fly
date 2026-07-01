@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "natures_spirit"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "natures_spirit"
+    }
+  ],
+  "ingredient": "railways:track_natures_spirit_redwood",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "results": [
+        {
+          "id": "railways:track_incomplete_natures_spirit_redwood_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_natures_spirit_redwood_wide",
+      "processing_time": 50
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_natures_spirit_redwood_wide"
+        }
+      ],
+      "target": "railways:track_incomplete_natures_spirit_redwood_wide",
+      "ingredient": "natures_spirit:redwood_slab"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_natures_spirit_redwood_wide"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_natures_spirit_redwood_wide"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_natures_spirit_redwood_wide"
+  },
+  "result": {
+    "id": "railways:track_natures_spirit_redwood_wide"
+  }
+}

@@ -39,7 +39,7 @@ dependencies {
     // dependencies must also be pulled in to minimize problems, from remapping issues to compile errors.
     // All dependencies except Flywheel and Registrate are NOT safe to use!
     // Flywheel and Registrate must also be used carefully due to differences.
-    modCompileOnly("maven.modrinth:create-fly:${"create_fabric_version"()}")
+    modCompileOnly(rootProject.extra["patchedCreateFlyFiles"]!!)
     compileOnly("com.tterrag.registrate:Registrate:MC1.20-1.3.11")
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 

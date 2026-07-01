@@ -1,0 +1,42 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": "minecraft:warped_slab",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "results": [
+        {
+          "id": "railways:track_incomplete_warped_narrow"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_warped_narrow",
+      "processing_time": 50
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_warped_narrow"
+        }
+      ],
+      "target": "railways:track_incomplete_warped_narrow",
+      "ingredient": "minecraft:gold_nugget"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_warped_narrow"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_warped_narrow"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_warped_narrow"
+  },
+  "result": {
+    "id": "railways:track_warped_narrow"
+  }
+}

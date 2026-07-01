@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/cyan/windows",
+  "result": {
+    "id": "railways:cyan_round_pane_locometal_window",
+    "count": 1
+  }
+}

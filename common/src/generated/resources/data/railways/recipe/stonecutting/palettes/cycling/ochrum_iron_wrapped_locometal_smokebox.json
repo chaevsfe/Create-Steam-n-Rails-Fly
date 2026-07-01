@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/ochrum/wrapped_iron",
+  "result": {
+    "id": "railways:ochrum_iron_wrapped_locometal_smokebox",
+    "count": 1
+  }
+}

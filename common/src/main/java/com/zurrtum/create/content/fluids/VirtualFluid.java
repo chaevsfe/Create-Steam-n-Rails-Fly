@@ -41,10 +41,10 @@ public class VirtualFluid extends ForgeFlowingFluid {
         return Blocks.AIR.defaultBlockState();
     }
     public boolean isSource(FluidState state) {
-        return false;
+        return true;
     }
     public int getAmount(FluidState state) {
-        return 0;
+        return 8;
     }
     public VoxelShape getShape(FluidState state, BlockGetter level, BlockPos pos) {
         return Shapes.empty();

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/olive_green/doors",
+  "result": {
+    "id": "railways:olive_green_sliding_locometal_door",
+    "count": 1
+  }
+}

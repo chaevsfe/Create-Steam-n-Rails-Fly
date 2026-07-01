@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "twilightforest"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "twilightforest"
+    }
+  ],
+  "ingredient": "twilightforest:twilight_oak_slab",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_twilightforest_twilight_oak"
+        }
+      ],
+      "target": "railways:track_incomplete_twilightforest_twilight_oak",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_twilightforest_twilight_oak"
+        }
+      ],
+      "target": "railways:track_incomplete_twilightforest_twilight_oak",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_twilightforest_twilight_oak"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_twilightforest_twilight_oak"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_twilightforest_twilight_oak"
+  },
+  "result": {
+    "id": "railways:track_twilightforest_twilight_oak"
+  }
+}

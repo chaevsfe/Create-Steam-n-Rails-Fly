@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "byg"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "byg"
+    }
+  ],
+  "ingredient": "byg:nightshade_slab",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_byg_nightshade"
+        }
+      ],
+      "target": "railways:track_incomplete_byg_nightshade",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_byg_nightshade"
+        }
+      ],
+      "target": "railways:track_incomplete_byg_nightshade",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_byg_nightshade"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_byg_nightshade"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_byg_nightshade"
+  },
+  "result": {
+    "id": "railways:track_byg_nightshade"
+  }
+}

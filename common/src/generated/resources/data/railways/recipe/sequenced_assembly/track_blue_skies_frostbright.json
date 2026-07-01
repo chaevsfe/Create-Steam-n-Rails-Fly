@@ -1,0 +1,56 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "blue_skies"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "blue_skies"
+    }
+  ],
+  "ingredient": "blue_skies:frostbright_slab",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_blue_skies_frostbright"
+        }
+      ],
+      "target": "railways:track_incomplete_blue_skies_frostbright",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:deploying",
+      "results": [
+        {
+          "id": "railways:track_incomplete_blue_skies_frostbright"
+        }
+      ],
+      "target": "railways:track_incomplete_blue_skies_frostbright",
+      "ingredient": "#railways:internal/track_nuggets"
+    },
+    {
+      "type": "create:pressing",
+      "results": [
+        {
+          "id": "railways:track_incomplete_blue_skies_frostbright"
+        }
+      ],
+      "ingredient": "railways:track_incomplete_blue_skies_frostbright"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_blue_skies_frostbright"
+  },
+  "result": {
+    "id": "railways:track_blue_skies_frostbright"
+  }
+}

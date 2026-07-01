@@ -78,10 +78,8 @@ public class PalettesSlidingDoorBlock extends SlidingDoorBlock implements IWrenc
             Level level = context.getLevel();
             BlockPos posBelow = context.getClickedPos().below();
             return super.onSneakWrenched(level.getBlockState(posBelow), new UseOnContext(
-                level,
                 context.getPlayer(),
                 context.getHand(),
-                context.getItemInHand(),
                 new BlockHitResult(
                     context.getClickLocation().add(0, -1, 0),
                     context.getClickedFace(),
