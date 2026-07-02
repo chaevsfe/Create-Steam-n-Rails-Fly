@@ -98,7 +98,7 @@ public class RailwaysJeiClient implements IModPlugin {
 			graphics.guiRenderState.submitPicturesInPictureState(new SawRenderState(
 				new Matrix3x2f(matrices),
 				x - 3,
-				y + 18
+				y + 90
 			));
 			matrices.popMatrix();
 		}
