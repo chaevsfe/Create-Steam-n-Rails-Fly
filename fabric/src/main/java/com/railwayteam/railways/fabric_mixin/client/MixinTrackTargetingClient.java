@@ -35,9 +35,8 @@ public abstract class MixinTrackTargetingClient {
     @Shadow
     static BezierTrackPointLocation lastHoveredBezierSegment;
 
-    @Inject(method = "render", at = @At("HEAD"))
-    private static void railways$renderSwitchHints(Minecraft mc, PoseStack ms, SuperRenderTypeBuffer buffer,
-                                                   Vec3 camera, CallbackInfo ci) {
+    @Inject(method = "clientTick", at = @At("HEAD"))
+    private static void railways$tickSwitchHints(Minecraft mc, CallbackInfo ci) {
         TrackSwitchDebugVisualizer.visualizePotentialLocations();
     }
 

@@ -242,8 +242,9 @@ public class TrackCouplerBlockEntity extends SmartBlockEntity implements Transfo
                     if (location != null && location.graph != null) {
                         location.graph.removePoint(level.getServer(), CREdgePointTypes.COUPLER, point.id);
                         Create.RAILWAYS.trains.forEach((uuid, train) -> {
-                            ((IOccupiedCouplers) train).railways$getOccupiedCouplers().remove(point.id);
-                            if (uuid == point.getCurrentTrain() || train.graph == location.graph) {
+                            if (train instanceof IOccupiedCouplers occupiedCouplers)
+                                occupiedCouplers.railways$getOccupiedCouplers().remove(point.id);
+                            if (uuid.equals(point.getCurrentTrain()) || train.graph == location.graph) {
                                 train.updateSignalBlocks = true;
                             }
                         });
