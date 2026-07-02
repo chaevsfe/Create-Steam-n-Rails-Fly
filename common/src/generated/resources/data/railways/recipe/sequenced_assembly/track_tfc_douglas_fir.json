@@ -19,32 +19,20 @@
   "sequence": [
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_tfc_douglas_fir"
-        }
-      ],
-      "target": "railways:track_incomplete_tfc_douglas_fir",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "#railways:internal/track_rods"
     },
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_tfc_douglas_fir"
-        }
-      ],
-      "target": "railways:track_incomplete_tfc_douglas_fir",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "#railways:internal/track_rods"
     },
     {
       "type": "create:pressing",
-      "results": [
-        {
-          "id": "railways:track_incomplete_tfc_douglas_fir"
-        }
-      ],
-      "ingredient": "railways:track_incomplete_tfc_douglas_fir"
+      "results": ["$result"],
+      "ingredient": "$ingredient"
     }
   ],
   "transitional_item": {

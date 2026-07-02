@@ -19,32 +19,20 @@
   "sequence": [
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_blue_skies_starlit"
-        }
-      ],
-      "target": "railways:track_incomplete_blue_skies_starlit",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "#create:track_nuggets"
     },
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_blue_skies_starlit"
-        }
-      ],
-      "target": "railways:track_incomplete_blue_skies_starlit",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "#create:track_nuggets"
     },
     {
       "type": "create:pressing",
-      "results": [
-        {
-          "id": "railways:track_incomplete_blue_skies_starlit"
-        }
-      ],
-      "ingredient": "railways:track_incomplete_blue_skies_starlit"
+      "results": ["$result"],
+      "ingredient": "$ingredient"
     }
   ],
   "transitional_item": {

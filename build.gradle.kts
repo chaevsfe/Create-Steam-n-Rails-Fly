@@ -231,6 +231,12 @@ subprojects {
 
     // from here down is platform configuration
     if(project.path == ":common") {
+        afterEvaluate {
+            tasks.named<Jar>("jar") {
+                archiveClassifier.set("")
+                destinationDirectory = layout.buildDirectory.dir("libs").get()
+            }
+        }
         return@subprojects
     }
 

@@ -5,32 +5,20 @@
   "sequence": [
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_phantom"
-        }
-      ],
-      "target": "railways:track_incomplete_phantom",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "minecraft:iron_ingot"
     },
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_phantom"
-        }
-      ],
-      "target": "railways:track_incomplete_phantom",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "minecraft:iron_ingot"
     },
     {
       "type": "create:pressing",
-      "results": [
-        {
-          "id": "railways:track_incomplete_phantom"
-        }
-      ],
-      "ingredient": "railways:track_incomplete_phantom"
+      "results": ["$result"],
+      "ingredient": "$ingredient"
     }
   ],
   "transitional_item": {

@@ -5,32 +5,20 @@
   "sequence": [
     {
       "type": "create:cutting",
-      "results": [
-        {
-          "id": "railways:track_incomplete_warped_wide"
-        }
-      ],
-      "ingredient": "railways:track_incomplete_warped_wide",
+      "results": ["$result"],
+      "ingredient": "$ingredient",
       "processing_time": 50
     },
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_warped_wide"
-        }
-      ],
-      "target": "railways:track_incomplete_warped_wide",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "minecraft:warped_slab"
     },
     {
       "type": "create:pressing",
-      "results": [
-        {
-          "id": "railways:track_incomplete_warped_wide"
-        }
-      ],
-      "ingredient": "railways:track_incomplete_warped_wide"
+      "results": ["$result"],
+      "ingredient": "$ingredient"
     }
   ],
   "transitional_item": {

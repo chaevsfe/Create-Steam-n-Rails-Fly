@@ -19,32 +19,20 @@
   "sequence": [
     {
       "type": "create:cutting",
-      "results": [
-        {
-          "id": "railways:track_incomplete_twilightforest_minewood_wide"
-        }
-      ],
-      "ingredient": "railways:track_incomplete_twilightforest_minewood_wide",
+      "results": ["$result"],
+      "ingredient": "$ingredient",
       "processing_time": 50
     },
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_twilightforest_minewood_wide"
-        }
-      ],
-      "target": "railways:track_incomplete_twilightforest_minewood_wide",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "twilightforest:mining_slab"
     },
     {
       "type": "create:pressing",
-      "results": [
-        {
-          "id": "railways:track_incomplete_twilightforest_minewood_wide"
-        }
-      ],
-      "ingredient": "railways:track_incomplete_twilightforest_minewood_wide"
+      "results": ["$result"],
+      "ingredient": "$ingredient"
     }
   ],
   "transitional_item": {

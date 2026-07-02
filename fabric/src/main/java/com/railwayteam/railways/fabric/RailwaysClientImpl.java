@@ -58,6 +58,9 @@ public class RailwaysClientImpl implements ClientModInitializer {
 	public void onInitializeClient() {
 		CopycatHeadstockModelRegistration.register();
 		RailwaysClient.init();
+		if (FabricLoader.getInstance().isModLoaded("jei")) {
+			registerJeiCompat();
+		}
 		ConductorCapItemRenderer.register();
 		CRParticleTypes.registerFactories();
 		registerClientEvents();
@@ -68,6 +71,16 @@ public class RailwaysClientImpl implements ClientModInitializer {
 		BlockRenderLayerMap.putBlock(
 				com.railwayteam.railways.registry.CRBlocks.CONDUCTOR_VENT.get(),
 				ChunkSectionLayer.CUTOUT);
+	}
+
+	private static void registerJeiCompat() {
+		try {
+			Class.forName("com.railwayteam.railways.compat.jei.RailwaysJeiClient")
+				.getMethod("register")
+				.invoke(null);
+		} catch (ReflectiveOperationException e) {
+			Railways.LOGGER.error("Failed to register Railways JEI client compatibility", e);
+		}
 	}
 
 	private static void registerTrackRenderLayers() {

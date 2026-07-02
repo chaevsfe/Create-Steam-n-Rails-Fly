@@ -19,32 +19,20 @@
   "sequence": [
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_quark_blossom"
-        }
-      ],
-      "target": "railways:track_incomplete_quark_blossom",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "#create:track_nuggets"
     },
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_quark_blossom"
-        }
-      ],
-      "target": "railways:track_incomplete_quark_blossom",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "#create:track_nuggets"
     },
     {
       "type": "create:pressing",
-      "results": [
-        {
-          "id": "railways:track_incomplete_quark_blossom"
-        }
-      ],
-      "ingredient": "railways:track_incomplete_quark_blossom"
+      "results": ["$result"],
+      "ingredient": "$ingredient"
     }
   ],
   "transitional_item": {

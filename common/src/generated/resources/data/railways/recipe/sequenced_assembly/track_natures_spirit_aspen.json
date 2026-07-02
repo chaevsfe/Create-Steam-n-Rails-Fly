@@ -19,32 +19,20 @@
   "sequence": [
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_natures_spirit_aspen"
-        }
-      ],
-      "target": "railways:track_incomplete_natures_spirit_aspen",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "#create:track_nuggets"
     },
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_natures_spirit_aspen"
-        }
-      ],
-      "target": "railways:track_incomplete_natures_spirit_aspen",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "#create:track_nuggets"
     },
     {
       "type": "create:pressing",
-      "results": [
-        {
-          "id": "railways:track_incomplete_natures_spirit_aspen"
-        }
-      ],
-      "ingredient": "railways:track_incomplete_natures_spirit_aspen"
+      "results": ["$result"],
+      "ingredient": "$ingredient"
     }
   ],
   "transitional_item": {

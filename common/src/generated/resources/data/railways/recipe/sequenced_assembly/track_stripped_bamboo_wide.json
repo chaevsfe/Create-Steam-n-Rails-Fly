@@ -5,32 +5,20 @@
   "sequence": [
     {
       "type": "create:cutting",
-      "results": [
-        {
-          "id": "railways:track_incomplete_stripped_bamboo_wide"
-        }
-      ],
-      "ingredient": "railways:track_incomplete_stripped_bamboo_wide",
+      "results": ["$result"],
+      "ingredient": "$ingredient",
       "processing_time": 50
     },
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_stripped_bamboo_wide"
-        }
-      ],
-      "target": "railways:track_incomplete_stripped_bamboo_wide",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "minecraft:bamboo_slab"
     },
     {
       "type": "create:pressing",
-      "results": [
-        {
-          "id": "railways:track_incomplete_stripped_bamboo_wide"
-        }
-      ],
-      "ingredient": "railways:track_incomplete_stripped_bamboo_wide"
+      "results": ["$result"],
+      "ingredient": "$ingredient"
     }
   ],
   "transitional_item": {

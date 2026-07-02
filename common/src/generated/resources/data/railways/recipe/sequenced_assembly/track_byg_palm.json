@@ -19,32 +19,20 @@
   "sequence": [
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_byg_palm"
-        }
-      ],
-      "target": "railways:track_incomplete_byg_palm",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "#create:track_nuggets"
     },
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_byg_palm"
-        }
-      ],
-      "target": "railways:track_incomplete_byg_palm",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "#create:track_nuggets"
     },
     {
       "type": "create:pressing",
-      "results": [
-        {
-          "id": "railways:track_incomplete_byg_palm"
-        }
-      ],
-      "ingredient": "railways:track_incomplete_byg_palm"
+      "results": ["$result"],
+      "ingredient": "$ingredient"
     }
   ],
   "transitional_item": {

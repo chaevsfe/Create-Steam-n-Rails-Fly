@@ -5,32 +5,20 @@
   "sequence": [
     {
       "type": "create:cutting",
-      "results": [
-        {
-          "id": "railways:yellow_incomplete_conductor_cap"
-        }
-      ],
-      "ingredient": "railways:yellow_incomplete_conductor_cap",
+      "results": ["$result"],
+      "ingredient": "$ingredient",
       "processing_time": 50
     },
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:yellow_incomplete_conductor_cap"
-        }
-      ],
-      "target": "railways:yellow_incomplete_conductor_cap",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "create:precision_mechanism"
     },
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:yellow_incomplete_conductor_cap"
-        }
-      ],
-      "target": "railways:yellow_incomplete_conductor_cap",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "minecraft:string"
     }
   ],

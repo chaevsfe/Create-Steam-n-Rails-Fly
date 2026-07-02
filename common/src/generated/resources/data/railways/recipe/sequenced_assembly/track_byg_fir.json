@@ -19,32 +19,20 @@
   "sequence": [
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_byg_fir"
-        }
-      ],
-      "target": "railways:track_incomplete_byg_fir",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "#create:track_nuggets"
     },
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_byg_fir"
-        }
-      ],
-      "target": "railways:track_incomplete_byg_fir",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "#create:track_nuggets"
     },
     {
       "type": "create:pressing",
-      "results": [
-        {
-          "id": "railways:track_incomplete_byg_fir"
-        }
-      ],
-      "ingredient": "railways:track_incomplete_byg_fir"
+      "results": ["$result"],
+      "ingredient": "$ingredient"
     }
   ],
   "transitional_item": {

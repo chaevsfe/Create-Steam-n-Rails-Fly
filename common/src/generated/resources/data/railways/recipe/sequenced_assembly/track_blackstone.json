@@ -5,32 +5,20 @@
   "sequence": [
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_blackstone"
-        }
-      ],
-      "target": "railways:track_incomplete_blackstone",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "minecraft:gold_nugget"
     },
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_blackstone"
-        }
-      ],
-      "target": "railways:track_incomplete_blackstone",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "minecraft:gold_nugget"
     },
     {
       "type": "create:pressing",
-      "results": [
-        {
-          "id": "railways:track_incomplete_blackstone"
-        }
-      ],
-      "ingredient": "railways:track_incomplete_blackstone"
+      "results": ["$result"],
+      "ingredient": "$ingredient"
     }
   ],
   "transitional_item": {

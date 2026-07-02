@@ -54,6 +54,7 @@ dependencies {
     include("com.github.Chocohead:Fabric-ASM:v2.3")
 
     modCompileOnly("dev.emi:emi-fabric:${"emi_version"()}:api") { isTransitive = false }
+    modCompileOnly("maven.modrinth:jei:${"jei_fabric_version"()}")
 
     // JEI (recipe viewer) - dev runtime only, for testing recipe-viewer compatibility
     if ("enable_jei"().toBoolean()) {

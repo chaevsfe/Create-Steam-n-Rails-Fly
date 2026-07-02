@@ -5,32 +5,20 @@
   "sequence": [
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_monorail"
-        }
-      ],
-      "target": "railways:track_incomplete_monorail",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "create:metal_bracket"
     },
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_monorail"
-        }
-      ],
-      "target": "railways:track_incomplete_monorail",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "create:iron_sheet"
     },
     {
       "type": "create:pressing",
-      "results": [
-        {
-          "id": "railways:track_incomplete_monorail"
-        }
-      ],
-      "ingredient": "railways:track_incomplete_monorail"
+      "results": ["$result"],
+      "ingredient": "$ingredient"
     }
   ],
   "transitional_item": {

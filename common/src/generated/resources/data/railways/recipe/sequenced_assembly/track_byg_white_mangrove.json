@@ -19,32 +19,20 @@
   "sequence": [
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_byg_white_mangrove"
-        }
-      ],
-      "target": "railways:track_incomplete_byg_white_mangrove",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "#create:track_nuggets"
     },
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_byg_white_mangrove"
-        }
-      ],
-      "target": "railways:track_incomplete_byg_white_mangrove",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "#create:track_nuggets"
     },
     {
       "type": "create:pressing",
-      "results": [
-        {
-          "id": "railways:track_incomplete_byg_white_mangrove"
-        }
-      ],
-      "ingredient": "railways:track_incomplete_byg_white_mangrove"
+      "results": ["$result"],
+      "ingredient": "$ingredient"
     }
   ],
   "transitional_item": {

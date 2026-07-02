@@ -64,12 +64,32 @@ public class RailwaysSequencedAssemblyRecipeBuilder extends SequencedAssemblyRec
         }
         public void serializeRecipeData(JsonObject json) {
             super.serializeRecipeData(json);
+            normalizeSequencePlaceholders(json);
             if (recipeConditions.isEmpty())
                 return;
 
             JsonArray conds = new JsonArray();
             recipeConditions.forEach(c -> conds.add(toForgeJson(c)));
             json.add("conditions", conds);
+        }
+
+        private void normalizeSequencePlaceholders(JsonObject json) {
+            if (!json.has("sequence"))
+                return;
+
+            for (var stepElement : json.getAsJsonArray("sequence")) {
+                JsonObject step = stepElement.getAsJsonObject();
+
+                JsonArray results = new JsonArray();
+                results.add("$result");
+                step.add("results", results);
+
+                if (step.has("target")) {
+                    step.addProperty("target", "$ingredient");
+                } else if (step.has("ingredient")) {
+                    step.addProperty("ingredient", "$ingredient");
+                }
+            }
         }
 
         /**

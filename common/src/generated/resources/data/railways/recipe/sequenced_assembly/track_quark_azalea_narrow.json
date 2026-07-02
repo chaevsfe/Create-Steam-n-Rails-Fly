@@ -19,32 +19,20 @@
   "sequence": [
     {
       "type": "create:cutting",
-      "results": [
-        {
-          "id": "railways:track_incomplete_quark_azalea_narrow"
-        }
-      ],
-      "ingredient": "railways:track_incomplete_quark_azalea_narrow",
+      "results": ["$result"],
+      "ingredient": "$ingredient",
       "processing_time": 50
     },
     {
       "type": "create:deploying",
-      "results": [
-        {
-          "id": "railways:track_incomplete_quark_azalea_narrow"
-        }
-      ],
-      "target": "railways:track_incomplete_quark_azalea_narrow",
+      "results": ["$result"],
+      "target": "$ingredient",
       "ingredient": "#create:track_nuggets"
     },
     {
       "type": "create:pressing",
-      "results": [
-        {
-          "id": "railways:track_incomplete_quark_azalea_narrow"
-        }
-      ],
-      "ingredient": "railways:track_incomplete_quark_azalea_narrow"
+      "results": ["$result"],
+      "ingredient": "$ingredient"
     }
   ],
   "transitional_item": {
