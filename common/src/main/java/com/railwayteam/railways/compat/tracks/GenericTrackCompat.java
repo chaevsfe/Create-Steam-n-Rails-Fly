@@ -104,6 +104,7 @@ public class GenericTrackCompat {
 
             NonNullSupplier<TrackBlock> standardBlock = makeTrack(standardMaterial);
             BLOCKS.put(name, standardBlock);
+            registerIncompleteItem(standardMaterial, name, langName(name));
 
             // wide gauge
             TrackMaterial wideMaterial = wideVariant(standardMaterial);
@@ -114,6 +115,7 @@ public class GenericTrackCompat {
             NonNullSupplier<TrackBlock> wideBlock = makeTrack(wideMaterial);
             CRBlocks.WIDE_GAUGE_TRACKS.put(wideMaterial, wideBlock);
             BLOCKS.put(name+"_wide", wideBlock);
+            registerIncompleteItem(wideMaterial, name+"_wide", "Wide " + langName(name));
 
             // narrow gauge
             TrackMaterial narrowMaterial = narrowVariant(standardMaterial);
@@ -124,7 +126,17 @@ public class GenericTrackCompat {
             NonNullSupplier<TrackBlock> narrowBlock = makeTrack(narrowMaterial);
             CRBlocks.NARROW_GAUGE_TRACKS.put(narrowMaterial, narrowBlock);
             BLOCKS.put(name+"_narrow", narrowBlock);
+            registerIncompleteItem(narrowMaterial, name+"_narrow", "Narrow " + langName(name));
         }
+    }
+
+    // CRItems only registers incomplete-track items for materials in the "railways" namespace;
+    // compat materials are namespaced under the compat mod's id and are created here instead,
+    // so their "transitional_item" (used by the sequenced assembly recipes) must be registered here too.
+    private void registerIncompleteItem(TrackMaterial material, String name, String lang) {
+        ITEM_INCOMPLETE_TRACK.put(material, registrate().item("track_incomplete_" + modid + "_" + name, SequencedAssemblyItem::new)
+            .lang("Incomplete " + lang + " Track")
+            .register());
     }
 
     protected String langName(String name) {
