@@ -19,14 +19,13 @@
 package com.railwayteam.railways.mixin;
 
 import com.zurrtum.create.content.equipment.toolbox.ToolboxInventory;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import java.util.List;
-
 @Mixin(value = ToolboxInventory.class, remap = false)
 public interface AccessorToolboxInventory {
   @Accessor("filters")
-  List<ItemStack> getFilters();
+  NonNullList<ItemStack> getFilters();
 }

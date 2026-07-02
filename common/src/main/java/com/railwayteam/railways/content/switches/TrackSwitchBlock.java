@@ -26,7 +26,6 @@ import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import com.zurrtum.create.content.trains.entity.TravellingPoint;
 import com.zurrtum.create.foundation.block.IBE;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import com.zurrtum.create.client.catnip.lang.Lang;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
@@ -93,7 +92,7 @@ public abstract class TrackSwitchBlock extends HorizontalDirectionalBlock implem
       };
     }
     public @NotNull String getSerializedName() {
-      return Lang.asId(name());
+      return name().toLowerCase(java.util.Locale.ROOT);
     }
 
     public boolean canSwitchTo(SwitchState next, SwitchConstraint constraint) {
