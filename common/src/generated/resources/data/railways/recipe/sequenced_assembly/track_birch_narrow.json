@@ -21,7 +21,7 @@
         }
       ],
       "target": "railways:track_incomplete_birch_narrow",
-      "ingredient": "#railways:internal/track_nuggets"
+      "ingredient": "#create:track_nuggets"
     },
     {
       "type": "create:pressing",

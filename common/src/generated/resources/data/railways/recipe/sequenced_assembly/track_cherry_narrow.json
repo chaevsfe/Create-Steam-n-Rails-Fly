@@ -21,7 +21,7 @@
         }
       ],
       "target": "railways:track_incomplete_cherry_narrow",
-      "ingredient": "#railways:internal/track_nuggets"
+      "ingredient": "#create:track_nuggets"
     },
     {
       "type": "create:pressing",

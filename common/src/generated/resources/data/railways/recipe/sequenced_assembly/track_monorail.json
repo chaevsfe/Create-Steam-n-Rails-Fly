@@ -21,7 +21,7 @@
         }
       ],
       "target": "railways:track_incomplete_monorail",
-      "ingredient": "#railways:internal/plates/iron_plates"
+      "ingredient": "create:iron_sheet"
     },
     {
       "type": "create:pressing",

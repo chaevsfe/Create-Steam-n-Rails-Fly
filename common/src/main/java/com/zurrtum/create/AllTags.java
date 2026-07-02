@@ -37,6 +37,7 @@ public class AllTags {
         CONTRAPTION_CONTROLLED("contraption_controlled"),
         SLEEPERS("sleepers"),
         TOOLBOXES("toolboxes"),
+        TRACK_NUGGETS("track_nuggets"),
         TRACKS("tracks"),
         UPRIGHT_ON_BELT("upright_on_belt"),
         WRENCH("wrench");

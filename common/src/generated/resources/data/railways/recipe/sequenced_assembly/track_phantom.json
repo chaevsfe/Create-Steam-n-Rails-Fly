@@ -11,7 +11,7 @@
         }
       ],
       "target": "railways:track_incomplete_phantom",
-      "ingredient": "#railways:internal/ingots/iron_ingots"
+      "ingredient": "minecraft:iron_ingot"
     },
     {
       "type": "create:deploying",
@@ -21,7 +21,7 @@
         }
       ],
       "target": "railways:track_incomplete_phantom",
-      "ingredient": "#railways:internal/ingots/iron_ingots"
+      "ingredient": "minecraft:iron_ingot"
     },
     {
       "type": "create:pressing",

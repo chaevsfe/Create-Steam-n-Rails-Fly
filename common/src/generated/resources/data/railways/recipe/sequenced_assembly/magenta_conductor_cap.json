@@ -31,7 +31,7 @@
         }
       ],
       "target": "railways:magenta_incomplete_conductor_cap",
-      "ingredient": "#railways:internal/string"
+      "ingredient": "minecraft:string"
     }
   ],
   "transitional_item": {

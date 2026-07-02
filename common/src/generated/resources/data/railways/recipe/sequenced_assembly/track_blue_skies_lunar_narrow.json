@@ -35,7 +35,7 @@
         }
       ],
       "target": "railways:track_incomplete_blue_skies_lunar_narrow",
-      "ingredient": "#railways:internal/track_nuggets"
+      "ingredient": "#create:track_nuggets"
     },
     {
       "type": "create:pressing",
