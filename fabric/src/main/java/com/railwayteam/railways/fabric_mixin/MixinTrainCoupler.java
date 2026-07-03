@@ -45,7 +45,15 @@ public abstract class MixinTrainCoupler implements IOccupiedCouplers {
         return railways$occupiedCouplers;
     }
 
-    @Inject(method = "earlyTick", at = @At("HEAD"))
+    @Inject(
+        method = "earlyTick",
+        at = @At(
+            value = "INVOKE",
+            target = "Lcom/zurrtum/create/content/trains/entity/Train;addToSignalGroups(Ljava/util/Collection;)V",
+            ordinal = 2,
+            shift = At.Shift.AFTER
+        )
+    )
     private void railways$tickOccupiedCouplers(Level level, CallbackInfo ci) {
         if (graph == null || railways$occupiedCouplers.isEmpty())
             return;

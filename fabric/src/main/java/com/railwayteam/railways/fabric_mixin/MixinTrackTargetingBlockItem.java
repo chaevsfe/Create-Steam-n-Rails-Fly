@@ -29,7 +29,7 @@ public class MixinTrackTargetingBlockItem {
     @Shadow
     private EdgePointType<?> type;
 
-    private static final List<TrackShape> railways$acceptableSwitchShapes = List.of(
+    private static final List<TrackShape> railways$acceptableTargetShapes = List.of(
         TrackShape.XO,
         TrackShape.ZO,
         TrackShape.PD,
@@ -63,7 +63,7 @@ public class MixinTrackTargetingBlockItem {
                                                       BezierTrackPointLocation targetBezier, EdgePointType<?> type,
                                                       BiConsumer<TrackTargetingBlockItem.OverlapResult, TrackGraphLocation> callback,
                                                       CallbackInfo ci) {
-        if (type != CREdgePointTypes.SWITCH)
+        if (type != CREdgePointTypes.COUPLER && type != CREdgePointTypes.SWITCH)
             return;
 
         TrackTargetingBlockItem.OverlapResult notStraight = TrackTargetingBlockItem.OverlapResult.valueOf("NOT_STRAIGHT");
@@ -74,7 +74,8 @@ public class MixinTrackTargetingBlockItem {
         }
 
         TrackShape shape = level.getBlockState(pos).getValue(TrackBlock.SHAPE);
-        if (!railways$acceptableSwitchShapes.contains(shape) || shape.getAxes().stream().anyMatch(v -> v.y > 0)) {
+        if (!railways$acceptableTargetShapes.contains(shape)
+            || (type == CREdgePointTypes.SWITCH && shape.getAxes().stream().anyMatch(v -> v.y > 0))) {
             callback.accept(notStraight, null);
             ci.cancel();
         }

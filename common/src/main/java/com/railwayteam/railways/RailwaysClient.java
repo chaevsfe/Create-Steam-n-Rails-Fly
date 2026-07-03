@@ -26,6 +26,7 @@ import com.railwayteam.railways.content.conductor.ConductorEntityModel;
 import com.railwayteam.railways.content.conductor.ConductorRenderer;
 import com.railwayteam.railways.content.conductor.vent.CopycatVentModel;
 import com.railwayteam.railways.content.conductor.whistle.ConductorWhistleFlagRenderer;
+import com.railwayteam.railways.content.coupling.coupler.TrackCouplerRenderer;
 import com.railwayteam.railways.content.semaphore.SemaphoreRenderer;
 import com.railwayteam.railways.content.switches.TrackSwitchRenderer;
 import com.zurrtum.create.client.AllModels;
@@ -122,6 +123,7 @@ public class RailwaysClient {
       BogeyBlockEntityRenderer::new, BogeyBlockEntityVisual::new);
     AllBlockEntityRenders.render(CRBlockEntities.SEMAPHORE.get(), SemaphoreRenderer::new);
     AllBlockEntityRenders.render(CRBlockEntities.CONDUCTOR_WHISTLE_FLAG.get(), ConductorWhistleFlagRenderer::new);
+    AllBlockEntityRenders.render(CRBlockEntities.TRACK_COUPLER.get(), TrackCouplerRenderer::new);
     AllBlockEntityRenders.render(CRBlockEntities.ANDESITE_SWITCH.get(), TrackSwitchRenderer::new);
     AllBlockEntityRenders.render(CRBlockEntities.BRASS_SWITCH.get(), TrackSwitchRenderer::new);
   }

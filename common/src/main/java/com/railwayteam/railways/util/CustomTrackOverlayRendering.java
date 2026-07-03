@@ -47,8 +47,15 @@ public class CustomTrackOverlayRendering {
     public static void renderOverlay(LevelAccessor level, BlockPos pos, Direction.AxisDirection direction,
                                      BezierTrackPointLocation bezier, PoseStack ms, MultiBufferSource buffer, int light, int overlay,
                                      EdgePointType<?> type, float scale) {
-        if (CUSTOM_OVERLAYS.containsKey(type))
-            renderOverlay(level, pos, direction, bezier, ms, buffer, light, overlay, CUSTOM_OVERLAYS.get(type), scale, false);
+        renderOverlayIfPresent(level, pos, direction, bezier, ms, buffer, light, overlay, type, scale);
+    }
+
+    public static boolean renderOverlayIfPresent(LevelAccessor level, BlockPos pos, Direction.AxisDirection direction,
+                                                 BezierTrackPointLocation bezier, PoseStack ms, MultiBufferSource buffer,
+                                                 int light, int overlay, EdgePointType<?> type, float scale) {
+        if (!CUSTOM_OVERLAYS.containsKey(type))
+            return false;
+        return renderOverlay(level, pos, direction, bezier, ms, buffer, light, overlay, CUSTOM_OVERLAYS.get(type), scale, false);
     }
 
     public static void renderOverlay(LevelAccessor level, BlockPos pos, Direction.AxisDirection direction,
@@ -57,19 +64,20 @@ public class CustomTrackOverlayRendering {
         renderOverlay(level, pos, direction, bezier, ms, buffer, light, overlay, model, scale, false);
     }
 
-    public static void renderOverlay(LevelAccessor level, BlockPos pos, Direction.AxisDirection direction,
-                                     BezierTrackPointLocation bezier, PoseStack ms, MultiBufferSource buffer, int light, int overlay,
-                                     PartialModel model, float scale, boolean offsetToSide) {
+    public static boolean renderOverlay(LevelAccessor level, BlockPos pos, Direction.AxisDirection direction,
+                                        BezierTrackPointLocation bezier, PoseStack ms, MultiBufferSource buffer, int light, int overlay,
+                                        PartialModel model, float scale, boolean offsetToSide) {
         BlockState trackState = level.getBlockState(pos);
-        renderOverlay(level, pos, direction, bezier, ms, buffer, model, scale, offsetToSide, trackState);
+        return renderOverlay(level, pos, direction, bezier, ms, buffer, model, scale, offsetToSide, trackState);
     }
 
-    private static void renderOverlay(LevelAccessor level, BlockPos pos, Direction.AxisDirection direction,
-                                      BezierTrackPointLocation bezier, PoseStack ms, MultiBufferSource buffer,
-                                      PartialModel model, float scale, boolean offsetToSide, BlockState trackState) {
+    private static boolean renderOverlay(LevelAccessor level, BlockPos pos, Direction.AxisDirection direction,
+                                         BezierTrackPointLocation bezier, PoseStack ms, MultiBufferSource buffer,
+                                         PartialModel model, float scale, boolean offsetToSide, BlockState trackState) {
         if (model == null)
-            return;
+            return false;
 
+        boolean rendered = false;
         ms.pushPose();
         if (prepareTrackOverlay(level, pos, trackState, bezier, direction, ms)) {
             CachedBuffers.partial(model, trackState)
@@ -78,8 +86,10 @@ public class CustomTrackOverlayRendering {
                 .translate(offsetToSide ? .5 : -.5, 0, -.5)
                 .light(LevelRenderer.getLightColor(level, pos))
                 .renderInto(ms.last(), buffer.getBuffer(RenderTypes.cutoutMovingBlock()));
+            rendered = true;
         }
         ms.popPose();
+        return rendered;
     }
 
     public static void renderOverlayInto(LevelAccessor level, BlockPos pos, BlockState trackState,

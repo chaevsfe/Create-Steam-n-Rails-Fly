@@ -7,6 +7,8 @@ import com.zurrtum.create.client.catnip.render.SuperRenderTypeBuffer;
 import com.zurrtum.create.client.content.trains.track.TrackTargetingClient;
 import com.zurrtum.create.client.flywheel.lib.transform.TransformStack;
 import com.zurrtum.create.content.trains.graph.EdgePointType;
+import com.zurrtum.create.content.trains.graph.TrackGraphLocation;
+import com.zurrtum.create.content.trains.track.TrackTargetingBlockItem;
 import com.zurrtum.create.infrastructure.component.BezierTrackPointLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -14,7 +16,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,24 +36,23 @@ public abstract class MixinTrackTargetingClient {
     @Shadow
     static BezierTrackPointLocation lastHoveredBezierSegment;
 
+    @Shadow
+    static TrackTargetingBlockItem.OverlapResult lastResult;
+
+    @Shadow
+    static TrackGraphLocation lastLocation;
+
     @Inject(method = "clientTick", at = @At("HEAD"))
     private static void railways$tickSwitchHints(Minecraft mc, CallbackInfo ci) {
         TrackSwitchDebugVisualizer.visualizePotentialLocations();
     }
 
-    @Inject(
-        method = "render",
-        at = @At(
-            value = "FIELD",
-            opcode = Opcodes.GETSTATIC,
-            target = "Lcom/zurrtum/create/client/content/trains/track/TrackTargetingClient;lastType:Lcom/zurrtum/create/content/trains/graph/EdgePointType;",
-            ordinal = 0
-        ),
-        cancellable = true
-    )
+    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     private static void railways$renderCustomOverlay(Minecraft mc, PoseStack ms, SuperRenderTypeBuffer buffer,
                                                      Vec3 camera, CallbackInfo ci) {
-        if (!CustomTrackOverlayRendering.CUSTOM_OVERLAYS.containsKey(lastType))
+        if (lastLocation == null || lastResult == null || lastResult.feedback != null)
+            return;
+        if (!CustomTrackOverlayRendering.CUSTOM_OVERLAYS.containsKey(lastType) || mc.level == null || lastHovered == null)
             return;
 
         BlockPos pos = lastHovered;
@@ -65,9 +65,10 @@ public abstract class MixinTrackTargetingClient {
         TransformStack.of(ms)
             .translate(Vec3.atLowerCornerOf(pos)
                 .subtract(camera));
-        CustomTrackOverlayRendering.renderOverlay(mc.level, pos, direction, lastHoveredBezierSegment, ms, buffer, light,
-            OverlayTexture.NO_OVERLAY, lastType, 1 + 1 / 16f);
+        boolean rendered = CustomTrackOverlayRendering.renderOverlayIfPresent(mc.level, pos, direction, lastHoveredBezierSegment,
+            ms, buffer, light, OverlayTexture.NO_OVERLAY, lastType, 1 + 1 / 16f);
         ms.popPose();
-        ci.cancel();
+        if (rendered)
+            ci.cancel();
     }
 }

@@ -104,7 +104,7 @@ public class ClientPacketHandlers {
     public static void handleChopTrainEnd(Minecraft mc, UUID trainId, int numberOfCarriages, boolean doubleEnded) {
         Level level = mc.level;
         if (level != null) {
-            Train train = CreateClient.RAILWAYS.trains.get(trainId);
+            Train train = CreateClient.RAILWAYS().trains.get(trainId);
             if (train != null) {
                 for (int i = 0; i < numberOfCarriages; i++) {
                     train.carriages.remove(train.carriages.size() - 1);
@@ -122,8 +122,8 @@ public class ClientPacketHandlers {
     public static void handleAddTrainEnd(Minecraft mc, UUID trainId, UUID backTrainId, int middleSpacing, boolean doubleEnded) {
         Level level = mc.level;
         if (level != null) {
-            Train train = CreateClient.RAILWAYS.trains.get(trainId);
-            Train backTrain = CreateClient.RAILWAYS.trains.get(backTrainId);
+            Train train = CreateClient.RAILWAYS().trains.get(trainId);
+            Train backTrain = CreateClient.RAILWAYS().trains.get(backTrainId);
             if (train != null && backTrain != null) {
                 train.carriages.addAll(backTrain.carriages);
                 backTrain.carriages.clear();
@@ -141,7 +141,7 @@ public class ClientPacketHandlers {
 
                 train.carriages.forEach(c -> c.setTrain(train));
 
-                CreateClient.RAILWAYS.trains.remove(backTrainId);
+                CreateClient.RAILWAYS().trains.remove(backTrainId);
             }
         }
     }

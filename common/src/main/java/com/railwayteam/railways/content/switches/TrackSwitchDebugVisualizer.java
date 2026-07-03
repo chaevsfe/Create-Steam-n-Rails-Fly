@@ -89,7 +89,7 @@ public class TrackSwitchDebugVisualizer {
         int range = 64;
         int rangeSqr = range * range;
 
-        for (TrackGraph graph : CreateClient.RAILWAYS.trackNetworks.values()) {
+        for (TrackGraph graph : CreateClient.RAILWAYS().trackNetworks.values()) {
             for (TrackNodeLocation tnl : graph.getNodes()) {
                 if (!Objects.equals(tnl.dimension, mc.level.dimension()))
                     continue;

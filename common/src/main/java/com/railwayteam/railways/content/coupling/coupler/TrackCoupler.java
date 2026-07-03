@@ -17,8 +17,9 @@ import com.zurrtum.create.content.trains.graph.DimensionPalette;
 import com.zurrtum.create.content.trains.graph.EdgePointType;
 import com.zurrtum.create.content.trains.graph.TrackGraph;
 import com.zurrtum.create.content.trains.signal.SingleBlockEntityEdgePoint;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.UUID;
@@ -57,9 +58,11 @@ public class TrackCoupler extends SingleBlockEntityEdgePoint {
 		super.blockEntityAdded(tile, front);
 	}
 
-	public void read(CompoundTag nbt, boolean migration, DimensionPalette dimensions) {
-		activated = nbt.getInt("Activated").orElse(0);
-		currentTrain = nbt.getString("TrainId").map(UUID::fromString).orElse(null);
+	@Override
+	public void read(ValueInput input, boolean migration, DimensionPalette dimensions) {
+		super.read(input, migration, dimensions);
+		activated = input.getIntOr("Activated", 0);
+		currentTrain = input.getString("TrainId").map(UUID::fromString).orElse(null);
 	}
 
 	public void read(FriendlyByteBuf buffer, DimensionPalette dimensions) {
@@ -68,10 +71,12 @@ public class TrackCoupler extends SingleBlockEntityEdgePoint {
 			blockEntityPos = buffer.readBlockPos();
 	}
 
-	public void write(CompoundTag nbt, DimensionPalette dimensions) {
-		nbt.putInt("Activated", activated);
+	@Override
+	public void write(ValueOutput output, DimensionPalette dimensions) {
+		super.write(output, dimensions);
+		output.putInt("Activated", activated);
 		if (currentTrain != null)
-			nbt.putString("TrainId", currentTrain.toString());
+			output.putString("TrainId", currentTrain.toString());
 	}
 
 	public void write(FriendlyByteBuf buffer, DimensionPalette dimensions) {

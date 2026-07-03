@@ -37,7 +37,9 @@ public class TrackCouplerBlockEntityClientBehaviours {
     public static BlockEntityBehaviour<?> createEdgeSpacingScroll(TrackCouplerBlockEntity be) {
         return new ScrollValueBehaviour<TrackCouplerBlockEntity, ServerScrollValueBehaviour>(
             Component.translatable("railways.coupler.edge_spacing"), be, new TrackCouplerBlockEntity.TrackCouplerValueBoxTransform(true)
-        )
+        ) {{
+            needsWrench = true;
+        }}
             .withFormatter(i -> String.valueOf(Component.translatable("railways.coupler.edge_spacing.meters")))
             .withFormatter(i -> i + "m");
     }
