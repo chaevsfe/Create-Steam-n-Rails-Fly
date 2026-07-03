@@ -1,6 +1,6 @@
 /*
  * Steam 'n' Rails
- * Copyright (c) 2022-2024 The Railways Team
+ * Copyright (c) 2026 The Railways Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,7 +16,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.railwayteam.railways.mixin;
+package com.railwayteam.railways.fabric_mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -48,7 +48,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mixin(RollerMovementBehaviour.class)
+@Mixin(value = RollerMovementBehaviour.class, remap = false)
 public abstract class MixinRollerMovementBehaviour {
     @Shadow protected abstract BlockState getStateToPaveWith(MovementContext context);
 
@@ -68,7 +68,7 @@ public abstract class MixinRollerMovementBehaviour {
     private void skipTracksAndPaveTracks(MovementContext context, BlockPos pos, CallbackInfo ci) {
         BlockState stateToPaveWith = getStateToPaveWith(context);
         int mode = context.blockEntityData.getInt("ScrollValue").orElse(0);
-        if (mode == 3) { // TRACK_REPLACE
+        if (mode == 3) {
             ci.cancel();
             TrackReplacePaver.pave(context, pos, stateToPaveWith, createHeightProfileForTracks(context));
         } else if (stateToPaveWith.getBlock() instanceof ITrackBlock) {
@@ -107,9 +107,9 @@ public abstract class MixinRollerMovementBehaviour {
         return ret;
     }
 
-    @WrapOperation(method = "createHeightProfileForTracks", at = @At(value = "INVOKE", target = "Lcom/zurrtum/create/content/contraptions/actors/roller/PaveTask;put(IIF)V"), remap = false)
+    @WrapOperation(method = "createHeightProfileForTracks", at = @At(value = "INVOKE", target = "Lcom/zurrtum/create/content/contraptions/actors/roller/PaveTask;put(IIF)V"))
     private void setUpsideDown(PaveTask instance, int x, int z, float y, Operation<Void> original, @Local(name = "point") TravellingPoint point) {
-        if(point.upsideDown)
+        if (point.upsideDown)
             y -= 2;
 
         original.call(instance, x, z, y);

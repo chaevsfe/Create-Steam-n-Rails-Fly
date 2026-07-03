@@ -46,13 +46,6 @@ dependencies {
     compileOnly("com.tterrag.registrate:Registrate:MC1.20-1.3.11")
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
-    // Fabric ASM (enum extension etc)
-    modImplementation("com.github.Chocohead:Fabric-ASM:v2.3") {
-        exclude (group = "net.fabricmc.fabric-api")
-    }
-
-    include("com.github.Chocohead:Fabric-ASM:v2.3")
-
     modCompileOnly("dev.emi:emi-fabric:${"emi_version"()}:api") { isTransitive = false }
     modCompileOnly("maven.modrinth:jei:${"jei_fabric_version"()}")
 

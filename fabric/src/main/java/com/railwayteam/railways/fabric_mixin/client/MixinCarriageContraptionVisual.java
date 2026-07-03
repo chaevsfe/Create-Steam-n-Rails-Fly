@@ -26,11 +26,14 @@ import com.railwayteam.railways.content.custom_bogeys.renderer.unified.BogeyDisp
 import com.railwayteam.railways.mixin_interfaces.IUpdateCount;
 import com.zurrtum.create.client.content.contraptions.render.ContraptionVisual;
 import com.zurrtum.create.client.content.trains.bogey.BogeyVisual;
+import com.zurrtum.create.client.content.trains.entity.CarriageContraptionEntityRenderer;
 import com.zurrtum.create.content.trains.entity.CarriageContraptionEntity;
+import com.zurrtum.create.content.trains.entity.CarriageBogey;
 import com.zurrtum.create.client.content.trains.entity.CarriageContraptionVisual;
 import com.zurrtum.create.client.flywheel.api.visual.DynamicVisual;
 import com.zurrtum.create.client.flywheel.api.visualization.VisualizationContext;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -54,6 +57,10 @@ public abstract class MixinCarriageContraptionVisual extends ContraptionVisual<C
 	@Shadow(remap = false)
 	@Final
 	private BogeyVisual[] visuals;
+
+	@Shadow(remap = false)
+	@Final
+	private CarriageBogey[] bogeys;
 
 	@Shadow private int numBogeys;
 	@Unique
@@ -79,6 +86,30 @@ public abstract class MixinCarriageContraptionVisual extends ContraptionVisual<C
 			visuals = new BogeyVisual[MAX_NUM_BOGEYS];
 			numBogeys = 0;
 			this.railways$fromParent((IUpdateCount) this.entity);
+		}
+	}
+
+	@Inject(method = "beginFrame", at = @At("TAIL"), remap = false)
+	private void railways$refreshBogeyLight(DynamicVisual.Context context, CallbackInfo ci) {
+		int entityLight = -1;
+		for (int i = 0; i < numBogeys; i++) {
+			BogeyVisual visual = visuals[i];
+			CarriageBogey bogey = bogeys[i];
+			if (visual == null || bogey == null) {
+				continue;
+			}
+
+			Vec3 lightPos = bogey.getAnchorPosition();
+			if (lightPos != null) {
+				visual.updateLight(CarriageContraptionEntityRenderer.getBogeyLightCoords(this.entity.level(), lightPos));
+				continue;
+			}
+
+			if (entityLight == -1) {
+				entityLight = CarriageContraptionEntityRenderer.getBogeyLightCoords(this.entity.level(),
+					this.entity.getPosition(context.partialTick()));
+			}
+			visual.updateLight(entityLight);
 		}
 	}
 

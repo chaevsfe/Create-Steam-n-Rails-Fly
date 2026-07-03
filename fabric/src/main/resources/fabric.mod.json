@@ -25,9 +25,6 @@
     ],
     "fabric-datagen": [
       "com.railwayteam.railways.fabric.RailwaysDataFabric"
-    ],
-    "mm:early_risers": [
-      "com.railwayteam.railways.fabric.EarlyRiser"
     ]
   },
   "mixins": [
