@@ -146,7 +146,6 @@ public abstract class PacketSet {
 			return;
 		}
 		Function<FriendlyByteBuf, S2CPacket> factory = s2cPackets.get(i);
-		// TEMPORARY diagnostic: see PacketSetImpl.RailwaysPayload#decode.
 		S2CPacket packet;
 		try {
 			packet = factory.apply(buf);
@@ -154,8 +153,6 @@ public abstract class PacketSet {
 			Railways.LOGGER.error("S2C Packet #{} ({}) failed to decode, readableBytes was {}", i, s2cTypeName(i), buf.readableBytes(), t);
 			throw t;
 		}
-		// TEMPORARY diagnostic: confirm dispatch reaches packet.handle().
-		Railways.LOGGER.info("[PacketSet] dispatching S2C packet #{} ({})", i, s2cTypeName(i));
 		mc.execute(() -> {
 			try {
 				packet.handle(mc);
