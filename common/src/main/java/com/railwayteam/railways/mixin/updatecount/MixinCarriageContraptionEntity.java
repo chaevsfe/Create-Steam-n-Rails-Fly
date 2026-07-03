@@ -16,7 +16,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.railwayteam.railways.mixin.client;
+package com.railwayteam.railways.mixin.updatecount;
 
 import com.railwayteam.railways.mixin_interfaces.IUpdateCount;
 import com.zurrtum.create.content.trains.entity.CarriageContraptionEntity;

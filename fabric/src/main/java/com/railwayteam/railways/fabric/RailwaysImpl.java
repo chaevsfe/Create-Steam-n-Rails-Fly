@@ -22,6 +22,7 @@ import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.config.fabric.CRConfigsImpl;
 import com.railwayteam.railways.fabric.events.CommonEventsFabric;
 import com.railwayteam.railways.multiloader.CommandRegistrar;
+import com.railwayteam.railways.multiloader.fabric.PlayerSelectionImpl;
 import com.railwayteam.railways.registry.fabric.CRBlockEntitiesImpl;
 import com.railwayteam.railways.registry.fabric.CRBlocksImpl;
 import com.railwayteam.railways.registry.fabric.CRMountedStorageTypesImpl;
@@ -31,6 +32,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 
 public class RailwaysImpl implements ModInitializer {
 	public void onInitialize() {
+		PlayerSelectionImpl.init();
 		Railways.init();
 		CRConfigsImpl.register();
 		CRParticleTypesParticleEntryImpl.register();

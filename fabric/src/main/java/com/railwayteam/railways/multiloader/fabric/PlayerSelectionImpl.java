@@ -27,7 +27,21 @@ public class PlayerSelectionImpl extends PlayerSelection {
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> currentServer = null);
     }
 
+    /**
+     * No-op: calling this forces this class's static initializer to run (registering the
+     * SERVER_STARTED/STOPPED listeners above) before any server can possibly start. Without
+     * an explicit early reference, this class only loads on first actual use - e.g. via
+     * {@link #of} from a player-join hook - which happens after SERVER_STARTED has already
+     * fired, permanently missing it and leaving currentServer null for the whole session.
+     */
+    public static void init() {
+    }
+
     private final Collection<ServerPlayer> players;
+
+    Collection<ServerPlayer> railways$getPlayers() {
+        return players;
+    }
 
     private PlayerSelectionImpl(Collection<ServerPlayer> players) {
         this.players = players;

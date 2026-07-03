@@ -27,7 +27,9 @@
     "AccessorTrain",
     "NbtUtilsMixin"
   ],
-  "client": [],
+  "client": [
+    "updatecount.MixinCarriageContraptionEntity"
+  ],
   "injectors": {
     "defaultRequire": 1,
     "maxShiftBy": 5

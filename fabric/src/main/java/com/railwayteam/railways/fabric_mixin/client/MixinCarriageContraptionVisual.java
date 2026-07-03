@@ -16,7 +16,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.railwayteam.railways.mixin.client;
+package com.railwayteam.railways.fabric_mixin.client;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -24,10 +24,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.railwayteam.railways.content.custom_bogeys.renderer.unified.BogeyDisplay;
 import com.railwayteam.railways.content.custom_bogeys.renderer.unified.BogeyDisplayHolder;
 import com.railwayteam.railways.mixin_interfaces.IUpdateCount;
-import com.zurrtum.create.content.contraptions.render.ContraptionVisual;
+import com.zurrtum.create.client.content.contraptions.render.ContraptionVisual;
 import com.zurrtum.create.client.content.trains.bogey.BogeyVisual;
 import com.zurrtum.create.content.trains.entity.CarriageContraptionEntity;
-import com.zurrtum.create.content.trains.entity.CarriageContraptionVisual;
+import com.zurrtum.create.client.content.trains.entity.CarriageContraptionVisual;
+import com.zurrtum.create.client.flywheel.api.visual.DynamicVisual;
 import com.zurrtum.create.client.flywheel.api.visualization.VisualizationContext;
 import net.minecraft.nbt.CompoundTag;
 import org.spongepowered.asm.mixin.Final;
@@ -68,7 +69,7 @@ public abstract class MixinCarriageContraptionVisual extends ContraptionVisual<C
 	}
 
 	@Inject(method = "beginFrame", at = @At("HEAD"), remap = false)
-	private void railways$refreshBogeys(CallbackInfo ci) {
+	private void railways$refreshBogeys(DynamicVisual.Context context, CallbackInfo ci) {
 		if (IUpdateCount.outOfSync(this, (IUpdateCount) this.entity)) {
 			for (BogeyVisual visual : visuals) {
 				if (visual != null) {
@@ -81,7 +82,7 @@ public abstract class MixinCarriageContraptionVisual extends ContraptionVisual<C
 		}
 	}
 
-    @WrapOperation(method = "animate", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/trains/bogey/BogeyVisual;update(Lnet/minecraft/nbt/CompoundTag;FLcom/mojang/blaze3d/vertex/PoseStack;)V"))
+    @WrapOperation(method = "animate", at = @At(value = "INVOKE", target = "Lcom/zurrtum/create/client/content/trains/bogey/BogeyVisual;update(Lnet/minecraft/nbt/CompoundTag;FLcom/mojang/blaze3d/vertex/PoseStack;)V"))
     private void updateEntity(BogeyVisual instance, CompoundTag compoundTag, float v, PoseStack poseStack, Operation<Void> original) {
         if (instance instanceof BogeyDisplayHolder holder) {
             holder.runWithDisplay(display -> {

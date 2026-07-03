@@ -154,7 +154,16 @@ public abstract class PacketSet {
 			Railways.LOGGER.error("S2C Packet #{} ({}) failed to decode, readableBytes was {}", i, s2cTypeName(i), buf.readableBytes(), t);
 			throw t;
 		}
-		mc.execute(() -> packet.handle(mc));
+		// TEMPORARY diagnostic: confirm dispatch reaches packet.handle().
+		Railways.LOGGER.info("[PacketSet] dispatching S2C packet #{} ({})", i, s2cTypeName(i));
+		mc.execute(() -> {
+			try {
+				packet.handle(mc);
+			} catch (Throwable t) {
+				Railways.LOGGER.error("S2C Packet #{} ({}) threw during handle()", i, s2cTypeName(i), t);
+				throw t;
+			}
+		});
 	}
 
 	private String s2cTypeName(int i) {

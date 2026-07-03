@@ -81,6 +81,10 @@ public class PacketSetImpl extends PacketSet {
 	}
 
 	public void sendTo(PlayerSelection selection, Packet<? super ClientGamePacketListener> packet) {
+		if (selection instanceof PlayerSelectionImpl impl) {
+			for (ServerPlayer player : impl.railways$getPlayers())
+				player.connection.send(packet);
+		}
 	}
 
 	private static CustomPacketPayload.Type<RailwaysPayload> payloadType(Identifier id) {

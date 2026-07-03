@@ -6,6 +6,7 @@
   "client": [
     "client.BlockElementDeserializerMixin",
     "client.MixinBogeyBlockEntityVisual",
+    "client.MixinCarriageContraptionVisual",
     "client.MixinCurvedTrackInteraction",
     "client.MixinKeyboardHandler",
     "client.MixinObjGeometryModelMesh",

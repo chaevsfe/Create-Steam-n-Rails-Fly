@@ -18,6 +18,7 @@
 
 package com.railwayteam.railways.util.packet;
 
+import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.content.conductor.ConductorEntity;
 import com.railwayteam.railways.content.conductor.ConductorPossessionController;
 import com.railwayteam.railways.content.coupling.coupler.TrackCouplerBlockEntity;
@@ -87,17 +88,37 @@ public class ClientPacketHandlers {
         }
     }
 
+    // Create's own train-sync packets (e.g. AddTrainPacket, used to register a newly split-off
+    // train client-side) travel over a different network channel than our own S2C packets, with
+    // no guaranteed relative ordering once received. If one of our packets referencing a train by
+    // UUID arrives before Create's packet has registered that train, retry on a later tick instead
+    // of silently desyncing the client's copy of the train from the server's.
+    private static final int MAX_TRAIN_LOOKUP_RETRIES = 60;
+
     public static void handleCarriageContraptionEntityUpdate(Minecraft mc, int id, UUID trainId, int carriageIndex) {
+        handleCarriageContraptionEntityUpdate(mc, id, trainId, carriageIndex, MAX_TRAIN_LOOKUP_RETRIES);
+    }
+
+    private static void handleCarriageContraptionEntityUpdate(Minecraft mc, int id, UUID trainId, int carriageIndex, int retriesLeft) {
         Level level = mc.level;
-        if (level != null) {
-            Entity target = level.getEntity(id);
-            if (target instanceof CarriageContraptionEntity cce) {
-                cce.trainId = trainId;
-                ((AccessorCarriageContraptionEntity) cce).railways$setCarriage(null);
-                cce.carriageIndex = carriageIndex;
-                ((AccessorCarriageContraptionEntity) cce).railways$bindCarriage();
-                ((IUpdateCount) cce).railways$markUpdate();
+        if (level == null)
+            return;
+        Train train = CreateClient.RAILWAYS().trains.get(trainId);
+        if ((train == null || train.carriages.size() <= carriageIndex)) {
+            if (retriesLeft > 0) {
+                mc.execute(() -> handleCarriageContraptionEntityUpdate(mc, id, trainId, carriageIndex, retriesLeft - 1));
+            } else {
+                Railways.LOGGER.warn("[ClientPacketHandlers] carriageEntityUpdate gave up: train {} never appeared for entity {}", trainId, id);
             }
+            return;
+        }
+        Entity target = level.getEntity(id);
+        if (target instanceof CarriageContraptionEntity cce) {
+            cce.trainId = trainId;
+            ((AccessorCarriageContraptionEntity) cce).railways$setCarriage(null);
+            cce.carriageIndex = carriageIndex;
+            ((AccessorCarriageContraptionEntity) cce).railways$bindCarriage();
+            ((IUpdateCount) cce).railways$markUpdate();
         }
     }
 
@@ -108,7 +129,8 @@ public class ClientPacketHandlers {
             if (train != null) {
                 for (int i = 0; i < numberOfCarriages; i++) {
                     train.carriages.remove(train.carriages.size() - 1);
-                    train.carriageSpacing.remove(train.carriageSpacing.size() - 1);
+                    if (!train.carriageSpacing.isEmpty())
+                        train.carriageSpacing.remove(train.carriageSpacing.size() - 1);
                 }
                 double[] originalStress = ((AccessorTrain) train).railways$getStress();
                 double[] newStress = new double[originalStress.length - numberOfCarriages];
@@ -120,29 +142,39 @@ public class ClientPacketHandlers {
     }
 
     public static void handleAddTrainEnd(Minecraft mc, UUID trainId, UUID backTrainId, int middleSpacing, boolean doubleEnded) {
+        handleAddTrainEnd(mc, trainId, backTrainId, middleSpacing, doubleEnded, MAX_TRAIN_LOOKUP_RETRIES);
+    }
+
+    private static void handleAddTrainEnd(Minecraft mc, UUID trainId, UUID backTrainId, int middleSpacing, boolean doubleEnded, int retriesLeft) {
         Level level = mc.level;
         if (level != null) {
             Train train = CreateClient.RAILWAYS().trains.get(trainId);
             Train backTrain = CreateClient.RAILWAYS().trains.get(backTrainId);
-            if (train != null && backTrain != null) {
-                train.carriages.addAll(backTrain.carriages);
-                backTrain.carriages.clear();
-
-                train.carriageSpacing.add(middleSpacing);
-                train.carriageSpacing.addAll(backTrain.carriageSpacing);
-                backTrain.carriageSpacing.clear();
-
-                double[] newStress = new double[((AccessorTrain) train).railways$getStress().length + ((AccessorTrain) backTrain).railways$getStress().length + 1];
-                System.arraycopy(((AccessorTrain) train).railways$getStress(), 0, newStress, 0, ((AccessorTrain) train).railways$getStress().length);
-                newStress[((AccessorTrain) train).railways$getStress().length] = 0;
-                System.arraycopy(((AccessorTrain) backTrain).railways$getStress(), 0, newStress, ((AccessorTrain) train).railways$getStress().length + 1, ((AccessorTrain) backTrain).railways$getStress().length);
-                ((AccessorTrain) train).railways$setStress(newStress);
-                train.doubleEnded = doubleEnded;
-
-                train.carriages.forEach(c -> c.setTrain(train));
-
-                CreateClient.RAILWAYS().trains.remove(backTrainId);
+            if (train == null || backTrain == null) {
+                if (retriesLeft > 0) {
+                    mc.execute(() -> handleAddTrainEnd(mc, trainId, backTrainId, middleSpacing, doubleEnded, retriesLeft - 1));
+                } else {
+                    Railways.LOGGER.warn("[ClientPacketHandlers] addTrainEnd gave up: trainFound={} backTrainFound={}", train != null, backTrain != null);
+                }
+                return;
             }
+            train.carriages.addAll(backTrain.carriages);
+            backTrain.carriages.clear();
+
+            train.carriageSpacing.add(middleSpacing);
+            train.carriageSpacing.addAll(backTrain.carriageSpacing);
+            backTrain.carriageSpacing.clear();
+
+            double[] newStress = new double[((AccessorTrain) train).railways$getStress().length + ((AccessorTrain) backTrain).railways$getStress().length + 1];
+            System.arraycopy(((AccessorTrain) train).railways$getStress(), 0, newStress, 0, ((AccessorTrain) train).railways$getStress().length);
+            newStress[((AccessorTrain) train).railways$getStress().length] = 0;
+            System.arraycopy(((AccessorTrain) backTrain).railways$getStress(), 0, newStress, ((AccessorTrain) train).railways$getStress().length + 1, ((AccessorTrain) backTrain).railways$getStress().length);
+            ((AccessorTrain) train).railways$setStress(newStress);
+            train.doubleEnded = doubleEnded;
+
+            train.carriages.forEach(c -> c.setTrain(train));
+
+            CreateClient.RAILWAYS().trains.remove(backTrainId);
         }
     }
 
