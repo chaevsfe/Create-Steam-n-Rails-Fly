@@ -350,14 +350,10 @@ public class DoorScenes {
 
     private static void openDoor(SceneBuilder scene, BlockPos bottom) {
         scene.world().cycleBlockProperty(bottom, SlidingDoorBlock.OPEN);
-        scene.world().cycleBlockProperty(bottom, SlidingDoorBlock.VISIBLE);
-        scene.world().cycleBlockProperty(bottom.above(), SlidingDoorBlock.VISIBLE);
     }
 
     private static void closeDoor(SceneBuilder scene, BlockPos bottom) {
         scene.world().cycleBlockProperty(bottom, SlidingDoorBlock.OPEN);
         scene.idle(10);
-        scene.world().cycleBlockProperty(bottom, SlidingDoorBlock.VISIBLE);
-        scene.world().cycleBlockProperty(bottom.above(), SlidingDoorBlock.VISIBLE);
     }
 }

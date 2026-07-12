@@ -2,10 +2,9 @@ package com.railwayteam.railways.content.conductor.toolbox;
 
 import com.railwayteam.railways.content.conductor.ConductorEntity;
 import com.railwayteam.railways.util.packet.PacketSender;
+import com.zurrtum.create.AllBlocks;
 import com.zurrtum.create.AllDataComponents;
 import com.zurrtum.create.content.equipment.toolbox.ToolboxBlockEntity;
-import com.zurrtum.create.content.equipment.toolbox.ToolboxBlock;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -36,7 +35,7 @@ public class MountedToolbox extends ToolboxBlockEntity {
     private final Map<Player, Integer> trackedConnectedPlayers = new WeakHashMap<>();
 
     public MountedToolbox(ConductorEntity parent, DyeColor color) {
-        super(parent.blockPosition(), ToolboxBlock.getColorBlock(color).defaultBlockState());
+        super(parent.blockPosition(), AllBlocks.TOOLBOX.pick(color).defaultBlockState());
         this.parent = parent;
         setLevel(parent.level());
         setLazyTickRate(10);
@@ -80,7 +79,7 @@ public class MountedToolbox extends ToolboxBlockEntity {
     protected void read(ValueInput input, boolean clientPacket) {
         super.read(input, clientPacket);
         input.getInt("Color").ifPresent(colorId -> {
-            BlockState state = ToolboxBlock.getColorBlock(DyeColor.byId(colorId)).defaultBlockState();
+            BlockState state = AllBlocks.TOOLBOX.pick(DyeColor.byId(colorId)).defaultBlockState();
             setBlockState(state);
         });
     }
@@ -131,7 +130,7 @@ public class MountedToolbox extends ToolboxBlockEntity {
     }
 
     public ItemStack getDisplayStack() {
-        ItemStack stack = ToolboxBlock.getColorBlock(getColor()).asItem().getDefaultInstance();
+        ItemStack stack = AllBlocks.TOOLBOX.pick(getColor()).asItem().getDefaultInstance();
         if (hasCustomName())
             stack.set(DataComponents.CUSTOM_NAME, getCustomName());
         return stack;
@@ -156,8 +155,7 @@ public class MountedToolbox extends ToolboxBlockEntity {
         buffer.writeNbt(write(true));
     }
 
-    @ExpectPlatform
     public static void openMenu(ServerPlayer player, MountedToolbox toolbox) {
-        throw new AssertionError();
+        com.railwayteam.railways.content.conductor.toolbox.fabric.MountedToolboxImpl.openMenu(player, toolbox);
     }
 }

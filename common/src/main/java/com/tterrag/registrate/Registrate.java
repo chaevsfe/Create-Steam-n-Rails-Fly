@@ -13,7 +13,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -38,8 +37,7 @@ public class Registrate extends AbstractRegistrate<Registrate> {
     private final Map<String, RegistryEntry<?>> entries = new LinkedHashMap<>();
     private final List<RegistryEntry<?>> orderedEntries = new ArrayList<>();
     private ResourceKey<CreativeModeTab> currentCreativeTab = null;
-    // Keyed by ResourceLocation string form: the shim's RegistryEntry builds ResourceLocations via the
-    // deprecated constructor, whose instances do not hash/equal reliably across builders.
+    // Keyed by identifier string form to keep assignments stable across builder instances.
     private final Map<String, ResourceKey<CreativeModeTab>> creativeTabAssignments = new HashMap<>();
 
     protected Registrate(String modid) {
@@ -55,7 +53,7 @@ public class Registrate extends AbstractRegistrate<Registrate> {
     }
 
     /** Records which creative tab an entry belongs to. A null tab marks the entry as hidden from all Railways tabs. */
-    public void assignCreativeTab(ResourceLocation id, ResourceKey<CreativeModeTab> tab) {
+    public void assignCreativeTab(Identifier id, ResourceKey<CreativeModeTab> tab) {
         creativeTabAssignments.put(id.toString(), tab);
     }
 

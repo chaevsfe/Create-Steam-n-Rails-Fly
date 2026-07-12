@@ -2,7 +2,6 @@ package com.railwayteam.railways.registry;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.railwayteam.railways.Railways;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.glfw.GLFW;
@@ -78,13 +77,11 @@ public enum CRKeys {
         return isKeyDown(GLFW.GLFW_KEY_LEFT_ALT) || isKeyDown(GLFW.GLFW_KEY_RIGHT_ALT);
     }
 
-    @ExpectPlatform
     private static void registerKeyBinding(KeyMapping keyMapping) {
-        throw new AssertionError();
+        com.railwayteam.railways.registry.fabric.CRKeysImpl.registerKeyBinding(keyMapping);
     }
 
-    @ExpectPlatform
     private static int getBoundCode(KeyMapping keyMapping) {
-        throw new AssertionError();
+        return com.railwayteam.railways.registry.fabric.CRKeysImpl.getBoundCode(keyMapping);
     }
 }

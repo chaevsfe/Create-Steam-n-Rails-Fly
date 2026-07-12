@@ -41,7 +41,7 @@ import com.zurrtum.create.content.trains.bogey.BogeySize;
 import com.zurrtum.create.content.trains.bogey.BogeyStyle;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.KeyEvent;
@@ -54,6 +54,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -149,14 +150,14 @@ public class BogeyMenuScreen extends AbstractSimiScreen {
 	}
 
 	@Override
-	protected void renderWindow(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+	protected void renderWindow(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTicks) {
 		int x = guiLeft;
 		int y = guiTop;
 
 		background.render(guiGraphics, x, y, 512, 512);
 
 		MutableComponent header = Component.translatable("railways.gui.bogey_menu.title");
-		guiGraphics.drawString(font, header, x + background.width / 2 - font.width(header) / 2, y + 4, 0xFF582424, false);
+		guiGraphics.text(font, header, x + background.width / 2 - font.width(header) / 2, y + 4, 0xFF582424, false);
 
 		// Match the original corner-pivot transform while giving the rotated block room to render.
 		float casingScale = 2.5f;
@@ -187,7 +188,7 @@ public class BogeyMenuScreen extends AbstractSimiScreen {
 				renderIcon(guiGraphics, icon, x + 20, y + 42 + (i * 18));
 
 			Component bogeyName = trimToWidth(bogeyEntry.bogeyStyle().displayName, 55);
-			guiGraphics.drawString(font, bogeyName, x + 40, y + 46 + (i * 18), 0xFFFFFFFF);
+			guiGraphics.text(font, bogeyName, x + 40, y + 46 + (i * 18), 0xFFFFFFFF);
 		}
 
 		if (selectedBogey == null)
@@ -195,7 +196,7 @@ public class BogeyMenuScreen extends AbstractSimiScreen {
 
 		Component displayName = selectedBogey.bogeyStyle().displayName;
 		Component bogeyName = trimToWidth(displayName, 126);
-		guiGraphics.drawCenteredString(font, bogeyName, x + 190, y + 25, 0xFFFFFFFF);
+		guiGraphics.centeredText(font, bogeyName, x + 190, y + 25, 0xFFFFFFFF);
 
 		if (font.width(displayName) > 126) {
 			longBogeyTooltipArea.withTooltip(ImmutableList.of(displayName));
@@ -211,7 +212,7 @@ public class BogeyMenuScreen extends AbstractSimiScreen {
 		renderBogeyPreview(guiGraphics, x, y, partialTicks);
 	}
 
-	private void renderBogeyPreview(GuiGraphics guiGraphics, int x, int y, float partialTicks) {
+	private void renderBogeyPreview(GuiGraphicsExtractor guiGraphics, int x, int y, float partialTicks) {
 		BogeyStyle style = selectedBogey.bogeyStyle();
 		List<Pair<BogeyStyle, BogeySize>> renderCycle = BogeyMenuHandlerClient.getRenderCycle(style);
 		if (renderCycle.isEmpty())
@@ -252,9 +253,9 @@ public class BogeyMenuScreen extends AbstractSimiScreen {
 		int previewX = Mth.floor(x + 189.5f - previewSize / 2);
 		int previewY = Mth.floor(y + 86 - previewSize / 2);
 		int previewId = 31 * renderStyle.id.hashCode() + renderSize.id().hashCode();
-		guiGraphics.guiRenderState.submitPicturesInPictureState(EntityBlockRenderState.create(
+		guiGraphics.guiRenderState.addPicturesInPictureState(EntityBlockRenderState.create(
 			previewId, guiGraphics, minecraft.level, BlockPos.ZERO, bogeyBE, bogeyState,
-			previewX, previewY, modelScale, padding, 20, 45, 0
+			LightCoordsUtil.FULL_BRIGHT, previewX, previewY, modelScale, padding, 20, 45, 0
 		));
 	}
 
@@ -268,7 +269,7 @@ public class BogeyMenuScreen extends AbstractSimiScreen {
 		};
 	}
 
-	private void renderIcon(GuiGraphics guiGraphics, Identifier icon, int x, int y) {
+	private void renderIcon(GuiGraphicsExtractor guiGraphics, Identifier icon, int x, int y) {
 		guiGraphics.blit(RenderPipelines.GUI_TEXTURED, icon, x, y, 0, 0, 16, 16, 16, 16);
 	}
 
@@ -457,7 +458,7 @@ public class BogeyMenuScreen extends AbstractSimiScreen {
 		}
 
 		@Override
-		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+		protected void extractWidgetRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
 		}
 
 		@Override

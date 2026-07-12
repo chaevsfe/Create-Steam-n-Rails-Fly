@@ -19,7 +19,6 @@
 package com.railwayteam.railways.util;
 
 import com.railwayteam.railways.content.conductor.ConductorEntity;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,37 +33,32 @@ import org.jetbrains.annotations.Contract;
 import java.util.function.Predicate;
 
 public class EntityUtils {
-	@ExpectPlatform
 	public static CompoundTag getPersistentData(Entity entity) {
-		throw new AssertionError();
+		return com.railwayteam.railways.util.fabric.EntityUtilsImpl.getPersistentData(entity);
 	}
 
 	/**
 	 * Gives a player an item. Plays the pickup sound, and drops whatever can't be picked up.
 	 */
-	@ExpectPlatform
 	public static void givePlayerItem(Player player, ItemStack stack) {
-		throw new AssertionError();
+		com.railwayteam.railways.util.fabric.EntityUtilsImpl.givePlayerItem(player, stack);
 	}
 
-	@ExpectPlatform
 	public static ServerPlayer createConductorFakePlayer(ServerLevel level, ConductorEntity conductor) {
-		throw new AssertionError();
+		return com.railwayteam.railways.util.fabric.EntityUtilsImpl.createConductorFakePlayer(level, conductor);
 	}
 
-	@ExpectPlatform
 	public static double getReachDistance(Player player) {
-		throw new AssertionError();
+		return com.railwayteam.railways.util.fabric.EntityUtilsImpl.getReachDistance(player);
 	}
 
 	/**
 	 * Fire a use event.
 	 * @return true if the use is allowed, false otherwise
 	 */
-	@ExpectPlatform
 	@Contract // shut
 	public static boolean handleUseEvent(Player player, InteractionHand hand, BlockHitResult hit) {
-		throw new AssertionError();
+		return com.railwayteam.railways.util.fabric.EntityUtilsImpl.handleUseEvent(player, hand, hit);
 	}
 
 	public static boolean isHolding(Player player, Predicate<ItemStack> predicate) {

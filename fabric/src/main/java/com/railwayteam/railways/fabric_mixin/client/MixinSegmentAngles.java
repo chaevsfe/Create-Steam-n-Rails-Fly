@@ -19,8 +19,6 @@
 package com.railwayteam.railways.fabric_mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.railwayteam.railways.registry.CRTrackMaterials;
@@ -37,8 +35,9 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Collections;
 import java.util.Iterator;
 
 @Mixin(value = SegmentAngles.class, remap = false)
@@ -69,32 +68,31 @@ public class MixinSegmentAngles {
         return original;
     }
 
-    @WrapOperation(method = "<init>", at = @At(value = "INVOKE", target = "Lcom/zurrtum/create/content/trains/track/BezierConnection;iterator()Ljava/util/Iterator;"))
-    private Iterator<BezierConnection.Segment> railways$makeMonorailSegments(BezierConnection bc, Operation<Iterator<BezierConnection.Segment>> original) {
-        if (CRTrackMaterials.getType(bc.getMaterial()) != CRTrackMaterials.CRTrackType.MONORAIL) {
-            return original.call(bc);
-        }
+    @Inject(method = "<init>", at = @At("RETURN"))
+    private void railways$makeMonorailSegments(BezierConnection bc, CallbackInfo ci) {
+        if (!CRTrackMaterials.CRTrackType.MONORAIL.equals(CRTrackMaterials.getType(bc.getMaterial())) || length == 0)
+            return;
 
-        int segmentCount = length - 1;
-        Couple<Vec3> previousOffsets = null;
+        Iterator<BezierConnection.Segment> iterator = bc.iterator();
+        BezierConnection.Segment segment = iterator.next();
+        Vec3 upNormal = segment.derivative.normalize().cross(segment.normal);
+        Vec3 firstGirderOffset = upNormal.scale(8 / 16f);
+        Couple<Vec3> previousOffsets = Couple.create(
+            segment.position.add(firstGirderOffset),
+            segment.position.add(firstGirderOffset).add(upNormal.scale(-10 / 16f))
+        );
 
-        for (BezierConnection.Segment segment : bc) {
-            int i = segment.index;
-            boolean end = i == 0 || i == segmentCount;
+        int i = 0;
+        while (iterator.hasNext()) {
+            segment = iterator.next();
+            boolean end = segment.index == length;
 
             Vec3 mainGirder = segment.position;
-            Vec3 upNormal = segment.derivative.normalize()
-                .cross(segment.normal);
-            Vec3 firstGirderOffset = upNormal.scale(8 / 16f);
-            Vec3 secondGirderOffset = upNormal.scale(-10 / 16f);
+            upNormal = segment.derivative.normalize().cross(segment.normal);
+            firstGirderOffset = upNormal.scale(8 / 16f);
             Vec3 mainTop = segment.position.add(firstGirderOffset);
-            Vec3 mainBottom = mainTop.add(secondGirderOffset);
-
+            Vec3 mainBottom = mainTop.add(upNormal.scale(-10 / 16f));
             Couple<Vec3> offsets = Couple.create(mainTop, mainBottom);
-            if (previousOffsets == null) {
-                previousOffsets = offsets;
-                continue;
-            }
 
             lightPosition[i] = BlockPos.containing(mainGirder);
             railTransforms[i] = Couple.create(null, null);
@@ -136,8 +134,7 @@ public class MixinSegmentAngles {
             }
 
             previousOffsets = offsets;
+            i++;
         }
-
-        return Collections.emptyIterator();
     }
 }

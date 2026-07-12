@@ -25,13 +25,15 @@ import com.zurrtum.create.catnip.data.Pair;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface IGenericCrossingTrackBE {
@@ -41,15 +43,15 @@ public interface IGenericCrossingTrackBE {
     Pair<TrackMaterial, TrackShape> railways$getSecondCrossingPiece();
 
     @Environment(EnvType.CLIENT)
-    static @NotNull BakedModel getModel(@NotNull Pair<TrackMaterial, TrackShape> data) {
+    static @NotNull BlockStateModel getModel(@NotNull Pair<TrackMaterial, TrackShape> data) {
         return getModel(data.getFirst(), data.getSecond());
     }
 
     @Environment(EnvType.CLIENT)
-    static @NotNull BakedModel getModel(@NotNull TrackMaterial material, @NotNull TrackShape shape) {
+    static @NotNull BlockStateModel getModel(@NotNull TrackMaterial material, @NotNull TrackShape shape) {
         TrackBlock track = material.getBlock();
-        return (BakedModel) (Object) Minecraft.getInstance().getModelManager().getBlockModelShaper()
-            .getBlockModel(track.defaultBlockState()
+        return Minecraft.getInstance().getModelManager().getBlockStateModelSet()
+            .get(track.defaultBlockState()
                 .setValue(TrackBlock.SHAPE, shape)
             );
     }
@@ -61,7 +63,13 @@ public interface IGenericCrossingTrackBE {
 
     @Environment(EnvType.CLIENT)
     static @NotNull List<BakedQuad> getQuads(@NotNull TrackMaterial material, @NotNull TrackShape shape, @Nullable Direction side, @NotNull RandomSource rand) {
-        BakedModel model = getModel(material, shape);
-        return model.getQuads(material.getBlock().defaultBlockState().setValue(TrackBlock.SHAPE, shape), side, rand);
+        BlockStateModel model = getModel(material, shape);
+        List<BlockStateModelPart> parts = new ArrayList<>();
+        model.collectParts(rand, parts);
+
+        List<BakedQuad> quads = new ArrayList<>();
+        for (BlockStateModelPart part : parts)
+            quads.addAll(part.getQuads(side));
+        return List.copyOf(quads);
     }
 }

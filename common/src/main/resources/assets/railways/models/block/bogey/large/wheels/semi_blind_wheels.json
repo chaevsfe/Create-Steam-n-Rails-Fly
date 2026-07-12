@@ -5,6 +5,7 @@
   "flip_v": true,
   "model": "railways:models/block/bogey/large/wheels/semi_blind_wheels.obj",
   "textures": {
+    "particle": "#0",
     "0": "create:block/bogey/wheel"
   }
 }

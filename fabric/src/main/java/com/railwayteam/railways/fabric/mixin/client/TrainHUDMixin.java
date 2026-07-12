@@ -21,7 +21,7 @@ package com.railwayteam.railways.fabric.mixin.client;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.railwayteam.railways.content.switches.TrainHUDSwitchExtension;
-import com.zurrtum.create.content.trains.TrainHUD;
+import com.zurrtum.create.client.content.trains.TrainHUD;
 import net.minecraft.client.gui.GuiGraphics;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

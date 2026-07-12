@@ -1,4 +1,4 @@
-name: Publish Release
+name: Build Release
 
 on:
   workflow_dispatch:
@@ -10,8 +10,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Java
-        run: echo "JAVA_HOME=$JAVA_HOME_21_X64" >> "$GITHUB_ENV"
+      - name: Setup Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
 
       - name: Loom Cache
         uses: actions/cache@v4
@@ -26,10 +29,14 @@ jobs:
           gradle-home-cache-cleanup: true
           cache-read-only: true
 
-      - name: Build & Publish
-        env:
-          RELEASE_BUILD: true
-          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
-          MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
-        run: ./gradlew railwaysPublish
+      - name: Build
+        run: ./gradlew clean build validateAccessWidener --no-daemon
+
+      - name: Upload distributable JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: steam-rails-fabric-26.2-release
+          path: |
+            build/libs/Steam_Rails-*.jar
+            !build/libs/*-sources.jar
+          if-no-files-found: error

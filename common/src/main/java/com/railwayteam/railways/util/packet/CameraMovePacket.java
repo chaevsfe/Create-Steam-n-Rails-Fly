@@ -69,12 +69,21 @@ public class CameraMovePacket implements C2SPacket, S2CPacket {
     private static double clampHorizontal(double value) { return Mth.clamp(value, -3.0E7, 3.0E7); }
     private static double clampVertical(double value)   { return Mth.clamp(value, -2.0E7, 2.0E7); }
 
-    private static boolean isPlayerCollidingWithAnythingNew(ConductorEntity conductor,
-                                                             LevelReader world, AABB box) {
-        Iterable<VoxelShape> iterable = world.getCollisions(conductor, conductor.getBoundingBox().deflate(1.0E-5f));
-        VoxelShape shape = Shapes.create(box.deflate(1.0E-5f));
-        for (VoxelShape s : iterable) {
-            if (Shapes.joinIsNotEmpty(s, shape, BooleanOp.AND)) continue;
+    /**
+     * Stable 26.2 checks collisions at the exact packet destination against shapes that were not
+     * already intersecting the entity before it moved. The old getCollisions-based copy queried
+     * only the movement-adjusted current box, which could reject valid moves and miss a genuinely
+     * new destination collision.
+     */
+    private static boolean isEntityCollidingWithAnythingNew(LevelReader world, ConductorEntity conductor,
+                                                             AABB oldBox, double x, double y, double z) {
+        AABB destinationBox = conductor.getBoundingBox().move(
+                x - conductor.getX(), y - conductor.getY(), z - conductor.getZ());
+        Iterable<VoxelShape> collisions = world.getPreMoveCollisions(
+                conductor, destinationBox.deflate(1.0E-5), oldBox.getBottomCenter());
+        VoxelShape oldShape = Shapes.create(oldBox.deflate(1.0E-5));
+        for (VoxelShape collision : collisions) {
+            if (Shapes.joinIsNotEmpty(collision, oldShape, BooleanOp.AND)) continue;
             return true;
         }
         return false;
@@ -82,9 +91,7 @@ public class CameraMovePacket implements C2SPacket, S2CPacket {
 
     public static void teleport(ServerPlayer player, ConductorEntity conductor,
                                 double x, double y, double z, float yaw, float pitch) {
-        conductor.setPos(x, y, z);
-        conductor.setYRot(yaw);
-        conductor.setXRot(pitch);
+        conductor.absSnapTo(x, y, z, yaw, pitch);
         CRPackets.PACKETS.sendTo(player, new CameraMovePacket(
                 conductor, x, y, z, yaw, pitch, conductor.onGround()));
     }
@@ -151,21 +158,15 @@ public class CameraMovePacket implements C2SPacket, S2CPacket {
         doZ = cz - conductor.getZ();
         double sq = dm * dm + dn * dn + doZ * doZ;
 
-        if (sq > 0.0625) {
-            // moved wrongly, silently discard (client will resync)
-            return;
-        }
-
-        conductor.setPos(cx, cy, cz);
-        conductor.setYRot(gy);
-        conductor.setXRot(gx);
-
-        if (!conductor.noPhysics
-                && (sq > 0 && serverLevel.noCollision(conductor, aABB)
-                || isPlayerCollidingWithAnythingNew(conductor, serverLevel, aABB))) {
+        boolean movedWrongly = sq > 0.0625;
+        if (!conductor.noPhysics &&
+                (movedWrongly && serverLevel.noCollision(conductor, aABB)
+                        || isEntityCollidingWithAnythingNew(serverLevel, conductor, aABB, cx, cy, cz))) {
             teleport(sender, conductor, ix, iy, iz, gy, gx);
             return;
         }
+
+        conductor.absSnapTo(cx, cy, cz, gy, gx);
 
         conductor.doCheckFallDamage(conductor.getY() - ly, onGround);
         conductor.setOnGround(onGround);

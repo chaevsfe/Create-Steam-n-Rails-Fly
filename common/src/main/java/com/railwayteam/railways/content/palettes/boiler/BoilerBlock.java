@@ -27,7 +27,6 @@ import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import com.zurrtum.create.foundation.block.IHaveBigOutline;
 import com.zurrtum.create.foundation.placement.PoleHelper;
 import com.zurrtum.create.infrastructure.config.AllConfigs;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import com.zurrtum.create.catnip.data.Iterate;
 import com.zurrtum.create.catnip.placement.IPlacementHelper;
 import com.zurrtum.create.catnip.placement.PlacementHelpers;
@@ -43,6 +42,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -262,9 +262,8 @@ public class BoilerBlock extends Block implements IWrenchable, IHasCustomOutline
             return offset;
         }
 
-        @ExpectPlatform
         public static Attribute getAttribute() {
-            throw new AssertionError();
+            return Attributes.BLOCK_INTERACTION_RANGE.value();
         }
     }
 }

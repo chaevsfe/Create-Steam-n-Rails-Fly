@@ -107,8 +107,8 @@ public class HandcarItem extends BlockItem implements IDeployAnywayBlockItem {
                 return InteractionResult.FAIL;
 
             if (result.getValue().feedback != null) {
-                player.displayClientMessage(CreateLang.translateDirect(result.getValue().feedback)
-                    .withStyle(ChatFormatting.RED), true);
+                player.sendOverlayMessage(CreateLang.translateDirect(result.getValue().feedback)
+                    .withStyle(ChatFormatting.RED));
                 AllSoundEvents.DENY.play(level, null, pos, .5f, 1);
                 return InteractionResult.FAIL;
             }

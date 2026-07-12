@@ -2,6 +2,7 @@
 	"credit": "By Slimeist",
 	"ambientocclusion": false,
 	"textures": {
+		"particle": "#side",
 		"side": "block/amethyst_block",
 		"bottom": "block/barrel_top"
 	},

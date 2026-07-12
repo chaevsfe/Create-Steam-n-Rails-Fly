@@ -3,7 +3,6 @@ package com.railwayteam.railways.fabric_mixin.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.railwayteam.railways.content.switches.TrackSwitchDebugVisualizer;
 import com.railwayteam.railways.util.CustomTrackOverlayRendering;
-import com.zurrtum.create.client.catnip.render.SuperRenderTypeBuffer;
 import com.zurrtum.create.client.content.trains.track.TrackTargetingClient;
 import com.zurrtum.create.client.flywheel.lib.transform.TransformStack;
 import com.zurrtum.create.content.trains.graph.EdgePointType;
@@ -11,8 +10,7 @@ import com.zurrtum.create.content.trains.graph.TrackGraphLocation;
 import com.zurrtum.create.content.trains.track.TrackTargetingBlockItem;
 import com.zurrtum.create.infrastructure.component.BezierTrackPointLocation;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
@@ -48,7 +46,7 @@ public abstract class MixinTrackTargetingClient {
     }
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    private static void railways$renderCustomOverlay(Minecraft mc, PoseStack ms, SuperRenderTypeBuffer buffer,
+    private static void railways$renderCustomOverlay(Minecraft mc, PoseStack ms, SubmitNodeCollector queue,
                                                      Vec3 camera, CallbackInfo ci) {
         if (lastLocation == null || lastResult == null || lastResult.feedback != null)
             return;
@@ -56,7 +54,6 @@ public abstract class MixinTrackTargetingClient {
             return;
 
         BlockPos pos = lastHovered;
-        int light = LevelRenderer.getLightColor(mc.level, pos);
         Direction.AxisDirection direction = lastDirection
             ? Direction.AxisDirection.POSITIVE
             : Direction.AxisDirection.NEGATIVE;
@@ -65,8 +62,9 @@ public abstract class MixinTrackTargetingClient {
         TransformStack.of(ms)
             .translate(Vec3.atLowerCornerOf(pos)
                 .subtract(camera));
-        boolean rendered = CustomTrackOverlayRendering.renderOverlayIfPresent(mc.level, pos, direction, lastHoveredBezierSegment,
-            ms, buffer, light, OverlayTexture.NO_OVERLAY, lastType, 1 + 1 / 16f);
+        boolean rendered = CustomTrackOverlayRendering.renderOverlayIfPresent(
+            mc.level, pos, direction, lastHoveredBezierSegment, ms, queue, lastType, 1 + 1 / 16f
+        );
         ms.popPose();
         if (rendered)
             ci.cancel();

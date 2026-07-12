@@ -18,21 +18,29 @@
 
 package com.railwayteam.railways.util.packet;
 
+import com.railwayteam.railways.content.shadow_realm.ShadowRealm;
 import com.railwayteam.railways.multiloader.S2CPacket;
-import com.zurrtum.create.content.trains.entity.Train;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.FriendlyByteBuf;
 
-public record ShadowTrainRestorePacket(Train train) implements S2CPacket {
+import java.util.UUID;
+
+/** Marks the following Create AddTrainPacket as a relocation-only shadow train snapshot. */
+public record ShadowTrainRestorePacket(UUID trainId) implements S2CPacket {
     public ShadowTrainRestorePacket(FriendlyByteBuf buf) {
-        this((Train) null);
+        this(UUIDUtil.STREAM_CODEC.decode(buf));
     }
+
+    @Override
     public void write(FriendlyByteBuf buffer) {
-        // TODO: Rebuild shadow train restore sync on top of Create Fly's AddTrainPacket codec.
+        UUIDUtil.STREAM_CODEC.encode(buffer, trainId);
     }
+
+    @Override
     public void handle(Minecraft mc) {
-        mc.execute(() -> {
-            // TODO: Restore once TrainRelocator accessors are ported to Create Fly.
-        });
+        // PacketSet already dispatches handle() onto the client thread. Do not enqueue this again:
+        // the native AddTrainPacket sent immediately afterwards must observe the marker first.
+        ShadowRealm.clientPendingShadowTrainId = trainId;
     }
 }

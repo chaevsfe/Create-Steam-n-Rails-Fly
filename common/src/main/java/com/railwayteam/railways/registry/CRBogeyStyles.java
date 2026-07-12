@@ -15,6 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -235,15 +236,26 @@ public class CRBogeyStyles {
 
 	public static boolean styleFitsTrack(BogeyStyle style, Identifier trackType) {
 		for (BogeySize size : style.validSizes()) {
-			if (style.getBlockForSize(size) instanceof AbstractBogeyBlock<?> bogeyBlock) {
-				boolean validType = bogeyBlock.getValidPathfindingTypes(style).contains(trackType)
-					|| bogeyBlock.getValidPathfindingTypes(style).contains(CRTrackMaterials.CRTrackType.UNIVERSAL);
-				boolean monoRail = trackType.equals(CRTrackMaterials.CRTrackType.MONORAIL);
-				if (validType && ((!monoRail) ^ bogeyBlock instanceof InvisibleMonoBogeyBlock))
-					return true;
-			}
+			if (blockFitsTrack(style.getBlockForSize(size), style, trackType))
+				return true;
 		}
 		return false;
+	}
+
+	public static boolean blockFitsTrack(AbstractBogeyBlock<?> bogeyBlock, BogeyStyle style, Identifier trackType) {
+		if (trackType.equals(CRTrackMaterials.CRTrackType.UNIVERSAL))
+			return true;
+
+		boolean validType = bogeyBlock.getValidPathfindingTypes(style).contains(trackType)
+			|| bogeyBlock.getValidPathfindingTypes(style).contains(CRTrackMaterials.CRTrackType.UNIVERSAL);
+		boolean monoRail = trackType.equals(CRTrackMaterials.CRTrackType.MONORAIL);
+		return validType && ((!monoRail) ^ bogeyBlock instanceof InvisibleMonoBogeyBlock);
+	}
+
+	public static List<BogeyStyle> filterStylesForTrack(Collection<BogeyStyle> styles, Identifier trackType) {
+		return styles.stream()
+			.filter(style -> styleFitsTrack(style, trackType))
+			.toList();
 	}
 
 	public static Optional<BogeyStyle> getMapped(BogeyStyle style, Identifier trackType, boolean fallback) {
@@ -277,5 +289,31 @@ public class CRBogeyStyles {
 		return AllBogeyStyles.BOGEY_STYLES.values().stream()
 			.filter(candidate -> styleFitsTrack(candidate, trackType))
 			.findFirst();
+	}
+
+	public static Optional<ResolvedBogey> resolveForTrack(BogeyStyle selectedStyle, BogeySize preferredSize,
+														 Identifier trackType, boolean fallback) {
+		Optional<BogeyStyle> mappedStyle = trackType.equals(CRTrackMaterials.CRTrackType.UNIVERSAL)
+			? Optional.of(selectedStyle)
+			: getMapped(selectedStyle, trackType, fallback);
+		if (mappedStyle.isEmpty())
+			return Optional.empty();
+
+		BogeyStyle style = mappedStyle.get();
+		BogeySize size = preferredSize != null
+			? preferredSize
+			: AllBogeySizes.allSortedIncreasing().getFirst();
+		for (int attempts = 0; attempts < AllBogeySizes.allSortedIncreasing().size(); attempts++) {
+			if (style.validSizes().contains(size)) {
+				AbstractBogeyBlock<?> block = style.getBlockForSize(size);
+				if (blockFitsTrack(block, style, trackType))
+					return Optional.of(new ResolvedBogey(style, size, block));
+			}
+			size = size.nextBySize();
+		}
+		return Optional.empty();
+	}
+
+	public record ResolvedBogey(BogeyStyle style, BogeySize size, AbstractBogeyBlock<?> block) {
 	}
 }

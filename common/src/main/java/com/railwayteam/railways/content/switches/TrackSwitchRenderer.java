@@ -6,6 +6,7 @@ import com.railwayteam.railways.util.CustomTrackOverlayRendering;
 import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
+import com.zurrtum.create.client.catnip.render.SuperByteBufferRenderState;
 import com.zurrtum.create.client.flywheel.lib.model.baked.PartialModel;
 import com.zurrtum.create.client.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
 import com.zurrtum.create.content.trains.track.ITrackBlock;
@@ -13,8 +14,7 @@ import com.zurrtum.create.content.trains.track.TrackTargetingBehaviour;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -44,22 +44,46 @@ public class TrackSwitchRenderer
         if (be.isRemoved())
             return;
 
-        BlockState blockState = state.blockState;
+        BlockState blockState = be.getBlockState();
         state.yRot = AngleHelper.horizontalAngle(blockState.getValue(TrackSwitchBlock.FACING));
         state.automatic = be.isAutomatic();
 
+        Level level = be.getLevel();
+        if (level == null)
+            return;
+
+        float targetAngle = state.automatic ? brassFlagAngle(be) : andesiteFlagAngle(be);
+        be.lerpedAngle.updateChaseTarget(targetAngle);
+        state.flagAngle = be.lerpedAngle.getValue(tickProgress);
+
         if (state.automatic) {
-            state.flag = CachedBuffers.partial(CRBlockPartials.BRASS_SWITCH_FLAG, blockState);
-            state.flagAngle = brassFlagAngle(be);
+            SuperByteBuffer flag = CachedBuffers.partial(CRBlockPartials.BRASS_SWITCH_FLAG, blockState)
+                .cardinalLighting(getCardinalLighting(level))
+                .rotateCenteredDegrees(state.yRot, Direction.Axis.Y)
+                .light(state.lightCoords)
+                .translate(0, -2.0 / 16, 0)
+                .rotateCentered(1.5708f, Direction.UP)
+                .translate(0.5, 8.5 / 16, 0.5)
+                .rotate(state.flagAngle, Direction.NORTH)
+                .translate(-0.5, -7.5 / 16, -0.5);
+            state.flag = flag.extractRenderState();
         } else {
-            state.flag = CachedBuffers.partial(CRBlockPartials.ANDESITE_SWITCH_FLAG, blockState);
-            state.handle = CachedBuffers.partial(CRBlockPartials.ANDESITE_SWITCH_HANDLE, blockState);
-            state.flagAngle = andesiteFlagAngle(be);
+            state.flag = CachedBuffers.partial(CRBlockPartials.ANDESITE_SWITCH_FLAG, blockState)
+                .cardinalLighting(getCardinalLighting(level))
+                .rotateCenteredDegrees(state.yRot, Direction.Axis.Y)
+                .rotateCentered(state.flagAngle, Direction.UP)
+                .light(state.lightCoords)
+                .extractRenderState();
+            state.handle = CachedBuffers.partial(CRBlockPartials.ANDESITE_SWITCH_HANDLE, blockState)
+                .cardinalLighting(getCardinalLighting(level))
+                .rotateCenteredDegrees(state.yRot, Direction.Axis.Y)
+                .rotateCentered(-1.5708f, Direction.UP)
+                .light(state.lightCoords)
+                .extractRenderState();
         }
 
-        Level level = be.getLevel();
         TrackTargetingBehaviour<TrackSwitch> target = be.edgePoint;
-        if (level == null || target == null)
+        if (target == null)
             return;
 
         BlockPos targetPosition = target.getGlobalPosition();
@@ -99,44 +123,18 @@ public class TrackSwitchRenderer
     public void submit(SwitchRenderState state, PoseStack matrices, SubmitNodeCollector queue, CameraRenderState cameraState) {
         super.submit(state, matrices, queue, cameraState);
 
-        if (state.flag != null) {
-            queue.submitCustomGeometry(matrices, RenderTypes.cutoutMovingBlock(), (pose, consumer) -> {
-                SuperByteBuffer flag = state.flag
-                    .rotateCenteredDegrees(state.yRot, Direction.Axis.Y)
-                    .light(state.lightCoords);
+        if (state.flag != null)
+            state.flag.submit(matrices, queue);
 
-                if (state.automatic) {
-                    flag
-                        .translate(0, -2.0 / 16, 0)
-                        .rotateCentered(1.5708f, Direction.UP)
-                        .translate(0.5, 8.5 / 16, 0.5)
-                        .rotate(state.flagAngle, Direction.NORTH)
-                        .translate(-0.5, -7.5 / 16, -0.5);
-                } else {
-                    flag.rotateCentered(state.flagAngle, Direction.UP);
-                }
-
-                flag.renderInto(pose, consumer);
-            });
-        }
-
-        if (state.handle != null) {
-            queue.submitCustomGeometry(matrices, RenderTypes.cutoutMovingBlock(), (pose, consumer) ->
-                state.handle
-                    .rotateCenteredDegrees(state.yRot, Direction.Axis.Y)
-                    .rotateCentered(-1.5708f, Direction.UP)
-                    .light(state.lightCoords)
-                    .renderInto(pose, consumer));
-        }
+        if (state.handle != null)
+            state.handle.submit(matrices, queue);
 
         if (state.overlayModel != null && state.level != null && state.targetPosition != null && state.trackState != null) {
-            queue.submitCustomGeometry(matrices, RenderTypes.cutoutMovingBlock(), (pose, consumer) -> {
-                PoseStack overlayMatrices = new PoseStack();
-                overlayMatrices.translate(state.trackOffset.getX(), state.trackOffset.getY(), state.trackOffset.getZ());
-                CustomTrackOverlayRendering.renderOverlayInto(state.level, state.targetPosition, state.trackState,
-                    state.targetDirection, state.targetBezier, overlayMatrices, state.overlayModel, 1,
-                    state.offsetOverlayToSide, pose, consumer);
-            });
+            matrices.pushPose();
+            matrices.translate(state.trackOffset.getX(), state.trackOffset.getY(), state.trackOffset.getZ());
+            CustomTrackOverlayRendering.renderOverlay(state.level, state.targetPosition, state.targetDirection,
+                state.targetBezier, matrices, queue, state.overlayModel, 1, state.offsetOverlayToSide);
+            matrices.popPose();
         }
     }
 
@@ -144,8 +142,8 @@ public class TrackSwitchRenderer
         public float yRot;
         public boolean automatic;
         public float flagAngle;
-        public @Nullable SuperByteBuffer flag;
-        public @Nullable SuperByteBuffer handle;
+        public @Nullable SuperByteBufferRenderState flag;
+        public @Nullable SuperByteBufferRenderState handle;
 
         public @Nullable Level level;
         public @Nullable BlockPos targetPosition;

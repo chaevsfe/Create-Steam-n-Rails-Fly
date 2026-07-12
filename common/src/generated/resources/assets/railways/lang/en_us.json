@@ -1998,6 +1998,7 @@
   "itemGroup.railways_palettes": "Steam 'n' Rails: Palettes",
   "itemGroup.railways_tracks": "Steam 'n' Rails: Tracks",
   "key.category.railways.railways": "Steam 'n' Rails",
+  "railways.bogey.wrong_gauge": "The selected bogey is incompatible with this track gauge",
   "railways.bogeys.styles.archbar": "Archbar",
   "railways.bogeys.styles.blomberg": "Blomberg",
   "railways.bogeys.styles.coilspring": "Coilspring",

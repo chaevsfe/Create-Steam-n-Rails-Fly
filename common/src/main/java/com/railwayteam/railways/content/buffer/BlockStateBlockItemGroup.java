@@ -85,7 +85,7 @@ public class BlockStateBlockItemGroup<C, T extends BlockStateBlockItemGroup.ISty
 
         this.register();
 
-        ALL.put(blockEntry.getId().toIdentifier(), this);
+        ALL.put(blockEntry.getId(), this);
     }
 
     public static BlockStateBlockItemGroup<?, ?> get(Identifier id) {

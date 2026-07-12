@@ -26,12 +26,10 @@ import com.zurrtum.create.content.trains.track.ITrackBlock;
 import com.zurrtum.create.content.trains.track.TrackTargetingBehaviour;
 import com.zurrtum.create.client.flywheel.lib.model.baked.PartialModel;
 import com.zurrtum.create.infrastructure.component.BezierTrackPointLocation;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -118,13 +116,11 @@ public class TrackCouplerRenderer extends SmartBlockEntityRenderer<TrackCouplerB
         if (state.overlayModel == null || state.level == null || state.targetPosition == null || state.trackState == null)
             return;
 
-        queue.submitCustomGeometry(matrices, RenderTypes.cutoutMovingBlock(), (pose, consumer) -> {
-            PoseStack overlayMatrices = new PoseStack();
-            overlayMatrices.translate(state.trackOffset.getX(), state.trackOffset.getY(), state.trackOffset.getZ());
-            CustomTrackOverlayRendering.renderOverlayInto(state.level, state.targetPosition, state.trackState,
-                state.targetDirection, state.targetBezier, overlayMatrices, state.overlayModel, 1,
-                state.offsetOverlayToSide, pose, consumer);
-        });
+        matrices.pushPose();
+        matrices.translate(state.trackOffset.getX(), state.trackOffset.getY(), state.trackOffset.getZ());
+        CustomTrackOverlayRendering.renderOverlay(state.level, state.targetPosition, state.targetDirection,
+            state.targetBezier, matrices, queue, state.overlayModel, 1, state.offsetOverlayToSide);
+        matrices.popPose();
     }
 
     public static class CouplerRenderState extends SmartBlockEntityRenderer.SmartRenderState {

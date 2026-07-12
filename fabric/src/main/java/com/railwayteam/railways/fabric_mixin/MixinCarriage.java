@@ -62,13 +62,9 @@ public abstract class MixinCarriage {
 			return false;
 
 		Identifier trackType = CRTrackMaterials.getType(point.edge.getTrackMaterial());
-		AbstractBogeyBlock<?> bogeyBlock = bogey.type;
-		Identifier bogeyTrackType = bogeyBlock.getTrackType(bogey.getStyle());
-
 		if (trackType.equals(CRTrackMaterials.CRTrackType.UNIVERSAL))
 			return false;
-		if (bogeyTrackType.equals(CRTrackMaterials.CRTrackType.UNIVERSAL))
-			return false;
-		return !trackType.equals(bogeyTrackType);
+		AbstractBogeyBlock<?> bogeyBlock = bogey.type;
+		return bogeyBlock.isOnIncompatibleTrack((Carriage) (Object) this, leading);
 	}
 }

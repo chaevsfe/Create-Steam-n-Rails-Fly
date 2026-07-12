@@ -68,8 +68,8 @@ public class TagCycleHandlerClient {
 
     private static void openCycleMenu() {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.screen != null) {
-            debug("not opening: screen already present ({})", mc.screen.getClass().getName());
+        if (mc.gui.screen() != null) {
+            debug("not opening: screen already present ({})", mc.gui.screen().getClass().getName());
             return;
         }
         if (mc.gameMode == null) {
@@ -138,7 +138,7 @@ public class TagCycleHandlerClient {
             CRKeys.CYCLE_MENU.getBoundKey(),
             CRKeys.CYCLE_MENU.getBoundCode(),
             COOLDOWN,
-            mc.screen == null ? "null" : mc.screen.getClass().getName(),
+            mc.gui.screen() == null ? "null" : mc.gui.screen().getClass().getName(),
             player == null ? "no player" : describe(player.getItemInHand(InteractionHand.MAIN_HAND)),
             player == null ? "no player" : describe(player.getItemInHand(InteractionHand.OFF_HAND)));
     }

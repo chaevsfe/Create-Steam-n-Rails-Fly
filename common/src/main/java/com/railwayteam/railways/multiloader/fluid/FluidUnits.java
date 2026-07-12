@@ -18,11 +18,9 @@
 
 package com.railwayteam.railways.multiloader.fluid;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
 
 public class FluidUnits {
-    @ExpectPlatform
     public static long bucket() {
-        throw new AssertionError();
+        return com.railwayteam.railways.multiloader.fluid.fabric.FluidUnitsImpl.bucket();
     }
 }

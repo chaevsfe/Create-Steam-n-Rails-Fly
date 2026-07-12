@@ -2,6 +2,7 @@
 	"credit": "By Slimeist",
 	"texture_size": [32, 32],
 	"textures": {
+		"particle": "#1",
 		"1": "create:block/cogwheel"
 	},
 	"elements": [

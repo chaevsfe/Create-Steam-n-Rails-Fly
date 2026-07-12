@@ -5,6 +5,7 @@
   "flip_v": true,
   "model": "railways:models/block/bogey/singleaxle/frame.obj",
   "textures": {
+    "particle": "#0",
     "0": "railways:block/bogeys/standard/singleaxle_body"
   }
 }

@@ -24,22 +24,21 @@ import com.railwayteam.railways.RailwaysClient;
 import com.railwayteam.railways.base.reload.ClientResourceReloadListener;
 import com.railwayteam.railways.content.buffer.headstock.fabric.CopycatHeadstockModelRegistration;
 import com.railwayteam.railways.content.conductor.fabric.ConductorCapItemRenderer;
+import com.railwayteam.railways.content.custom_tracks.monorail.MonorailClientRuntimeChecks;
 import com.railwayteam.railways.events.ClientEvents;
 import com.railwayteam.railways.registry.CRParticleTypes;
-import com.zurrtum.create.content.trains.track.TrackMaterial;
+import com.railwayteam.railways.registry.fabric.CRBlockEntitiesClientImpl;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientWorldEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLevelEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -57,20 +56,15 @@ import java.util.function.Supplier;
 public class RailwaysClientImpl implements ClientModInitializer {
 	public void onInitializeClient() {
 		CopycatHeadstockModelRegistration.register();
+		CRBlockEntitiesClientImpl.register();
 		RailwaysClient.init();
+		MonorailClientRuntimeChecks.run();
 		if (FabricLoader.getInstance().isModLoaded("jei")) {
 			registerJeiCompat();
 		}
 		ConductorCapItemRenderer.register();
 		CRParticleTypes.registerFactories();
 		registerClientEvents();
-		registerTrackRenderLayers();
-
-		// Register vent block for CUTOUT chunk section so the hollow-frame copycat_base
-		// texture renders with proper alpha transparency (opaque frame, transparent center).
-		BlockRenderLayerMap.putBlock(
-				com.railwayteam.railways.registry.CRBlocks.CONDUCTOR_VENT.get(),
-				ChunkSectionLayer.CUTOUT);
 	}
 
 	private static void registerJeiCompat() {
@@ -83,18 +77,10 @@ public class RailwaysClientImpl implements ClientModInitializer {
 		}
 	}
 
-	private static void registerTrackRenderLayers() {
-		for (TrackMaterial material : TrackMaterial.ALL.values()) {
-			if (Railways.MOD_ID.equals(material.getId().getNamespace())) {
-				BlockRenderLayerMap.putBlock(material.getBlock(), ChunkSectionLayer.CUTOUT);
-			}
-		}
-	}
-
 	private static void registerClientEvents() {
 		ClientTickEvents.START_CLIENT_TICK.register(ClientEvents::onClientTickStart);
 		ClientTickEvents.END_CLIENT_TICK.register(ClientEvents::onClientTickEnd);
-		ClientWorldEvents.AFTER_CLIENT_WORLD_CHANGE.register((mc, level) -> ClientEvents.onClientWorldLoad(level));
+		ClientLevelEvents.AFTER_CLIENT_LEVEL_CHANGE.register((mc, level) -> ClientEvents.onClientWorldLoad(level));
 		ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
 			@Override
 			public Identifier getFabricId() {
@@ -128,7 +114,7 @@ public class RailwaysClientImpl implements ClientModInitializer {
 	}
 
 	public static void registerModelLayer(ModelLayerLocation layer, Supplier<LayerDefinition> definition) {
-		EntityModelLayerRegistry.registerModelLayer(layer, definition::get);
+		ModelLayerRegistry.registerModelLayer(layer, definition::get);
 	}
 
 	public static <T extends Entity> void registerEntityRenderer(EntityType<? extends T> type, EntityRendererProvider<T> provider) {

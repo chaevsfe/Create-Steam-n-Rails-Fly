@@ -7,6 +7,7 @@ import com.railwayteam.railways.content.conductor.ClientHandler;
 import com.railwayteam.railways.content.conductor.ConductorEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -30,12 +31,12 @@ public abstract class MixinGameRenderer {
     public abstract void setPostEffect(Identifier postEffectId);
 
     @Inject(method = "bobView", at = @At("HEAD"), cancellable = true)
-    private void railways$bobView(PoseStack poseStack, float partialTicks, CallbackInfo ci) {
-        if (!(minecraft.getCameraEntity() instanceof ConductorEntity conductor))
+    private void railways$bobView(CameraRenderState cameraState, PoseStack poseStack, CallbackInfo ci) {
+        if (!(minecraft.getCameraEntity() instanceof ConductorEntity))
             return;
 
-        float walk = -conductor.walkAnimation.position(partialTicks);
-        float bob = Mth.lerp(partialTicks, conductor.oBob, conductor.bob);
+        float walk = cameraState.entityRenderState.backwardsInterpolatedWalkDistance;
+        float bob = cameraState.entityRenderState.bob;
         poseStack.translate(Mth.sin(walk * (float) Math.PI) * bob * 0.5f,
             -Math.abs(Mth.cos(walk * (float) Math.PI) * bob), 0.0);
         poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.sin(walk * (float) Math.PI) * bob * 3.0f));
@@ -54,7 +55,7 @@ public abstract class MixinGameRenderer {
         if (!ClientHandler.isPlayerMountedOnCamera())
             return;
 
-        boolean shouldRender = !minecraft.options.hideGui;
+        boolean shouldRender = !minecraft.gui.hud.isHidden();
         HitResult hitResult = minecraft.hitResult;
         if (hitResult != null && hitResult.getType() == HitResult.Type.BLOCK && minecraft.level != null
             && hitResult instanceof BlockHitResult blockHitResult) {

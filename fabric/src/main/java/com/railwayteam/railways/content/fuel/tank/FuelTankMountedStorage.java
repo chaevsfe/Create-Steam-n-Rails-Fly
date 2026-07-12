@@ -1,112 +1,117 @@
 /*
  * Steam 'n' Rails
- * Copyright (c) 2025 The Railways Team
+ * Copyright (c) 2025-2026 The Railways Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.railwayteam.railways.content.fuel.tank;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.railwayteam.railways.content.fuel.tank.FuelTankMountedStorage.Handler;
 import com.railwayteam.railways.registry.fabric.CRMountedStorageTypesImpl;
+import com.zurrtum.create.AllClientHandle;
 import com.zurrtum.create.api.contraption.storage.SyncedMountedStorage;
 import com.zurrtum.create.api.contraption.storage.fluid.WrapperMountedFluidStorage;
-import com.zurrtum.create.content.contraptions.Contraption;
-import com.zurrtum.create.foundation.utility.CreateCodecs;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank;
 import com.zurrtum.create.catnip.animation.LerpedFloat;
+import com.zurrtum.create.content.contraptions.Contraption;
+import com.zurrtum.create.foundation.fluid.FluidTank;
+import com.zurrtum.create.infrastructure.fluids.FluidStack;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
-import java.util.Objects;
+public class FuelTankMountedStorage
+    extends WrapperMountedFluidStorage<FuelTankMountedStorage.Handler>
+    implements SyncedMountedStorage {
 
-public class FuelTankMountedStorage extends WrapperMountedFluidStorage<Handler> implements SyncedMountedStorage {
-	public static final Codec<FuelTankMountedStorage> CODEC = RecordCodecBuilder.create(i -> i.group(
-			CreateCodecs.NON_NEGATIVE_LONG.fieldOf("capacity").forGetter(FuelTankMountedStorage::getCapacity),
-			CreateCodecs.FLUID_STACK_CODEC.fieldOf("fluid").forGetter(FuelTankMountedStorage::getFluid)
-	).apply(i, FuelTankMountedStorage::new));
+    public static final MapCodec<FuelTankMountedStorage> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("capacity").forGetter(FuelTankMountedStorage::getCapacity),
+        FluidStack.OPTIONAL_CODEC.fieldOf("fluid").forGetter(FuelTankMountedStorage::getFluid)
+    ).apply(instance, FuelTankMountedStorage::new));
 
-	private boolean dirty;
+    private boolean dirty;
 
-	protected FuelTankMountedStorage(long capacity, FluidStack stack) {
-		super(CRMountedStorageTypesImpl.FUEL_TANK.get(), new Handler(capacity, stack));
-		this.wrapped.onChange = () -> this.dirty = true;
-	}
-	public void unmount(Level level, BlockState state, BlockPos pos, @Nullable BlockEntity be) {
-		if (be instanceof FuelTankBlockEntity tank && tank.isController()) {
-			FluidTank inventory = tank.getTankInventory();
-			// capacity shouldn't change, leave it
-			inventory.setFluid(this.wrapped.getFluid());
-		}
-	}
+    protected FuelTankMountedStorage(int capacity, FluidStack stack) {
+        super(CRMountedStorageTypesImpl.FUEL_TANK);
+        wrapped = new Handler(capacity, stack);
+    }
 
-	public FluidStack getFluid() {
-		return Objects.requireNonNull(this.wrapped.getFluid());
-	}
+    @Override
+    public void unmount(Level level, BlockState state, BlockPos pos, @Nullable BlockEntity be) {
+        if (be instanceof FuelTankBlockEntity tank && tank.isController()) {
+            tank.getTankInventory().setFluid(wrapped.getFluid());
+        }
+    }
 
-	public long getCapacity() {
-		return this.wrapped.getCapacity();
-	}
-	public boolean isDirty() {
-		return this.dirty;
-	}
-	public void markClean() {
-		this.dirty = false;
-	}
-	public void afterSync(Contraption contraption, BlockPos localPos) {
-		BlockEntity be = contraption.getBlockEntityClientSide(localPos);
-		if (!(be instanceof FuelTankBlockEntity tank))
-			return;
+    public FluidStack getFluid() {
+        return wrapped.getFluid();
+    }
 
-		FluidTank inv = tank.getTankInventory();
-		inv.setFluid(this.getFluid());
-		float fillLevel = inv.getFluidAmount() / (float) inv.getCapacity();
-		if (tank.getFluidLevel() == null) {
-			tank.setFluidLevel(LerpedFloat.linear().startWithValue(fillLevel));
-		}
-		tank.getFluidLevel().chase(fillLevel, 0.5, LerpedFloat.Chaser.EXP);
-	}
+    public int getCapacity() {
+        return wrapped.getMaxAmountPerStack();
+    }
 
-	public static FuelTankMountedStorage fromTank(FuelTankBlockEntity tank) {
-		// tank has update callbacks, make an isolated copy
-		FluidTank inventory = tank.getTankInventory();
-		return new FuelTankMountedStorage(inventory.getCapacity(), inventory.getFluid().copy());
-	}
+    @Override
+    public boolean isDirty() {
+        return dirty;
+    }
 
-	public static FuelTankMountedStorage fromLegacy(CompoundTag nbt) {
-		int capacity = nbt.getInt("Capacity");
-		FluidStack fluid = FluidStack.loadFluidStackFromNBT(nbt);
-		return new FuelTankMountedStorage(capacity, fluid);
-	}
+    @Override
+    public void markClean() {
+        dirty = false;
+    }
 
-	public static final class Handler extends FluidTank {
-		private Runnable onChange = () -> {};
+    @Override
+    public void markDirty() {
+        dirty = true;
+    }
 
-		public Handler(long capacity, FluidStack stack) {
-			super(capacity);
-			Objects.requireNonNull(stack);
-			this.setFluid(stack);
-		}
-		protected void onContentsChanged() {
-			this.onChange.run();
-		}
-	}
+    @Override
+    public void afterSync(Contraption contraption, BlockPos localPos) {
+        BlockEntity be = AllClientHandle.INSTANCE.getBlockEntityClientSide(contraption, localPos);
+        if (!(be instanceof FuelTankBlockEntity tank)) {
+            return;
+        }
+
+        FluidTank inventory = tank.getTankInventory();
+        inventory.setFluid(getFluid());
+        float fillLevel = inventory.getFluid().getAmount() / (float) inventory.getMaxAmountPerStack();
+        if (tank.getFluidLevel() == null) {
+            tank.setFluidLevel(LerpedFloat.linear().startWithValue(fillLevel));
+        }
+        tank.getFluidLevel().chase(fillLevel, 0.5, LerpedFloat.Chaser.EXP);
+    }
+
+    public static FuelTankMountedStorage fromTank(FuelTankBlockEntity tank) {
+        FluidTank inventory = tank.getTankInventory();
+        return new FuelTankMountedStorage(inventory.getMaxAmountPerStack(), inventory.getFluid().copy());
+    }
+
+    public final class Handler extends FluidTank {
+        private Handler(int capacity, FluidStack stack) {
+            super(capacity);
+            setFluid(stack);
+        }
+
+        @Override
+        public boolean isValid(int slot, FluidStack stack) {
+            return tankFuel(stack);
+        }
+
+        @Override
+        public void markDirty() {
+            dirty = true;
+        }
+    }
+
+    private static boolean tankFuel(FluidStack stack) {
+        return com.railwayteam.railways.content.fuel.LiquidFuelTrainHandler.isFuelForTanks(stack.getFluid());
+    }
 }

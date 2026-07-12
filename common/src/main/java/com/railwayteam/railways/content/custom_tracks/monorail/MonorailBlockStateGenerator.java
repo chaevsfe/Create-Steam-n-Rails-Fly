@@ -20,13 +20,11 @@ package com.railwayteam.railways.content.custom_tracks.monorail;
 
 import com.zurrtum.create.content.trains.track.TrackBlock;
 import com.zurrtum.create.foundation.data.SpecialBlockStateGen;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.world.level.block.state.BlockState;
 
 public abstract class MonorailBlockStateGenerator extends SpecialBlockStateGen {
-    @ExpectPlatform
     public static MonorailBlockStateGenerator create() {
-        throw new AssertionError();
+        return com.railwayteam.railways.content.custom_tracks.monorail.fabric.MonorailBlockStateGeneratorImpl.create();
     }
     protected int getXRotation(BlockState state) {
         return 0;

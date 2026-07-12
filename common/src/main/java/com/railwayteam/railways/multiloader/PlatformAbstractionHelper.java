@@ -19,17 +19,14 @@
 package com.railwayteam.railways.multiloader;
 
 import com.mojang.brigadier.arguments.ArgumentType;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.world.item.Item;
 
 public class PlatformAbstractionHelper {
-    @ExpectPlatform
     public static int getBurnTime(Item item) {
-        throw new AssertionError();
+        return com.railwayteam.railways.multiloader.fabric.PlatformAbstractionHelperImpl.getBurnTime(item);
     }
 
-    @ExpectPlatform
     public static <T extends Enum<T>> ArgumentType<T> enumArgument(Class<T> enumClass) {
-        throw new AssertionError();
+        return com.railwayteam.railways.multiloader.fabric.PlatformAbstractionHelperImpl.enumArgument(enumClass);
     }
 }

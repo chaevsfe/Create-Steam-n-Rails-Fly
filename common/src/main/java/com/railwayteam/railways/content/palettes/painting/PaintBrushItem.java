@@ -55,6 +55,7 @@ public class PaintBrushItem extends Item implements Vanishable {
 
         ItemStack offhandStack = player.getOffhandItem();
         if (!(offhandStack.getItem() instanceof PaintPitcherItem paintPitcher)) return InteractionResult.PASS;
+        if (paintPitcher.getLevels(offhandStack) <= 0) return InteractionResult.PASS;
 
         BlockState clickedState = level.getBlockState(clickedPos);
 

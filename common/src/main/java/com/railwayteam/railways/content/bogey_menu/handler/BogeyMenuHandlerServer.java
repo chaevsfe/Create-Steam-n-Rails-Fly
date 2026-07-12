@@ -45,6 +45,10 @@ public class BogeyMenuHandlerServer {
         selectedStyles.put(uuid, pair);
     }
 
+    public static void removeStyle(UUID uuid) {
+        selectedStyles.remove(uuid);
+    }
+
     public static Pair<BogeyStyle, @Nullable BogeySize> getStyle(UUID uuid) {
         return selectedStyles.getOrDefault(uuid, Pair.of(AllBogeyStyles.STANDARD, AllBogeySizes.SMALL));
     }

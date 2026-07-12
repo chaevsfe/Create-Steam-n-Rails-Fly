@@ -19,17 +19,16 @@
 package com.railwayteam.railways.content.palettes.painting;
 
 import com.railwayteam.railways.content.palettes.PalettesColor;
-import com.railwayteam.railways.mixin_interfaces.ItemStackDuck;
 import com.railwayteam.railways.multiloader.fluid.FluidUnits;
 import com.railwayteam.railways.registry.CRAdvancements;
 import com.railwayteam.railways.registry.CRItems;
 import com.railwayteam.railways.registry.CRTags;
 import com.railwayteam.railways.util.ItemUtils;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -40,9 +39,12 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Item.TooltipContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -54,6 +56,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.railwayteam.railways.util.ItemUtils.copyStackData;
 import static com.railwayteam.railways.util.ItemUtils.oppositeHand;
@@ -64,6 +67,7 @@ public abstract class PaintPitcherItem extends Item {
     public static final int MAX_LEVELS = 32;
     public static final long FLUID_PER_LEVEL = FluidUnits.bucket() / 8;
     public static final int LEVELS_PER_CANNON_SHOT = 8;
+    private static final String FILL_LEVEL_TAG = "FillLevel";
     protected final @Nullable PalettesColor color;
 
     public PaintPitcherItem(Properties properties, @Nullable PalettesColor color) {
@@ -71,16 +75,18 @@ public abstract class PaintPitcherItem extends Item {
         this.color = color;
     }
 
-    @ExpectPlatform
     public static PaintPitcherItem create(Properties properties, @Nullable PalettesColor color) {
-        throw new AssertionError();
+        return com.railwayteam.railways.content.palettes.painting.fabric.PaintPitcherItemImpl.create(properties, color);
     }
+    @Override
     public boolean isBarVisible(ItemStack stack) {
         return true;
     }
+    @Override
     public int getBarColor(ItemStack stack) {
         return color == null ? 0xfffdcb : color.getDiffuseColor();
     }
+    @Override
     public int getBarWidth(ItemStack stack) {
         return Math.round((float)getLevels(stack) * 13.0F / (float)MAX_LEVELS);
     }
@@ -111,26 +117,53 @@ public abstract class PaintPitcherItem extends Item {
 
     private static void setLevels(ItemStack stack, int levels) {
         if (!(stack.getItem() instanceof PaintPitcherItem)) return;
-        if (levels <= 0) {
+        if (levels <= 0 || levels > MAX_LEVELS) {
             throw new IllegalArgumentException("Levels must be between 1 and " + MAX_LEVELS);
         }
+
+        CustomData.update(DataComponents.CUSTOM_DATA, stack, tag -> tag.putInt(FILL_LEVEL_TAG, levels));
     }
 
     public int getLevels(ItemStack stack) {
         if (!(stack.getItem() instanceof PaintPitcherItem)) return 0;
 
-        return MAX_LEVELS;
+        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+        if (data == null) return MAX_LEVELS;
+
+        return Mth.clamp(data.copyTag().getIntOr(FILL_LEVEL_TAG, MAX_LEVELS), 0, MAX_LEVELS);
     }
 
     public long getFluidAmount(ItemStack stack) {
         return getLevels(stack) * FLUID_PER_LEVEL;
     }
 
+    public CannonShot splitForCannon(ItemStack source) {
+        if (source.getItem() != this) {
+            throw new IllegalArgumentException("Cannot split a different item as paint-pitcher ammunition");
+        }
+
+        int levels = getLevels(source);
+        if (levels <= 0) {
+            return new CannonShot(ItemStack.EMPTY, copyAsFilledStack(source, 0), 0);
+        }
+
+        int usedLevels = Math.min(levels, LEVELS_PER_CANNON_SHOT);
+        return new CannonShot(
+            copyAsFilledStack(source, usedLevels),
+            copyAsFilledStack(source, levels - usedLevels),
+            usedLevels
+        );
+    }
+
+    public record CannonShot(ItemStack projectile, ItemStack remainder, int usedLevels) {
+    }
+
     public ItemStack copyAsFilledStack(ItemStack base, int levels) {
-        levels = Math.max(levels, 0);
+        levels = Mth.clamp(levels, 0, MAX_LEVELS);
         if (levels == 0) {
             ItemStack stack = CRItems.EMPTY_PAINT_PITCHER.asStack();
             copyStackData(base, stack);
+            removeFillLevel(stack);
             return stack;
         } else {
             ItemStack stack = new ItemStack(this);
@@ -140,20 +173,27 @@ public abstract class PaintPitcherItem extends Item {
         }
     }
 
-    public void setFillInPlace(ItemStack stack, int levels) {
-        if (levels <= 0) {
-            ((ItemStackDuck) (Object) stack).railways$setItem(CRItems.EMPTY_PAINT_PITCHER.get());
+    private static void removeFillLevel(ItemStack stack) {
+        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+        if (data == null) return;
+
+        CompoundTag tag = data.copyTag();
+        tag.remove(FILL_LEVEL_TAG);
+        if (tag.isEmpty()) {
+            stack.remove(DataComponents.CUSTOM_DATA);
         } else {
-            ((ItemStackDuck) (Object) stack).railways$setItem(this);
-            setLevels(stack, levels);
+            CustomData.set(DataComponents.CUSTOM_DATA, stack, tag);
         }
     }
+    @Override
     public int getUseDuration(ItemStack stack, LivingEntity livingEntity) {
         return 42;
     }
+    @Override
     public ItemUseAnimation getUseAnimation(ItemStack stack) {
         return ItemUseAnimation.DRINK;
     }
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand usedHand) {
         if (CRTags.AllItemTags.PAINT_DRINK_BLOCKERS.matches(player.getItemInHand(oppositeHand(usedHand))))
             return InteractionResult.PASS;
@@ -161,6 +201,7 @@ public abstract class PaintPitcherItem extends Item {
         player.startUsingItem(usedHand);
         return InteractionResult.CONSUME;
     }
+    @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity livingEntity) {
         if (livingEntity instanceof ServerPlayer serverPlayer)
             CriteriaTriggers.CONSUME_ITEM.trigger(serverPlayer, stack);
@@ -182,9 +223,16 @@ public abstract class PaintPitcherItem extends Item {
 
         return copyAsFilledStack(stack, 0);
     }
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
+    @Override
+    public void appendHoverText(
+        ItemStack stack,
+        TooltipContext context,
+        TooltipDisplay display,
+        Consumer<Component> tooltip,
+        TooltipFlag flag
+    ) {
         int levels = getLevels(stack);
-        tooltipComponents.add(Component.translatable("item.railways.paint_pitcher.paint_level", levels, MAX_LEVELS));
+        tooltip.accept(Component.translatable("item.railways.paint_pitcher.paint_level", levels, MAX_LEVELS));
     }
 
     @SuppressWarnings("ConstantValue") // IntelliJ is hallucinating that the nested loops never terminate
@@ -214,7 +262,7 @@ public abstract class PaintPitcherItem extends Item {
         }
 
         final BlockPos splashSource = hitPos.relative(hit.getDirection());
-        final Vec3 splashSourceVec = splashSource.getCenter();
+        final Vec3 splashSourceVec = Vec3.atCenterOf(splashSource);
 
         List<RepaintingTarget> paintTargets = new ArrayList<>();
 

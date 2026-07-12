@@ -22,16 +22,14 @@ import com.google.gson.JsonObject;
 import com.railwayteam.railways.multiloader.fluid.FluidUnits;
 import com.zurrtum.create.content.processing.recipe.ProcessingRecipe;
 import com.zurrtum.create.content.processing.recipe.ProcessingRecipeBuilder;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.Nullable;
 
 public class FluidUtils {
-    @ExpectPlatform
     public static boolean canUseAsFuelStorage(BlockEntity be) {
-        throw new AssertionError();
+        return com.railwayteam.railways.util.fabric.FluidUtilsImpl.canUseAsFuelStorage(be);
     }
 
     /**
@@ -39,14 +37,12 @@ public class FluidUtils {
      * @return The fluid
      * @throws IllegalArgumentException If any object that isn't an instance of FluidStack or FluidVariant is passed.
      */
-    @ExpectPlatform
     public static Fluid getFluid(Object o) {
-        throw new AssertionError();
+        return com.railwayteam.railways.util.fabric.FluidUtilsImpl.getFluid(o);
     }
 
-    @ExpectPlatform
     public static void addFluidOutput(ProcessingRecipeBuilder<ProcessingRecipe<?>> b, Fluid fluid, long amount, @Nullable CompoundTag nbt) {
-        throw new AssertionError();
+        com.railwayteam.railways.util.fabric.FluidUtilsImpl.addFluidOutput(b, fluid, amount, nbt);
     }
 
     public static void mangleFluidAmount(JsonObject json) {

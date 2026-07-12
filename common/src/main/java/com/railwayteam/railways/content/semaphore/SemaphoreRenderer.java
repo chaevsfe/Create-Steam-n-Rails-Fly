@@ -34,7 +34,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -58,7 +58,8 @@ public class SemaphoreRenderer extends SmartBlockEntityRenderer<SemaphoreBlockEn
         super.extractRenderState(be, state, tickProgress, cameraPos, crumbling);
         if (be.isRemoved()) return;
 
-        BlockState blockState = state.blockState;
+        BlockState blockState = be.getBlockState();
+        state.blockState = blockState;
         state.yRot = AngleHelper.horizontalAngle(blockState.getValue(SemaphoreBlock.FACING)) + 180;
 
         boolean yellow = be.isDistantSignal;
@@ -184,6 +185,7 @@ public class SemaphoreRenderer extends SmartBlockEntityRenderer<SemaphoreBlockEn
     }
 
     public static class SemaphoreRenderState extends SmartBlockEntityRenderer.SmartRenderState {
+        public BlockState blockState;
         public float yRot;
         public float armAngle;
         public @Nullable SuperByteBuffer armBuf;

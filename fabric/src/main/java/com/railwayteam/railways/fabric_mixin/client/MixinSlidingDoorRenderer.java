@@ -7,6 +7,7 @@ import com.railwayteam.railways.content.palettes.doors.PalettesSlidingDoorBlock;
 import com.railwayteam.railways.registry.CRBlockPartials;
 import com.zurrtum.create.client.content.decoration.slidingDoor.SlidingDoorRenderer;
 import com.zurrtum.create.content.decoration.slidingDoor.SlidingDoorBlock;
+import com.zurrtum.create.content.decoration.slidingDoor.SlidingDoorBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -20,10 +21,10 @@ public class MixinSlidingDoorRenderer {
     )
     private Object getPalettesPartials(@SuppressWarnings("rawtypes") Map instance, Object key, Operation<Object> original,
                                        @Local SlidingDoorBlock block,
-                                       @Local(argsOnly = true) SlidingDoorRenderer.DoorRenderState state) {
+                                       @Local(argsOnly = true) SlidingDoorBlockEntity blockEntity) {
         if (block instanceof PalettesSlidingDoorBlock paletteBlock && paletteBlock.isFoldingDoor()) {
             return CRBlockPartials.FOLDING_DOORS.get(paletteBlock.color)
-                .get(state.blockState.getValue(PalettesSlidingDoorBlock.WINDOWED));
+                .get(blockEntity.getBlockState().getValue(PalettesSlidingDoorBlock.WINDOWED));
         }
         return original.call(instance, key);
     }

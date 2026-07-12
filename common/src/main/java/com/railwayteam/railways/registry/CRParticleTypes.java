@@ -22,7 +22,6 @@ import com.railwayteam.railways.content.smokestack.particles.chimneypush.Chimney
 import com.railwayteam.railways.content.smokestack.particles.legacy.SmokeParticleData;
 import com.railwayteam.railways.content.smokestack.particles.puffs.PuffSmokeParticleData;
 import com.zurrtum.create.foundation.particle.ICustomParticleData;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -79,9 +78,8 @@ public enum CRParticleTypes {
 			register(name, () -> object);
 		}
 
-		@ExpectPlatform
 		private static void register(String id, Supplier<ParticleType<?>> supplier) {
-			throw new AssertionError();//REGISTER.register(id, supplier);
+			com.railwayteam.railways.registry.fabric.CRParticleTypesParticleEntryImpl.register(id, supplier);
 		}
 
 		@Environment(EnvType.CLIENT)
@@ -90,9 +88,8 @@ public enum CRParticleTypes {
 		}
 
 		@Environment(EnvType.CLIENT)
-		@ExpectPlatform
 		private static <T extends ParticleOptions> void registerFactory(ParticleType<T> object, ParticleEngine engine, ICustomParticleData<T> customParticleData) {
-			throw new AssertionError();
+			com.railwayteam.railways.registry.fabric.CRParticleTypesParticleEntryImpl.registerFactory(object, engine, customParticleData);
 		}
 	}
 }

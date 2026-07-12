@@ -14,6 +14,7 @@ import com.railwayteam.railways.content.conductor.toolbox.MountedToolbox;
 import com.railwayteam.railways.content.conductor.toolbox.MountedToolboxDisposeAllPacket;
 import com.railwayteam.railways.registry.CRPackets;
 import com.zurrtum.create.client.content.equipment.toolbox.ToolboxScreen;
+import com.zurrtum.create.client.foundation.gui.AllGuiTextures;
 import com.zurrtum.create.client.foundation.gui.menu.AbstractSimiContainerScreen;
 import com.zurrtum.create.content.equipment.toolbox.ToolboxMenu;
 import net.minecraft.network.chat.Component;
@@ -26,7 +27,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = ToolboxScreen.class, remap = false)
 public abstract class MixinToolboxScreen extends AbstractSimiContainerScreen<ToolboxMenu> {
     public MixinToolboxScreen(ToolboxMenu container, Inventory inv, Component title) {
-        super(container, inv, title);
+        super(
+            container,
+            inv,
+            title,
+            30 + AllGuiTextures.TOOLBOX.getWidth(),
+            AllGuiTextures.TOOLBOX.getHeight() + AllGuiTextures.PLAYER_INVENTORY.getHeight() - 24
+        );
     }
 
     @Inject(method = "lambda$init$1", at = @At("HEAD"), cancellable = true)

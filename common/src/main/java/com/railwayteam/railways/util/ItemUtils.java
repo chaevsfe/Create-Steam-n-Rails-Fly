@@ -18,8 +18,7 @@
 
 package com.railwayteam.railways.util;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
@@ -27,10 +26,9 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Contract;
 
 public class ItemUtils {
-	@ExpectPlatform
 	@Contract // shut
 	public static boolean blocksEndermanView(ItemStack stack, Player wearer, EnderMan enderman) {
-		throw new AssertionError();
+		return com.railwayteam.railways.util.fabric.ItemUtilsImpl.blocksEndermanView(stack, wearer, enderman);
 	}
 
 	public static InteractionHand oppositeHand(InteractionHand hand) {
@@ -38,10 +36,11 @@ public class ItemUtils {
 	}
 
 	public static void copyStackData(ItemStack source, ItemStack target) {
+		if (source.isEmpty() || target.isEmpty()) return;
+		target.applyComponents(source.getComponentsPatch());
 	}
 
 	public static boolean isUnbreakable(ItemStack stack) {
-		if (stack.isEmpty()) return false;
-		return false;
+		return !stack.isEmpty() && stack.has(DataComponents.UNBREAKABLE);
 	}
 }

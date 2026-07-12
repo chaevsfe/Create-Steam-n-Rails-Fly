@@ -6,6 +6,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 
 import java.util.function.Function;
@@ -57,6 +58,11 @@ public class ItemBuilder<T extends Item, P> extends AbstractBuilder<T, P, ItemBu
             entry = new ItemEntry<>(owner.id(name), item);
         }
         ResourceKey<CreativeModeTab> tab = tabOverridden ? tabOverride : owner.getCurrentCreativeTab();
+        if (entry.get() instanceof BlockItem blockItem) {
+            // Since 26.2 the BlockItem constructor no longer fills Item.BY_BLOCK.
+            // Vanilla's Items.registerBlock does this explicitly; addon builders must too.
+            blockItem.registerBlocks(Item.BY_BLOCK, entry.get());
+        }
         owner.assignCreativeTab(entry.getId(), tab);
         owner.registerTooltipModifier(entry.get());
         if (!callbacksRun) {

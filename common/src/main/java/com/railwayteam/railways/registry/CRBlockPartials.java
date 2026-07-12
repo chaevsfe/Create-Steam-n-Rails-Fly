@@ -50,21 +50,21 @@ public class CRBlockPartials {
     public static final Map<String, Identifier> CUSTOM_CONDUCTOR_SKINS_FOR_NAME = new HashMap<>(); // for if a conductor is renamed, rather than the cap
 
     public static void registerCustomCap(String itemName, String modelLoc) {
-        CUSTOM_CONDUCTOR_CAPS.put(itemName, PartialModel.of(Railways.asResource("item/dev_caps/"+modelLoc)));
+        CUSTOM_CONDUCTOR_CAPS.put(itemName, PartialModel.of(Railways.asResource("entity/dev_caps/"+modelLoc)));
     }
 
     public static void registerCustomCap(String itemName, String modelLoc, boolean preventTilting) {
-        CUSTOM_CONDUCTOR_CAPS.put(itemName, PartialModel.of(Railways.asResource("item/dev_caps/"+modelLoc)));
+        CUSTOM_CONDUCTOR_CAPS.put(itemName, PartialModel.of(Railways.asResource("entity/dev_caps/"+modelLoc)));
         if (preventTilting)
             NO_TILT_CAPS.add(itemName);
     }
 
     public static void registerCustomConductorOnlyCap(String itemName, String modelLoc) {
-        CUSTOM_CONDUCTOR_ONLY_CAPS.put(itemName, PartialModel.of(Railways.asResource("item/dev_caps/"+modelLoc)));
+        CUSTOM_CONDUCTOR_ONLY_CAPS.put(itemName, PartialModel.of(Railways.asResource("entity/dev_caps/"+modelLoc)));
     }
 
     public static void registerCustomConductorOnlyCap(String itemName, String modelLoc, boolean preventTilting) {
-        CUSTOM_CONDUCTOR_ONLY_CAPS.put(itemName, PartialModel.of(Railways.asResource("item/dev_caps/"+modelLoc)));
+        CUSTOM_CONDUCTOR_ONLY_CAPS.put(itemName, PartialModel.of(Railways.asResource("entity/dev_caps/"+modelLoc)));
         if (preventTilting)
             NO_TILT_CAPS.add(itemName);
     }

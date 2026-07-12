@@ -52,8 +52,8 @@ public class PacketSetImpl extends PacketSet {
 							List<Function<FriendlyByteBuf, C2SPacket>> c2sPackets,
 							Object2IntMap<Class<? extends C2SPacket>> c2sTypes) {
 		super(id, version, s2cPackets, s2cTypes, c2sPackets, c2sTypes);
-		PayloadTypeRegistry.playS2C().register(payloadType(s2cPacket), RailwaysPayload.STREAM_CODEC);
-		PayloadTypeRegistry.playC2S().register(payloadType(c2sPacket), RailwaysPayload.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(payloadType(s2cPacket), RailwaysPayload.STREAM_CODEC);
+		PayloadTypeRegistry.serverboundPlay().register(payloadType(c2sPacket), RailwaysPayload.STREAM_CODEC);
 	}
 
 	@Environment(EnvType.CLIENT)

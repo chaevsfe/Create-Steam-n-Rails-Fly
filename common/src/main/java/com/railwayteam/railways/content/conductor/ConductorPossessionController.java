@@ -12,6 +12,7 @@ package com.railwayteam.railways.content.conductor;
 
 import com.railwayteam.railways.registry.CRPackets;
 import com.railwayteam.railways.util.packet.CameraMovePacket;
+import com.railwayteam.railways.util.packet.ClientPacketHandlers;
 import com.railwayteam.railways.util.packet.DismountCameraPacket;
 import com.railwayteam.railways.util.packet.SpyConductorInteractPacket;
 import net.fabricmc.api.EnvType;
@@ -47,6 +48,8 @@ public class ConductorPossessionController {
 
 	@Environment(EnvType.CLIENT)
 	public static void onClientTick(Minecraft mc, boolean start) {
+		if (start)
+			ClientPacketHandlers.retryPendingCameraView(mc);
 		Entity cameraEntity = mc.getCameraEntity();
 		if (cameraEntity instanceof ConductorEntity) {
 			wasMounted = true;
@@ -103,8 +106,8 @@ public class ConductorPossessionController {
 			wasMounted = false;
 			positionReminder = 0;
 			dismount();
-			if (mc.levelRenderer != null)
-				mc.levelRenderer.allChanged();
+			if (mc.levelExtractor != null)
+				mc.levelExtractor.allChanged();
 		}
 	}
 
@@ -164,8 +167,8 @@ public class ConductorPossessionController {
 	@Environment(EnvType.CLIENT)
 	public static void setRenderPosition(Entity entity) {
 		if (entity instanceof ConductorEntity && cameraStorage != null) {
-			cameraStorage.viewCenterX = entity.chunkPosition().x;
-			cameraStorage.viewCenterZ = entity.chunkPosition().z;
+			cameraStorage.viewCenterX = entity.chunkPosition().x();
+			cameraStorage.viewCenterZ = entity.chunkPosition().z();
 		}
 	}
 

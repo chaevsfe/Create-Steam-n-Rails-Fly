@@ -2,7 +2,7 @@ package com.railwayteam.railways.registry;
 
 import com.railwayteam.railways.Railways;
 import com.zurrtum.create.client.foundation.gui.AllIcons;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 
@@ -29,7 +29,7 @@ public class CRIcons extends AllIcons {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int x, int y) {
+    public void render(GuiGraphicsExtractor graphics, int x, int y) {
         graphics.blit(RenderPipelines.GUI_TEXTURED, ICON_ATLAS, x, y, crIconX, crIconY, 16, 16, 256, 256);
     }
 

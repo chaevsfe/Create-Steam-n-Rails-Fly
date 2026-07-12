@@ -20,7 +20,6 @@ package com.railwayteam.railways.util;
 
 import com.zurrtum.create.api.contraption.storage.fluid.MountedFluidStorageType;
 import com.tterrag.registrate.util.entry.BlockEntry;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -29,28 +28,23 @@ import net.minecraft.world.level.block.state.BlockState;
  * basis, usually due to doing fluids
  */
 public class AbstractionUtils {
-    @ExpectPlatform
     public static BlockEntry<?> getFluidTankBlockEntry() {
-        throw new AssertionError();
+        return com.railwayteam.railways.util.fabric.AbstractionUtilsImpl.getFluidTankBlockEntry();
     }
 
-    @ExpectPlatform
     public static boolean isInstanceOfFuelTankBlockEntity(BlockEntity blockEntity) {
-        throw new AssertionError();
+        return com.railwayteam.railways.util.fabric.AbstractionUtilsImpl.isInstanceOfFuelTankBlockEntity(blockEntity);
     }
 
-    @ExpectPlatform
     public static boolean isInstanceOfFuelTankMountedStorageType(MountedFluidStorageType<?> type) {
-        throw new AssertionError();
+        return com.railwayteam.railways.util.fabric.AbstractionUtilsImpl.isInstanceOfFuelTankMountedStorageType(type);
     }
 
-    @ExpectPlatform
     public static BlockEntry<?> getPortableFuelInterfaceBlockEntry() {
-        throw new AssertionError();
+        return com.railwayteam.railways.util.fabric.AbstractionUtilsImpl.getPortableFuelInterfaceBlockEntry();
     }
 
-    @ExpectPlatform
     public static boolean portableFuelInterfaceBlockHasState(BlockState state) {
-        throw new AssertionError();
+        return com.railwayteam.railways.util.fabric.AbstractionUtilsImpl.portableFuelInterfaceBlockHasState(state);
     }
 }

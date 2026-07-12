@@ -66,7 +66,7 @@ public class RemoteLensItem extends Item {
 		if (target instanceof ConductorEntity conductor && conductor.getJob() == ConductorEntity.Job.SPY) {
 			setSelectedConductor(stack, conductor.getUUID());
 			player.setItemInHand(hand, stack);
-			player.displayClientMessage(Component.translatable("railways.remote_lens.set"), true);
+			player.sendOverlayMessage(Component.translatable("railways.remote_lens.set"));
 			player.level().playSound(null, conductor.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, .5f, 1.1f);
 			return InteractionResult.SUCCESS;
 		}
@@ -92,7 +92,7 @@ public class RemoteLensItem extends Item {
 
 		if (player.isShiftKeyDown()) {
 			clearSelectedConductor(stack);
-			player.displayClientMessage(Component.translatable("railways.remote_lens.clear"), true);
+			player.sendOverlayMessage(Component.translatable("railways.remote_lens.clear"));
 			level.playSound(null, player.blockPosition(), SoundEvents.LEVER_CLICK, SoundSource.PLAYERS, .5f, 1.1f);
 			return InteractionResult.SUCCESS;
 		}

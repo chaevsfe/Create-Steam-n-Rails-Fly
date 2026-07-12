@@ -3,7 +3,6 @@ package com.railwayteam.railways.content.conductor.toolbox;
 import com.railwayteam.railways.content.conductor.ConductorEntity;
 import com.railwayteam.railways.multiloader.C2SPacket;
 import com.zurrtum.create.content.equipment.toolbox.ToolboxHandler;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -39,8 +38,7 @@ public class MountedToolboxDisposeAllPacket implements C2SPacket {
 			ToolboxHandler.syncData(player, com.zurrtum.create.AllSynchedDatas.TOOLBOX.get(player));
 	}
 
-	@ExpectPlatform
 	public static boolean doDisposal(MountedToolbox toolbox, ServerPlayer player, ConductorEntity conductor) {
-		throw new AssertionError();
+		return com.railwayteam.railways.content.conductor.toolbox.fabric.MountedToolboxDisposeAllPacketImpl.doDisposal(toolbox, player, conductor);
 	}
 }

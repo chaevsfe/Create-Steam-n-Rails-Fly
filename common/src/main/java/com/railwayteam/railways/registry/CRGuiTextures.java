@@ -4,7 +4,7 @@ import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.content.switches.TrackSwitchBlock;
 import com.zurrtum.create.client.catnip.gui.element.ScreenElement;
 import com.zurrtum.create.catnip.theme.Color;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 
@@ -52,15 +52,15 @@ public enum CRGuiTextures implements ScreenElement {
     public void bind() {
     }
 
-    public void render(GuiGraphics graphics, int x, int y) {
+    public void render(GuiGraphicsExtractor graphics, int x, int y) {
         render(graphics, x, y, 256, 256);
     }
 
-    public void render(GuiGraphics graphics, int x, int y, int textureWidth, int textureHeight) {
+    public void render(GuiGraphicsExtractor graphics, int x, int y, int textureWidth, int textureHeight) {
         graphics.blit(RenderPipelines.GUI_TEXTURED, location, x, y, startX, startY, width, height, textureWidth, textureHeight);
     }
 
-    public void render(GuiGraphics graphics, int x, int y, Color c) {
+    public void render(GuiGraphicsExtractor graphics, int x, int y, Color c) {
         render(graphics, x, y);
     }
 }

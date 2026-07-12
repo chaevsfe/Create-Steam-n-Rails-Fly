@@ -44,7 +44,7 @@ public class TagCycleHandlerServer {
     public static void select(ServerPlayer player, Item target) {
         if (!select(player, target, InteractionHand.MAIN_HAND) && !select(player, target, InteractionHand.OFF_HAND)) {
             Railways.LOGGER.warn("Player {} tried to select {} through tag cycling but failed",
-                player.getName().getString(), target.getName().getString());
+                player.getName().getString(), target.getName(new ItemStack(target)).getString());
             player.connection.disconnect(Component.literal("Invalid tag selection"));
         }
     }

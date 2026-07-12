@@ -20,7 +20,6 @@ package com.railwayteam.railways.registry;
 
 import com.zurrtum.create.content.fluids.VirtualFluid;
 import com.tterrag.registrate.util.entry.FluidEntry;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -29,14 +28,12 @@ public class CRFluids {
 
     public static void register() {}
 
-    @ExpectPlatform
     private static FluidEntry<VirtualFluid> registerPaint() {
-        throw new AssertionError();
+        return com.railwayteam.railways.registry.fabric.CRFluidsImpl.registerPaint();
     }
 
     @Environment(EnvType.CLIENT)
-    @ExpectPlatform
     public static void initRendering() {
-        throw new AssertionError();
+        com.railwayteam.railways.registry.fabric.CRFluidsImpl.initRendering();
     }
 }

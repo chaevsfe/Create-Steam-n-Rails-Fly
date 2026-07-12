@@ -1,0 +1,7 @@
+{
+  "parent": "railways:entity/dev_caps/stonks_hat",
+  "textures": {
+    "0": "railways:entity/dev_caps/stonks_hat_red",
+    "particle": "railways:entity/dev_caps/stonks_hat_red"
+  }
+}

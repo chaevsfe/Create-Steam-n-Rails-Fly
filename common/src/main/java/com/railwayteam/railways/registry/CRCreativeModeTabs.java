@@ -3,7 +3,6 @@ package com.railwayteam.railways.registry;
 import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.content.conductor.ConductorCapItem;
 import com.zurrtum.create.content.processing.sequenced.SequencedAssemblyItem;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
@@ -21,19 +20,16 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class CRCreativeModeTabs {
-    @ExpectPlatform
     public static ResourceKey<CreativeModeTab> getBaseTabKey() {
-        throw new AssertionError();
+        return com.railwayteam.railways.registry.fabric.CRCreativeModeTabsImpl.getBaseTabKey();
     }
 
-    @ExpectPlatform
     public static ResourceKey<CreativeModeTab> getTracksTabKey() {
-        throw new AssertionError();
+        return com.railwayteam.railways.registry.fabric.CRCreativeModeTabsImpl.getTracksTabKey();
     }
 
-    @ExpectPlatform
     public static ResourceKey<CreativeModeTab> getPalettesTabKey() {
-        throw new AssertionError();
+        return com.railwayteam.railways.registry.fabric.CRCreativeModeTabsImpl.getPalettesTabKey();
     }
 
     public static void register() {
@@ -169,9 +165,8 @@ public class CRCreativeModeTabs {
         }
     }
 
-    @ExpectPlatform
     private static boolean isInCreativeTab(com.tterrag.registrate.util.entry.RegistryEntry<?> entry, ResourceKey<CreativeModeTab> tab) {
-        throw new AssertionError();
+        return com.railwayteam.railways.registry.fabric.CRCreativeModeTabsImpl.isInCreativeTab(entry, tab);
     }
 
     public record TabInfo(ResourceKey<CreativeModeTab> key, CreativeModeTab tab) {

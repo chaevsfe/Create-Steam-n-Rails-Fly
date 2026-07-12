@@ -18,9 +18,12 @@
 
 package com.railwayteam.railways.fabric_mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.railwayteam.railways.config.CRConfigs;
 import com.railwayteam.railways.content.switches.TrackSwitch;
 import com.railwayteam.railways.content.switches.TrackSwitchBlock.SwitchState;
+import com.railwayteam.railways.mixin_interfaces.IDistanceTravelled;
 import com.railwayteam.railways.mixin_interfaces.IGenerallySearchableNavigation;
 import com.railwayteam.railways.registry.CRPackets;
 import com.railwayteam.railways.util.MixinVariables;
@@ -29,6 +32,7 @@ import com.zurrtum.create.catnip.data.Pair;
 import com.zurrtum.create.content.contraptions.OrientedContraptionEntity;
 import com.zurrtum.create.content.contraptions.actors.trainControls.ControlsBlock;
 import com.zurrtum.create.content.trains.entity.Carriage;
+import com.zurrtum.create.content.trains.entity.CarriageBogey;
 import com.zurrtum.create.content.trains.entity.CarriageContraptionEntity;
 import com.zurrtum.create.content.trains.entity.Navigation;
 import net.minecraft.core.BlockPos;
@@ -49,7 +53,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 @Mixin(value = CarriageContraptionEntity.class, remap = false)
-public abstract class MixinCarriageContraptionEntity extends OrientedContraptionEntity {
+public abstract class MixinCarriageContraptionEntity extends OrientedContraptionEntity implements IDistanceTravelled {
     @Shadow private Carriage carriage;
 
     private MixinCarriageContraptionEntity(EntityType<? extends OrientedContraptionEntity> type, Level world) {
@@ -57,6 +61,30 @@ public abstract class MixinCarriageContraptionEntity extends OrientedContraption
     }
 
     @Unique private boolean railways$switchMessage = false;
+    @Unique private double railways$distanceTravelled;
+
+    @WrapOperation(
+        method = "tickContraption",
+        at = @At(
+            value = "INVOKE",
+            target = "Lcom/zurrtum/create/content/trains/entity/CarriageBogey;updateAngles(Lcom/zurrtum/create/content/trains/entity/CarriageContraptionEntity;D)V",
+            ordinal = 0
+        )
+    )
+    private void railways$storeDistanceTravelled(
+        CarriageBogey bogey,
+        CarriageContraptionEntity entity,
+        double distanceMoved,
+        Operation<Void> original
+    ) {
+        original.call(bogey, entity, distanceMoved);
+        railways$distanceTravelled = distanceMoved;
+    }
+
+    @Override
+    public double railways$getDistanceTravelled() {
+        return railways$distanceTravelled;
+    }
 
     @Inject(method = "control", at = @At("TAIL"))
     private void railways$showSwitchOverlay(BlockPos controlsLocalPos, Collection<Integer> heldControls, Player player,

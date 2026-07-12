@@ -36,6 +36,7 @@ import net.minecraft.core.Rotations;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.WalkAnimationState;
@@ -57,7 +58,7 @@ public class ConductorScenes {
     playerHead.set(DataComponents.PROFILE, ResolvableProfile.createUnresolved(playerName));
 
     ElementLink<EntityElement> player = scene.world().createEntity(w -> {
-      ArmorStand entity = EntityType.ARMOR_STAND.create(w, EntitySpawnReason.COMMAND);
+      ArmorStand entity = EntityTypes.ARMOR_STAND.create(w, EntitySpawnReason.COMMAND);
       entity.setPos(pos.x, pos.y, pos.z);
       entity.xo = pos.x;
       entity.yo = pos.y;
@@ -376,7 +377,7 @@ public class ConductorScenes {
 
     scene.idle(45);
 
-    ItemStack toolboxStack = new ItemStack(AllBlocks.LIME_TOOLBOX);
+    ItemStack toolboxStack = new ItemStack(AllBlocks.TOOLBOX.pick(DyeColor.LIME));
 
     scene.overlay().showControls(util.vector().topOf(conductorPos), Pointing.DOWN, 40)
             .rightClick()

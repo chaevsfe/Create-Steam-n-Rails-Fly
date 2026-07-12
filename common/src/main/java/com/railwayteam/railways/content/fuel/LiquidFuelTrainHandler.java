@@ -22,16 +22,28 @@ import com.railwayteam.railways.config.CRConfigs;
 import com.railwayteam.railways.multiloader.PlatformAbstractionHelper;
 import com.railwayteam.railways.util.FluidUtils;
 import com.zurrtum.create.api.contraption.storage.fluid.MountedFluidStorageWrapper;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.FuelValues;
+import org.jetbrains.annotations.Nullable;
 
 public class LiquidFuelTrainHandler {
-    @ExpectPlatform
     public static int handleFuelDraining(MountedFluidStorageWrapper fluidFuels) {
-        throw new AssertionError();
+        return com.railwayteam.railways.content.fuel.fabric.LiquidFuelTrainHandlerImpl.handleFuelDraining(fluidFuels);
+    }
+
+    public static int handleFuelDraining(MountedFluidStorageWrapper fluidFuels, FuelValues fuelValues) {
+        return com.railwayteam.railways.content.fuel.fabric.LiquidFuelTrainHandlerImpl.handleFuelDraining(
+            fluidFuels,
+            fuelValues
+        );
     }
 
     public static int handleFuelChecking(Object o) {
+        return handleFuelChecking(o, null);
+    }
+
+    public static int handleFuelChecking(Object o, @Nullable FuelValues fuelValues) {
         int burnTime;
 
         Fluid fluid = FluidUtils.getFluid(o);
@@ -41,7 +53,9 @@ public class LiquidFuelTrainHandler {
         if (fuelType != null) {
             burnTime = fuelType.getInvalid() ? 0 : fuelType.getFuelTicks();
         } else {
-            int bucketBurnTime = PlatformAbstractionHelper.getBurnTime(fluid.getBucket());
+            int bucketBurnTime = fuelValues == null
+                ? PlatformAbstractionHelper.getBurnTime(fluid.getBucket())
+                : fuelValues.burnDuration(new ItemStack(fluid.getBucket()));
 
             // Divide burnTime by 10 to get burnTime for 1/10th of a bucket and then by divide by 4,
             // so it isn't so strong

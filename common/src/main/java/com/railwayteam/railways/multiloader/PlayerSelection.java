@@ -18,7 +18,6 @@
 
 package com.railwayteam.railways.multiloader;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.Identifier;
@@ -35,43 +34,35 @@ import java.util.function.Predicate;
 public abstract class PlayerSelection {
 	public abstract void accept(Identifier id, FriendlyByteBuf buffer);
 
-	@ExpectPlatform
 	public static PlayerSelection all() {
-		throw new AssertionError();
+		return com.railwayteam.railways.multiloader.fabric.PlayerSelectionImpl.all();
 	}
 
-	@ExpectPlatform
 	public static PlayerSelection allWith(Predicate<ServerPlayer> condition) {
-		throw new AssertionError();
+		return com.railwayteam.railways.multiloader.fabric.PlayerSelectionImpl.allWith(condition);
 	}
 
-	@ExpectPlatform
 	public static PlayerSelection of(ServerPlayer player) {
-		throw new AssertionError();
+		return com.railwayteam.railways.multiloader.fabric.PlayerSelectionImpl.of(player);
 	}
 
-	@ExpectPlatform
 	public static PlayerSelection tracking(Entity entity) {
-		throw new AssertionError();
+		return com.railwayteam.railways.multiloader.fabric.PlayerSelectionImpl.tracking(entity);
 	}
 
-	@ExpectPlatform
 	public static PlayerSelection trackingWith(Entity entity, Predicate<ServerPlayer> condition) {
-		throw new AssertionError();
+		return com.railwayteam.railways.multiloader.fabric.PlayerSelectionImpl.trackingWith(entity, condition);
 	}
 
-	@ExpectPlatform
 	public static PlayerSelection tracking(BlockEntity be) {
-		throw new AssertionError();
+		return com.railwayteam.railways.multiloader.fabric.PlayerSelectionImpl.tracking(be);
 	}
 
-	@ExpectPlatform
 	public static PlayerSelection tracking(ServerLevel level, BlockPos pos) {
-		throw new AssertionError();
+		return com.railwayteam.railways.multiloader.fabric.PlayerSelectionImpl.tracking(level, pos);
 	}
 
-	@ExpectPlatform
 	public static PlayerSelection trackingAndSelf(ServerPlayer player) {
-		throw new AssertionError();
+		return com.railwayteam.railways.multiloader.fabric.PlayerSelectionImpl.trackingAndSelf(player);
 	}
 }

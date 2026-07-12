@@ -105,6 +105,7 @@
 
   "item.railways.paint_pitcher.paint_level": "Paint level: %s / %s",
 
+  "railways.bogey.wrong_gauge": "The selected bogey is incompatible with this track gauge",
   "railways.bogeys.styles.handcar": "Handcar",
   
   "railways.bogeys.styles.invisible": "Invisible",

@@ -21,12 +21,14 @@ package com.railwayteam.railways.content.custom_bogeys.special.invisible;
 import com.zurrtum.create.client.content.trains.bogey.BogeyBlockEntityRenderer.BogeyRenderState;
 import com.zurrtum.create.client.content.trains.bogey.BogeyRenderer;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.CardinalLighting;
 import org.jetbrains.annotations.Nullable;
 
 public class InvisibleBogeyRenderer implements BogeyRenderer {
     @Override
     public BogeyRenderState getRenderData(@Nullable CompoundTag bogeyData, float wheelAngle, float partialTick,
-                                          int packedLight, boolean inContraption) {
+                                          int packedLight, @Nullable CardinalLighting cardinalLighting,
+                                          boolean inContraption) {
         return (poseStack, queue) -> {};
     }
 }

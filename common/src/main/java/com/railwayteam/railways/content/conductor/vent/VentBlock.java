@@ -23,7 +23,6 @@ import com.railwayteam.railways.content.conductor.ConductorEntity;
 import com.railwayteam.railways.registry.CRShapes;
 import com.zurrtum.create.content.decoration.copycat.CopycatBlock;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -33,7 +32,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Relative;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockAndLightGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -61,13 +60,12 @@ public abstract class VentBlock extends CopycatBlock implements IWrenchable {
         super.createBlockStateDefinition(builder.add(CONDUCTOR_VISIBLE));
     }
 
-    @ExpectPlatform
     public static VentBlock create(Properties properties) {
-        throw new AssertionError();
+        return com.railwayteam.railways.content.conductor.vent.fabric.VentBlockImpl.create(properties);
     }
 
 /*    @Nullable
-    public BlockState getConnectiveMaterial(BlockAndTintGetter reader, BlockState otherState, Direction face, BlockPos fromPos, BlockPos toPos) {
+    public BlockState getConnectiveMaterial(BlockAndLightGetter reader, BlockState otherState, Direction face, BlockPos fromPos, BlockPos toPos) {
         return getMaterial(reader, toPos);
     }*/
     public boolean canFaceBeOccluded(BlockState state, Direction face) {
@@ -75,10 +73,11 @@ public abstract class VentBlock extends CopycatBlock implements IWrenchable {
     }
 
 /*    @Override
-    public boolean isUnblockableConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
+    public boolean isUnblockableConnectivitySide(BlockAndLightGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
         return true;
     }*/
-    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
+    @Override
+    public boolean canConnectTexturesToward(BlockAndLightGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
         return true;
     }
 

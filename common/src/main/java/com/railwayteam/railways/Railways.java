@@ -35,7 +35,6 @@ import com.railwayteam.railways.content.item.RailwaysTooltipModifiers;
 import com.zurrtum.create.CreateBuildInfo;
 import com.zurrtum.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.providers.ProviderType;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
@@ -133,18 +132,15 @@ public class Railways {
     return REGISTRATE;
   }
 
-  @ExpectPlatform
   public static void finalizeRegistrate() {
-    throw new AssertionError();
+    com.railwayteam.railways.fabric.RailwaysImpl.finalizeRegistrate();
   }
 
-  @ExpectPlatform
   public static void registerCommands(CommandRegistrar registrar) {
-    throw new AssertionError();
+    com.railwayteam.railways.fabric.RailwaysImpl.registerCommands(registrar);
   }
 
-  @ExpectPlatform
   public static void platformBasedRegistration() {
-    throw new AssertionError();
+    com.railwayteam.railways.fabric.RailwaysImpl.platformBasedRegistration();
   }
 }

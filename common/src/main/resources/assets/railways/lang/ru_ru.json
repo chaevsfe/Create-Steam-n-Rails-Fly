@@ -1996,6 +1996,7 @@
   "itemGroup.railways_caps": "Steam 'n' Rails: Фуражки машиниста",
   "itemGroup.railways_palettes": "Steam 'n' Rails: Строительные блоки",
   "itemGroup.railways_tracks": "Steam 'n' Rails: Железнодорожные пути",
+  "railways.bogey.wrong_gauge": "Выбранная тележка несовместима с шириной этой колеи",
   "railways.bogeys.styles.archbar": "Арочная",
   "railways.bogeys.styles.blomberg": "Бломберг",
   "railways.bogeys.styles.coilspring": "Пружинная",

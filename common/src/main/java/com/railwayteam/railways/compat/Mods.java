@@ -18,7 +18,6 @@
 
 package com.railwayteam.railways.compat;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
@@ -101,8 +100,7 @@ public enum Mods {
 		return isModLoaded(id, null);
 	}
 	
-	@ExpectPlatform
 	public static boolean isModLoaded(String id, @Nullable String fabricId) {
-		throw new AssertionError();
+		return com.railwayteam.railways.compat.fabric.ModsImpl.isModLoaded(id, fabricId);
 	}
 }

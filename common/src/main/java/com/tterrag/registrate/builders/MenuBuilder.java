@@ -6,7 +6,7 @@ import com.tterrag.registrate.util.nullness.NonNullBiFunction;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
+import net.fabricmc.fabric.api.menu.v1.ExtendedMenuType;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.client.gui.screens.Screen;
@@ -52,7 +52,7 @@ public class MenuBuilder<T extends AbstractContainerMenu, P> extends AbstractBui
     public MenuEntry<T> register() {
         MenuType<T> type;
         if (extendedFactory != null) {
-            type = new ExtendedScreenHandlerType<>((syncId, inventory, data) -> {
+            type = new ExtendedMenuType<>((syncId, inventory, data) -> {
                 FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
                 buffer.writeNbt(data);
                 return extendedFactory.create(typeRef[0], syncId, inventory, buffer);

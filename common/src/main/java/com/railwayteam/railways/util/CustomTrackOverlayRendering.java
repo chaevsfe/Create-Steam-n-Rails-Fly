@@ -1,13 +1,13 @@
 package com.railwayteam.railways.util;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.railwayteam.railways.content.custom_tracks.phantom.PhantomSpriteManager;
 import com.railwayteam.railways.mixin_interfaces.IHasTrackCasing;
 import com.railwayteam.railways.registry.CRBlockPartials;
 import com.railwayteam.railways.registry.CRBlockPartials.TrackCasingSpec;
 import com.railwayteam.railways.registry.CRTrackMaterials;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
+import com.zurrtum.create.client.catnip.render.SuperByteBufferRenderState;
 import com.zurrtum.create.client.content.trains.track.TrackRenderer;
 import com.zurrtum.create.client.flywheel.lib.model.baked.PartialModel;
 import com.zurrtum.create.client.flywheel.lib.transform.TransformStack;
@@ -22,12 +22,11 @@ import com.zurrtum.create.content.trains.track.TrackBlockEntity;
 import com.zurrtum.create.content.trains.track.TrackShape;
 import com.zurrtum.create.content.trains.track.TrackTargetingBehaviour;
 import com.zurrtum.create.infrastructure.component.BezierTrackPointLocation;
-import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -45,71 +44,54 @@ public class CustomTrackOverlayRendering {
     }
 
     public static void renderOverlay(LevelAccessor level, BlockPos pos, Direction.AxisDirection direction,
-                                     BezierTrackPointLocation bezier, PoseStack ms, MultiBufferSource buffer, int light, int overlay,
+                                     BezierTrackPointLocation bezier, PoseStack ms, SubmitNodeCollector queue,
                                      EdgePointType<?> type, float scale) {
-        renderOverlayIfPresent(level, pos, direction, bezier, ms, buffer, light, overlay, type, scale);
+        renderOverlayIfPresent(level, pos, direction, bezier, ms, queue, type, scale);
     }
 
     public static boolean renderOverlayIfPresent(LevelAccessor level, BlockPos pos, Direction.AxisDirection direction,
-                                                 BezierTrackPointLocation bezier, PoseStack ms, MultiBufferSource buffer,
-                                                 int light, int overlay, EdgePointType<?> type, float scale) {
-        if (!CUSTOM_OVERLAYS.containsKey(type))
+                                                 BezierTrackPointLocation bezier, PoseStack ms, SubmitNodeCollector queue,
+                                                 EdgePointType<?> type, float scale) {
+        PartialModel model = CUSTOM_OVERLAYS.get(type);
+        if (model == null)
             return false;
-        return renderOverlay(level, pos, direction, bezier, ms, buffer, light, overlay, CUSTOM_OVERLAYS.get(type), scale, false);
+        return renderOverlay(level, pos, direction, bezier, ms, queue, model, scale, false);
     }
 
     public static void renderOverlay(LevelAccessor level, BlockPos pos, Direction.AxisDirection direction,
-                                     BezierTrackPointLocation bezier, PoseStack ms, MultiBufferSource buffer, int light, int overlay,
+                                     BezierTrackPointLocation bezier, PoseStack ms, SubmitNodeCollector queue,
                                      PartialModel model, float scale) {
-        renderOverlay(level, pos, direction, bezier, ms, buffer, light, overlay, model, scale, false);
+        renderOverlay(level, pos, direction, bezier, ms, queue, model, scale, false);
     }
 
     public static boolean renderOverlay(LevelAccessor level, BlockPos pos, Direction.AxisDirection direction,
-                                        BezierTrackPointLocation bezier, PoseStack ms, MultiBufferSource buffer, int light, int overlay,
+                                        BezierTrackPointLocation bezier, PoseStack ms, SubmitNodeCollector queue,
                                         PartialModel model, float scale, boolean offsetToSide) {
         BlockState trackState = level.getBlockState(pos);
-        return renderOverlay(level, pos, direction, bezier, ms, buffer, model, scale, offsetToSide, trackState);
+        return renderOverlay(level, pos, direction, bezier, ms, queue, model, scale, offsetToSide, trackState);
     }
 
     private static boolean renderOverlay(LevelAccessor level, BlockPos pos, Direction.AxisDirection direction,
-                                         BezierTrackPointLocation bezier, PoseStack ms, MultiBufferSource buffer,
+                                         BezierTrackPointLocation bezier, PoseStack ms, SubmitNodeCollector queue,
                                          PartialModel model, float scale, boolean offsetToSide, BlockState trackState) {
         if (model == null)
             return false;
 
-        boolean rendered = false;
         ms.pushPose();
-        if (prepareTrackOverlay(level, pos, trackState, bezier, direction, ms)) {
-            CachedBuffers.partial(model, trackState)
-                .translate(.5, 0, .5)
-                .scale(scale)
-                .translate(offsetToSide ? .5 : -.5, 0, -.5)
-                .light(LevelRenderer.getLightColor(level, pos))
-                .renderInto(ms.last(), buffer.getBuffer(RenderTypes.cutoutMovingBlock()));
-            rendered = true;
+        if (!prepareTrackOverlay(level, pos, trackState, bezier, direction, ms)) {
+            ms.popPose();
+            return false;
         }
-        ms.popPose();
-        return rendered;
-    }
 
-    public static void renderOverlayInto(LevelAccessor level, BlockPos pos, BlockState trackState,
-                                         Direction.AxisDirection direction, BezierTrackPointLocation bezier,
-                                         PoseStack ms, PartialModel model, float scale, boolean offsetToSide,
-                                         PoseStack.Pose pose, VertexConsumer consumer) {
-        if (model == null)
-            return;
-
-        ms.pushPose();
-        if (prepareTrackOverlay(level, pos, trackState, bezier, direction, ms)) {
-            CachedBuffers.partial(model, trackState)
-                .transform(ms.last())
-                .translate(.5, 0, .5)
-                .scale(scale)
-                .translate(offsetToSide ? .5 : -.5, 0, -.5)
-                .light(LevelRenderer.getLightColor(level, pos))
-                .renderInto(pose, consumer);
-        }
+        SuperByteBufferRenderState geometry = CachedBuffers.partial(model, trackState)
+            .translate(.5, 0, .5)
+            .scale(scale)
+            .translate(offsetToSide ? .5 : -.5, 0, -.5)
+            .light(LightCoordsUtil.getLightCoords(level, pos))
+            .extractRenderState();
+        geometry.submit(ms, queue);
         ms.popPose();
+        return true;
     }
 
     private static boolean prepareTrackOverlay(LevelAccessor level, BlockPos pos, BlockState state,
@@ -211,7 +193,7 @@ public class CustomTrackOverlayRendering {
             for (BezierConnection bc : trackBE.getConnections().values())
                 yOffset += bc.starts.getFirst().y - pos.getY();
             msr.center()
-                .rotateX((float) (-direction.getStep() * trackBE.tilt.smoothingAngle.get()))
+                .rotateXDegrees((float) (-direction.getStep() * trackBE.tilt.smoothingAngle.get()))
                 .uncenter()
                 .translate(0, yOffset / 2, 0);
         }

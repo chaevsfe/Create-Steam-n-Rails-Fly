@@ -1,6 +1,7 @@
 {
 	"parent": "block/block",
 	"textures": {
+		"particle": "#frame",
 		"piston": "create:block/bogey/piston",
 		"frame": "create:block/bogey/frame",
 		"wheel": "create:block/bogey/wheel",

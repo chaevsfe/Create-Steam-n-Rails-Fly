@@ -18,9 +18,7 @@
 
 package com.railwayteam.railways.util;
 
-import com.google.common.collect.ImmutableMap;
 import com.zurrtum.create.content.trains.track.TrackBlock;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeColor;
@@ -52,36 +50,17 @@ public class BlockStateUtils {
             .setValue(WATERLOGGED, state.getValue(WATERLOGGED));
     }
 
-    @ExpectPlatform
     public static SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, Entity entity) {
-        throw new AssertionError();
+        return com.railwayteam.railways.util.fabric.BlockStateUtilsImpl.getSoundType(state, level, pos, entity);
     }
 
-    private static final Map<Block, DyeColor> WOOL_MAP = ImmutableMap.<Block, DyeColor>builder()
-        .putAll(ImmutableMap.of(
-            Blocks.RED_WOOL, DyeColor.RED,
-            Blocks.ORANGE_WOOL, DyeColor.ORANGE,
-            Blocks.YELLOW_WOOL, DyeColor.YELLOW,
-            Blocks.LIME_WOOL, DyeColor.LIME,
-            Blocks.GREEN_WOOL, DyeColor.GREEN,
-            Blocks.LIGHT_BLUE_WOOL, DyeColor.LIGHT_BLUE,
-            Blocks.CYAN_WOOL, DyeColor.CYAN,
-            Blocks.BLUE_WOOL, DyeColor.BLUE))
-        .putAll(ImmutableMap.of(
-            Blocks.PURPLE_WOOL, DyeColor.PURPLE,
-            Blocks.MAGENTA_WOOL, DyeColor.MAGENTA,
-            Blocks.PINK_WOOL, DyeColor.PINK,
-            Blocks.BROWN_WOOL, DyeColor.BROWN,
-            Blocks.BLACK_WOOL, DyeColor.BLACK,
-            Blocks.GRAY_WOOL, DyeColor.GRAY,
-            Blocks.LIGHT_GRAY_WOOL, DyeColor.LIGHT_GRAY,
-            Blocks.WHITE_WOOL, DyeColor.WHITE))
-        .build();
-
+    private static final Map<Block, DyeColor> WOOL_MAP = new HashMap<>();
     private static final Map<DyeColor, Block> WOOL_MAP_REVERSE = new HashMap<>();
     static {
-        for (Map.Entry<Block, DyeColor> entry : WOOL_MAP.entrySet()) {
-            WOOL_MAP_REVERSE.put(entry.getValue(), entry.getKey());
+        for (DyeColor color : DyeColor.values()) {
+            Block wool = Blocks.WOOL.pick(color);
+            WOOL_MAP.put(wool, color);
+            WOOL_MAP_REVERSE.put(color, wool);
         }
     }
 
@@ -90,7 +69,7 @@ public class BlockStateUtils {
     }
 
     public static Block getWoolBlock(DyeColor color) {
-        return WOOL_MAP_REVERSE.getOrDefault(color, Blocks.WHITE_WOOL);
+        return WOOL_MAP_REVERSE.getOrDefault(color, Blocks.WOOL.white());
     }
 
     public static BlockState blockWithProperties(Block blockSource, BlockState propertySource) {

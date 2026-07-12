@@ -18,7 +18,6 @@
 
 package com.railwayteam.railways.util;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 
@@ -42,9 +41,8 @@ public class RegistrationListening {
 		addListener(dual.listener2);
 	}
 
-	@ExpectPlatform
 	public static <T> void addListener(Listener<T> listener) {
-		throw new AssertionError();
+		com.railwayteam.railways.util.fabric.RegistrationListeningImpl.addListener(listener);
 	}
 
 	public record Listener<T>(Registry<T> registry, Identifier id, Consumer<T> consumer) {

@@ -56,6 +56,10 @@ import java.util.UUID;
  */
 @Environment(EnvType.CLIENT)
 public class ClientPacketHandlers {
+    private static final int MAX_CAMERA_LOOKUP_TICKS = 100;
+    private static int pendingCameraEntityId = -1;
+    private static int pendingCameraLookupTicks;
+
     public static void handleCameraMove(Minecraft mc, int id, double x, double y, double z, float yaw, float pitch, boolean onGround) {
         if (mc.level == null) return;
         if (!(mc.level.getEntity(id) instanceof ConductorEntity conductor)) return;
@@ -200,9 +204,56 @@ public class ClientPacketHandlers {
         }
     }
 
-    public static void handleSetCameraView(Minecraft mc, int id) {
+    public static void handleSetCameraView(Minecraft mc, int id, boolean conductorCamera) {
+        pendingCameraEntityId = -1;
+        pendingCameraLookupTicks = 0;
+        if (mc.level == null) {
+            if (conductorCamera) {
+                pendingCameraEntityId = id;
+                pendingCameraLookupTicks = MAX_CAMERA_LOOKUP_TICKS;
+            }
+            return;
+        }
+
         Entity entity = mc.level.getEntity(id);
-        boolean isCamera = entity instanceof ConductorEntity;
+        if (entity == null && conductorCamera) {
+            // A far-away conductor's spawn packet can arrive after the camera command. Keep the
+            // request until native chunk/entity tracking has populated the client level.
+            pendingCameraEntityId = id;
+            pendingCameraLookupTicks = MAX_CAMERA_LOOKUP_TICKS;
+            return;
+        }
+
+        applyCameraView(mc, entity, conductorCamera);
+    }
+
+    public static void retryPendingCameraView(Minecraft mc) {
+        if (pendingCameraEntityId < 0)
+            return;
+        if (mc.level == null) {
+            if (--pendingCameraLookupTicks <= 0)
+                pendingCameraEntityId = -1;
+            return;
+        }
+
+        Entity entity = mc.level.getEntity(pendingCameraEntityId);
+        if (entity instanceof ConductorEntity) {
+            pendingCameraEntityId = -1;
+            pendingCameraLookupTicks = 0;
+            applyCameraView(mc, entity, true);
+            return;
+        }
+
+        if (--pendingCameraLookupTicks <= 0) {
+            Railways.LOGGER.warn("Conductor camera entity {} did not arrive after {} client ticks; dismounting safely",
+                    pendingCameraEntityId, MAX_CAMERA_LOOKUP_TICKS);
+            pendingCameraEntityId = -1;
+            ConductorPossessionController.dismount();
+        }
+    }
+
+    private static void applyCameraView(Minecraft mc, @Nullable Entity entity, boolean conductorCamera) {
+        boolean isCamera = conductorCamera && entity instanceof ConductorEntity;
 
         if (isCamera || entity instanceof Player) {
             mc.setCameraEntity(entity);
@@ -223,7 +274,7 @@ public class ClientPacketHandlers {
                 ConductorPossessionController.previousCameraType = null;
             }
 
-            mc.levelRenderer.allChanged();
+            mc.levelExtractor.allChanged();
         }
     }
 }

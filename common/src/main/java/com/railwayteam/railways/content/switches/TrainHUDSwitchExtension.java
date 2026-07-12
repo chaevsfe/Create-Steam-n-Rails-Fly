@@ -21,7 +21,7 @@ package com.railwayteam.railways.content.switches;
 import com.railwayteam.railways.registry.CRGuiTextures;
 import com.zurrtum.create.catnip.animation.LerpedFloat;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.world.level.GameType;
 import org.jetbrains.annotations.Nullable;
@@ -43,9 +43,9 @@ public class TrainHUDSwitchExtension {
         switchProgress.tickChaser();
     }
 
-    public static void renderOverlay(GuiGraphics graphics, float partialTicks, int width, int height) {
+    public static void renderOverlay(GuiGraphicsExtractor graphics, float partialTicks, int width, int height) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.options.hideGui || mc.gameMode.getPlayerMode() == GameType.SPECTATOR)
+        if (mc.gui.hud.isHidden() || mc.gameMode.getPlayerMode() == GameType.SPECTATOR)
             return;
 
         float progress = switchProgress.getValue(partialTicks);

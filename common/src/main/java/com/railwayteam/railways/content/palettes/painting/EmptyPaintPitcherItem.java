@@ -18,7 +18,6 @@
 
 package com.railwayteam.railways.content.palettes.painting;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.world.item.Item;
 
 public abstract class EmptyPaintPitcherItem extends Item {
@@ -26,8 +25,7 @@ public abstract class EmptyPaintPitcherItem extends Item {
         super(properties);
     }
 
-    @ExpectPlatform
     public static EmptyPaintPitcherItem create(Properties properties) {
-        throw new AssertionError();
+        return com.railwayteam.railways.content.palettes.painting.fabric.EmptyPaintPitcherItemImpl.create(properties);
     }
 }

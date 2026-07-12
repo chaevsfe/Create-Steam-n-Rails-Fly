@@ -24,7 +24,6 @@ import com.railwayteam.railways.content.custom_tracks.gen_template.TrackGenTempl
 import com.zurrtum.create.content.trains.track.TrackBlock;
 import com.zurrtum.create.content.trains.track.TrackShape;
 import com.zurrtum.create.foundation.data.SpecialBlockStateGen;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Map;
@@ -44,13 +43,12 @@ public abstract class CustomTrackBlockStateGenerator extends SpecialBlockStateGe
         this.textureMap = textureMap;
     }
 
-    @ExpectPlatform
     public static CustomTrackBlockStateGenerator create(
         OutputPrefixer outputPrefixer,
         TrackGenTemplate template,
         Map<TrackShape, Map<String, TextureKey>> textureMap
     ) {
-        throw new AssertionError();
+        return com.railwayteam.railways.content.custom_tracks.fabric.CustomTrackBlockStateGeneratorImpl.create(outputPrefixer, template, textureMap);
     }
     protected int getXRotation(BlockState state) {
         return 0;

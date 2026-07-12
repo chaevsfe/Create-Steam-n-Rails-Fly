@@ -20,7 +20,6 @@ package com.railwayteam.railways.multiloader;
 
 import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.registry.CRPackets;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -183,14 +182,13 @@ public abstract class PacketSet {
 		sender.level().getServer().execute(() -> packet.handle(sender));
 	}
 
-	@ExpectPlatform
 	@Internal
 	public static PacketSet create(String id, int version,
 								   List<Function<FriendlyByteBuf, S2CPacket>> s2cPackets,
 								   Object2IntMap<Class<? extends S2CPacket>> s2cTypes,
 								   List<Function<FriendlyByteBuf, C2SPacket>> c2sPackets,
 								   Object2IntMap<Class<? extends C2SPacket>> c2sTypes) {
-		throw new AssertionError();
+		return com.railwayteam.railways.multiloader.fabric.PacketSetImpl.create(id, version, s2cPackets, s2cTypes, c2sPackets, c2sTypes);
 	}
 
 	/**

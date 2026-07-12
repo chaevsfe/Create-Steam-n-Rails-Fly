@@ -5,6 +5,7 @@
 	"flip_v": true,
 	"model": "railways:models/block/bogey/narrow/default_small/frame.obj",
 	"textures": {
+		"particle": "#0",
 		"0": "railways:block/bogeys/narrow/small_bogey"
 	}
 }

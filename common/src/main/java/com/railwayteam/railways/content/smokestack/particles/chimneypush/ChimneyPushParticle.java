@@ -27,7 +27,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.renderer.state.QuadParticleRenderState;
+import net.minecraft.client.renderer.state.level.QuadParticleRenderState;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -114,7 +114,7 @@ public class ChimneyPushParticle extends CustomAnimatedTextureSheetParticle {
             quadSize,
             u0, u1, v0, v1,
             ARGB.colorFromFloat(this.alpha, this.rCol, this.gCol, this.bCol),
-            this.getLightColor(partialTicks)
+            this.getLightCoords(partialTicks)
         );
     }
 

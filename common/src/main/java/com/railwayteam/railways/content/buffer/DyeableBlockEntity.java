@@ -20,6 +20,7 @@ package com.railwayteam.railways.content.buffer;
 
 import com.railwayteam.railways.util.BlockStateUtils;
 import com.zurrtum.create.foundation.blockEntity.SmartBlockEntity;
+import com.zurrtum.create.AllItemTags;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -78,7 +79,7 @@ public class DyeableBlockEntity extends SmartBlockEntity implements IDyedBuffer 
     public InteractionResult applyDyeIfValid(ItemStack stack) {
         if (!(stack.getItem()instanceof DyeItem dyeItem))
             return InteractionResult.PASS;
-        DyeColor color = dyeItem.getDyeColor();
+        DyeColor color = AllItemTags.getDyeColor(stack);
         if (color == this.color)
             return InteractionResult.PASS;
         if (level.isClientSide() && !isVirtual())

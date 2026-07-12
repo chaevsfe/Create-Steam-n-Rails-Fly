@@ -2,6 +2,7 @@
 	"credit": "By Slimeist",
 	"ambientocclusion": false,
 	"textures": {
+		"particle": "#side",
 		"side": "minecraft:block/amethyst_block",
 		"top": "minecraft:block/acacia_planks",
 		"bottom": "minecraft:block/barrel_top"

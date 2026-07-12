@@ -25,16 +25,13 @@ import com.railwayteam.railways.content.smokestack.particles.chimneypush.Chimney
 import com.railwayteam.railways.content.smokestack.particles.chimneypush.ChimneyPushParticleData;
 import com.zurrtum.create.api.behaviour.movement.MovementBehaviour;
 import com.zurrtum.create.catnip.animation.LerpedFloat;
-import com.zurrtum.create.client.foundation.virtualWorld.VirtualRenderWorld;
 import com.zurrtum.create.content.contraptions.TranslatingContraption;
 import com.zurrtum.create.content.contraptions.behaviour.MovementContext;
-import com.zurrtum.create.content.contraptions.render.ContraptionMatrices;
 import com.zurrtum.create.content.trains.entity.CarriageContraption;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.DyeColor;
@@ -153,13 +150,6 @@ public class SmokeStackMovementBehaviour extends MovementBehaviour {
         }
     }
 
-    @Environment(EnvType.CLIENT)
-    public void renderInContraption(MovementContext context, VirtualRenderWorld renderWorld, ContraptionMatrices matrices, MultiBufferSource buffer) {
-        if (context.temporaryData instanceof TemporaryData temporaryData) {
-            temporaryData.moveParticles(context);
-        }
-    }
-
     @Override
     public void tick(MovementContext context) {
         if (context.world == null
@@ -222,7 +212,7 @@ public class SmokeStackMovementBehaviour extends MovementBehaviour {
             maxModifier += 15;
         }
 
-        RandomSource random = context.world.random;
+        RandomSource random = context.world.getRandom();
         SmokeEmissionParams emissionParams = ((SmokeStackBlock) context.state.getBlock()).emissionParams;
         double speedModifierTarget = 5 * (0.5 + maxModifier);
         speedMultiplierChaser.chase(speedModifierTarget, 0.4, LerpedFloat.Chaser.LINEAR);

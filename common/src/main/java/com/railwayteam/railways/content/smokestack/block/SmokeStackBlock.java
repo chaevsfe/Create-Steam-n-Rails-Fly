@@ -24,6 +24,7 @@ import com.railwayteam.railways.content.smokestack.block.be.SmokeStackBlockEntit
 import com.railwayteam.railways.registry.CRBlockEntities;
 import com.railwayteam.railways.util.ShapeWrapper;
 import com.zurrtum.create.foundation.block.IBE;
+import com.zurrtum.create.AllItemTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -104,7 +105,7 @@ public class SmokeStackBlock extends AbstractSmokeStackBlock<SmokeStackBlockEnti
     protected InteractionResult useItemOn(ItemStack itemStack, BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer,
                                           InteractionHand pHand, BlockHitResult pHit) {
         if (itemStack.getItem() instanceof DyeItem dyeItem) {
-            DyeColor color = dyeItem.getDyeColor();
+            DyeColor color = AllItemTags.getDyeColor(itemStack);
             withBlockEntityDo(pLevel, pPos, te -> te.setColor(color));
             if (!pPlayer.isCreative()) {
                 itemStack.shrink(1);

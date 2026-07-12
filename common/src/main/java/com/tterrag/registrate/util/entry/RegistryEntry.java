@@ -2,25 +2,22 @@ package com.tterrag.registrate.util.entry;
 
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceLocation;
 
 public class RegistryEntry<T> implements NonNullSupplier<T> {
-    protected final Identifier identifier;
-    protected final ResourceLocation id;
+    protected final Identifier id;
     protected final T value;
 
     public RegistryEntry(Identifier id, T value) {
-        this.identifier = id;
-        this.id = new ResourceLocation(id.getNamespace(), id.getPath());
+        this.id = id;
         this.value = value;
     }
 
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return id;
     }
 
     public Identifier getIdentifier() {
-        return identifier;
+        return id;
     }
 
     @Override

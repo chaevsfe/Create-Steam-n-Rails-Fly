@@ -31,7 +31,7 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotView;
 import mezz.jei.api.runtime.IJeiRuntime;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -88,14 +88,14 @@ public class RailwaysJeiClient implements IModPlugin {
 
 	private static class CuttingSequencedAssemblyRenderer extends SequencedAssemblyCategory.SequencedRenderer<CuttingRecipe> {
 		@Override
-		public void render(GuiGraphics graphics, int i, int x, int y, Optional<IRecipeSlotView> slot) {
+		public void render(GuiGraphicsExtractor graphics, int i, int x, int y, Optional<IRecipeSlotView> slot) {
 			float scale = 19 / 33f;
 			Matrix3x2fStack matrices = graphics.pose();
 			matrices.pushMatrix();
 			matrices.translate(x, y);
 			matrices.scale(scale, scale);
 			matrices.translate(-x, -y);
-			graphics.guiRenderState.submitPicturesInPictureState(new SawRenderState(
+			graphics.guiRenderState.addPicturesInPictureState(new SawRenderState(
 				new Matrix3x2f(matrices),
 				x - 3,
 				y + 90

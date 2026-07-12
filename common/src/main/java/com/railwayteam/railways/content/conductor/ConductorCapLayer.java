@@ -40,7 +40,7 @@ public class ConductorCapLayer extends RenderLayer<ConductorRenderState, Conduct
     }
 
     public static RenderType entityCutoutNoCull(Identifier texture) {
-        return RenderType.create("railways_conductor_cap", RenderSetup.builder(RenderPipelines.ENTITY_CUTOUT_NO_CULL)
+        return RenderType.create("railways_conductor_cap", RenderSetup.builder(RenderPipelines.ENTITY_CUTOUT)
             .withTexture("Sampler0", texture)
             .useLightmap()
             .useOverlay()

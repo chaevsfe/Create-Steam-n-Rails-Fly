@@ -20,7 +20,7 @@ package com.railwayteam.railways.util;
 
 import com.railwayteam.railways.Railways;
 import com.zurrtum.create.content.trains.entity.Train;
-import dev.architectury.injectables.annotations.ExpectPlatform;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,19 +28,16 @@ import java.nio.file.Path;
 import java.util.Locale;
 
 public class Utils {
-	@ExpectPlatform
 	public static Path configDir() {
-		throw new AssertionError();
+		return com.railwayteam.railways.util.fabric.UtilsImpl.configDir();
 	}
 
-	@ExpectPlatform
 	public static Path modsDir() {
-		throw new AssertionError();
+		return com.railwayteam.railways.util.fabric.UtilsImpl.modsDir();
 	}
 
-	@ExpectPlatform
 	public static boolean isDevEnv() {
-		throw new AssertionError();
+		return com.railwayteam.railways.util.fabric.UtilsImpl.isDevEnv();
 	}
 
 	public static boolean isEnvVarTrue(String name) {
@@ -63,13 +60,11 @@ public class Utils {
 		}
 	}
 
-	@ExpectPlatform
-	public static void sendHonkPacket(Train train, boolean isHonk) {
-		throw new AssertionError();
+	public static void sendHonkPacket(Level level, Train train, boolean isHonk) {
+		com.railwayteam.railways.util.fabric.UtilsImpl.sendHonkPacket(level, train, isHonk);
 	}
 
-	@ExpectPlatform
 	public static void postChunkEventClient(LevelChunk chunk, boolean load) {
-		throw new AssertionError();
+		com.railwayteam.railways.util.fabric.UtilsImpl.postChunkEventClient(chunk, load);
 	}
 }

@@ -22,7 +22,6 @@ import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.registry.CRBlockEntities;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import com.zurrtum.create.foundation.block.IBE;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -52,9 +51,8 @@ public abstract class TrackCouplerBlock extends Block implements IBE<TrackCouple
 		registerDefaultState(defaultBlockState().setValue(POWERED, false).setValue(MODE, TrackCouplerBlockEntity.AllowedOperationMode.BOTH));
 	}
 
-	@ExpectPlatform
 	public static TrackCouplerBlock create(Properties properties) {
-		throw new AssertionError();
+		return com.railwayteam.railways.content.coupling.coupler.fabric.TrackCouplerBlockImpl.create(properties);
 	}
 	protected void createBlockStateDefinition(Builder<Block, BlockState> pBuilder) {
 		super.createBlockStateDefinition(pBuilder.add(POWERED).add(MODE));
@@ -138,7 +136,7 @@ public abstract class TrackCouplerBlock extends Block implements IBE<TrackCouple
 			pos, state.getValue(MODE), newState.getValue(MODE), newState.getValue(POWERED));
 		Player player = context.getPlayer();
 		if (player != null)
-			player.displayClientMessage(newState.getValue(MODE).getTranslatedName(), true);
+			player.sendOverlayMessage(newState.getValue(MODE).getTranslatedName());
 		return InteractionResult.SUCCESS;
 	}
 }

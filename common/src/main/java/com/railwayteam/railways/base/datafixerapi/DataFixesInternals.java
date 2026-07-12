@@ -17,11 +17,15 @@
 package com.railwayteam.railways.base.datafixerapi;
 
 import com.mojang.datafixers.DSL.TypeReference;
+import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.serialization.Dynamic;
+import com.railwayteam.railways.Railways;
+import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.datafix.DataFixTypes;
+import net.minecraft.util.datafix.DataFixers;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -57,14 +61,39 @@ public abstract class DataFixesInternals {
         return dynamic.get("Railways_DataVersion").asInt(0);
     }
 
-    private static DataFixesInternals instance;
+    private static volatile DataFixesInternals instance;
 
     public static @NotNull DataFixesInternals get() {
-        if (instance == null) {
-            instance = new NoOpDataFixesInternals();
+        DataFixesInternals current = instance;
+        if (current != null)
+            return current;
+
+        synchronized (DataFixesInternals.class) {
+            current = instance;
+            if (current != null)
+                return current;
+
+            try {
+                int vanillaVersion = SharedConstants.getCurrentVersion().dataVersion().version();
+                Schema vanillaSchema = DataFixers.getDataFixer().getSchema(DataFixUtils.makeKey(vanillaVersion));
+                if (vanillaSchema == null)
+                    throw new IllegalStateException("Vanilla DFU returned no schema for version " + vanillaVersion);
+
+                current = new DataFixesInternalsImpl(vanillaSchema);
+                Railways.LOGGER.info("[Railways DFU] Vanilla schema bridge initialized at data version {}", vanillaVersion);
+            } catch (Throwable throwable) {
+                if (throwable instanceof VirtualMachineError error)
+                    throw error;
+                Railways.LOGGER.error(
+                    "[Railways DFU] Could not initialize the vanilla schema bridge; legacy fixes are disabled safely",
+                    throwable
+                );
+                current = new NoOpDataFixesInternals();
+            }
+            instance = current;
         }
 
-        return instance;
+        return current;
     }
 
     public abstract void registerFixer(@Range(from = 0, to = Integer.MAX_VALUE) int currentVersion,

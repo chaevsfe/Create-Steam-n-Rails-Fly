@@ -18,6 +18,7 @@
 
 package com.railwayteam.railways.util.packet;
 
+import com.railwayteam.railways.content.conductor.ConductorEntity;
 import com.railwayteam.railways.multiloader.S2CPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
@@ -25,17 +26,24 @@ import net.minecraft.world.entity.Entity;
 
 public class SetCameraViewPacket implements S2CPacket {
     private final int id;
+    private final boolean conductorCamera;
+
     public SetCameraViewPacket(Entity camera) {
         id = camera.getId();
+        conductorCamera = camera instanceof ConductorEntity;
     }
 
     public SetCameraViewPacket(FriendlyByteBuf buf) {
         id = buf.readVarInt();
+        conductorCamera = buf.readBoolean();
     }
+
     public void write(FriendlyByteBuf buffer) {
         buffer.writeVarInt(id);
+        buffer.writeBoolean(conductorCamera);
     }
+
     public void handle(Minecraft mc) {
-        ClientPacketHandlers.handleSetCameraView(mc, id);
+        ClientPacketHandlers.handleSetCameraView(mc, id, conductorCamera);
     }
 }

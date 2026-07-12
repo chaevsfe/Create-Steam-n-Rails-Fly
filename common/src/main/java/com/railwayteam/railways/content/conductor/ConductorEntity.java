@@ -13,6 +13,7 @@ import com.railwayteam.railways.util.ItemUtils;
 import com.railwayteam.railways.util.Utils;
 import com.railwayteam.railways.util.packet.SetCameraViewPacket;
 import com.zurrtum.create.AllBlocks;
+import com.zurrtum.create.AllItemTags;
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.AllSoundEvents;
 import com.zurrtum.create.Create;
@@ -33,7 +34,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.SectionPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -290,7 +290,7 @@ public class ConductorEntity extends AbstractGolem {
             for (Entity e2 : entity.getPassengers()) entity.positionRider(e2);
         });
         if (level() instanceof ServerLevel serverLevel) {
-            ChunkPos cp = new ChunkPos(this.blockPosition());
+            ChunkPos cp = ChunkPos.containing(this.blockPosition());
             serverLevel.getChunkSource().addTicketWithRadius(TicketType.FORCED, cp, 3);
         }
         firstGoodX = lastGoodX = x;
@@ -301,21 +301,7 @@ public class ConductorEntity extends AbstractGolem {
 
     public int ventCooldown = 0;
 
-    public static final List<Player> RECENTLY_DISMOUNTED_PLAYERS = new ArrayList<>();
     @NotNull private WeakReference<ServerPlayer> currentlyViewing = new WeakReference<>(null);
-    private int initialChunkLoadingDistance = 0;
-    private boolean hasSentChunks = false;
-
-    public SectionPos oldSectionPos = null;
-
-    public static boolean hasRecentlyDismounted(Player player) {
-        return RECENTLY_DISMOUNTED_PLAYERS.remove(player);
-    }
-
-    public void setChunkLoadingDistance(int d) { initialChunkLoadingDistance = d; }
-    public int getChunkLoadingDistance() { return initialChunkLoadingDistance; }
-    public boolean hasSentChunks() { return hasSentChunks; }
-    public void setHasSentChunks(boolean v) { hasSentChunks = v; }
 
     // -------------------------------------------------------------------------
     // Client-side possession state
@@ -726,10 +712,10 @@ public class ConductorEntity extends AbstractGolem {
         if (player.level() != level()) return false;
         if (player.getCamera() instanceof ConductorEntity c) c.stopViewing(player);
         currentlyViewing = new WeakReference<>(player);
-        oldSectionPos = null;
-        setChunkLoadingDistance(((ServerLevel) player.level()).getServer().getPlayerList().getViewDistance());
-        setHasSentChunks(false);
         player.camera = this;
+        // ChunkMapMixin makes this native move use the conductor as its ticket/tracking-view
+        // origin. Running it immediately avoids a one-tick empty view before ServerPlayer.tick.
+        ((ServerLevel) player.level()).getChunkSource().move(player);
         CRPackets.PACKETS.sendTo(player, new SetCameraViewPacket(this));
         resetPosition();
         return true;
@@ -739,8 +725,10 @@ public class ConductorEntity extends AbstractGolem {
         if (!level().isClientSide()) {
             currentlyViewing.clear();
             player.camera = player;
+            // Restore the body's native chunk tickets and tracking view before the client switches
+            // its camera back. This also re-sends any chunks dropped while viewing from afar.
+            ((ServerLevel) player.level()).getChunkSource().move(player);
             CRPackets.PACKETS.sendTo(player, new SetCameraViewPacket(player));
-            RECENTLY_DISMOUNTED_PLAYERS.add(player);
         }
     }
 
@@ -775,8 +763,6 @@ public class ConductorEntity extends AbstractGolem {
     @Override
     public void tick() {
         this.resetPosition();
-        SectionPos sectionPos = SectionPos.of(this);
-        if (!sectionPos.equals(oldSectionPos)) setHasSentChunks(false);
         if (level().isClientSide()) {
             ConductorPossessionController.tryUpdatePossession(this);
             updatePossessionInputs();
@@ -787,16 +773,6 @@ public class ConductorEntity extends AbstractGolem {
             fakePlayer = EntityUtils.createConductorFakePlayer(serverLevel, this);
         super.tick();
         if (ventCooldown > 0) ventCooldown--;
-        if (level() instanceof ServerLevel serverLevel) {
-            ServerPlayer player = currentlyViewing.get();
-            if (player != null) {
-                ChunkPos cp = new ChunkPos(blockPosition());
-                int vd = serverLevel.getServer().getPlayerList().getViewDistance();
-                for (int x = cp.x - vd; x <= cp.x + vd; x++)
-                    for (int z = cp.z - vd; z <= cp.z + vd; z++)
-                        serverLevel.getChunkSource().addTicketWithRadius(TicketType.FORCED, new ChunkPos(x, z), 3);
-            }
-        }
         if (toolbox != null) toolbox.tick();
     }
 
@@ -872,8 +848,11 @@ public class ConductorEntity extends AbstractGolem {
     @Override
     protected @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (stack.getItem() instanceof DyeItem di) {
-            setColor(di.getDyeColor());
+        if (stack.getItem() instanceof DyeItem) {
+            DyeColor dyeColor = AllItemTags.getDyeColor(stack);
+            if (dyeColor == null)
+                return InteractionResult.PASS;
+            setColor(dyeColor);
             if (!player.isCreative()) stack.shrink(1);
             return InteractionResult.SUCCESS;
         } else if (stack.getItem() == AllBlocks.ANDESITE_CASING.asItem()) {
@@ -1150,13 +1129,13 @@ public class ConductorEntity extends AbstractGolem {
                     if (isSprintKeyPressed && honkPacketCooldown-- <= 0) {
                         train.determineHonk(conductor.level());
                         if (train.lowHonk != null) {
-                            Utils.sendHonkPacket(train, true);
+                            Utils.sendHonkPacket(conductor.level(), train, true);
                             honkPacketCooldown = 5;
                             usedToHonk = true;
                         }
                     }
                     if (!isSprintKeyPressed && usedToHonk) {
-                        Utils.sendHonkPacket(train, false);
+                        Utils.sendHonkPacket(conductor.level(), train, false);
                         honkPacketCooldown = 0; usedToHonk = false;
                     }
                 }

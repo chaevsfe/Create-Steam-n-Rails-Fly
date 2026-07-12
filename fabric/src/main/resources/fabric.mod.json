@@ -3,19 +3,23 @@
   "id": "railways",
   "version": "${version}",
   "name": "Create: Steam 'n' Rails",
-  "description": "Unofficial port of Create: Steam 'n' Rails to Create Fly 1.21.11",
+  "description": "Create: Steam 'n' Rails port for Create Fly 26.2",
   "authors": [
     "R2bEEaton"
   ],
   "contact": {
-    "sources": "https://github.com/R2bEEaton-Minecraft/Railway/"
+    "sources": "https://github.com/cat4blep/Create-Steam-n-Rails-Fly"
   },
   "license": ["LGPL v3"],
   "icon": "assets/railways/icon.png",
   "environment": "*",
+  "accessWidener": "railways.accesswidener",
   "entrypoints": {
     "main": [
       "com.railwayteam.railways.fabric.RailwaysImpl"
+    ],
+    "create_plugin": [
+      "com.railwayteam.railways.fabric.RailwaysCreateRegisterPlugin"
     ],
     "client": [
       "com.railwayteam.railways.fabric.RailwaysClientImpl"
@@ -32,7 +36,7 @@
     "railways-common.mixins.json"
   ],
   "depends": {
-    "minecraft": "${minecraft_version}",
+    "minecraft": "${minecraft_dependency_version}",
     "fabricloader": ">=${fabric_loader_version}",
     "fabric-api": ">=${fabric_api_version}",
     "create": "${create_fabric_version_range}"

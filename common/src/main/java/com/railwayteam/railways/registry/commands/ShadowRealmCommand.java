@@ -31,13 +31,15 @@ import com.railwayteam.railways.registry.CRPackets;
 import com.railwayteam.railways.util.packet.ShadowTrainRestorePacket;
 import com.zurrtum.create.Create;
 import com.zurrtum.create.content.trains.entity.Train;
+import com.zurrtum.create.infrastructure.packet.s2c.AddTrainPacket;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.commands.arguments.UuidArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permissions;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -48,7 +50,7 @@ import static net.minecraft.commands.Commands.literal;
 public class ShadowRealmCommand {
     public static ArgumentBuilder<CommandSourceStack, ?> register() {
         return literal("shadow_realm")
-            .requires(cs -> cs.hasPermission(2))
+            .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
             .then(banish())
             .then(restore())
             .then(kill());
@@ -57,11 +59,11 @@ public class ShadowRealmCommand {
     private static ArgumentBuilder<CommandSourceStack, ?> banish() {
         return literal("banish")
             .then(argument("train", UuidArgument.uuid())
-                .then(argument("key", ResourceLocationArgument.id())
+                .then(argument("key", IdentifierArgument.id())
                     .executes(ctx -> $banish(
                         ctx.getSource(),
                         UuidArgument.getUuid(ctx, "train"),
-                        ResourceLocationArgument.getId(ctx, "key")
+                        IdentifierArgument.getId(ctx, "key")
                     ))));
     }
 
@@ -89,11 +91,11 @@ public class ShadowRealmCommand {
 
     private static ArgumentBuilder<CommandSourceStack, ?> restore() {
         return literal("restore")
-            .then(argument("key", ResourceLocationArgument.id())
+            .then(argument("key", IdentifierArgument.id())
                 .suggests(ShadowRealmCommand::suggestKeys)
                 .executes(ctx -> $restore(
                     ctx.getSource(),
-                    ResourceLocationArgument.getId(ctx, "key")
+                    IdentifierArgument.getId(ctx, "key")
                 )));
     }
 
@@ -113,7 +115,10 @@ public class ShadowRealmCommand {
             return 0;
         }
 
-        CRPackets.PACKETS.sendTo(player, new ShadowTrainRestorePacket(train));
+        // The marker is deliberately sent first. AddTrainPacket then supplies the train through
+        // Create Fly's registry-aware Train.STREAM_CODEC without duplicating its wire format.
+        CRPackets.PACKETS.sendTo(player, new ShadowTrainRestorePacket(train.id));
+        CRPackets.PACKETS.sendTo(player, new AddTrainPacket(train));
 
         source.sendSuccess(() -> Component.literal("Use a wrench on a track to restore '").append(train.name).append("'"), true);
         return 1;
@@ -121,11 +126,11 @@ public class ShadowRealmCommand {
     
     private static ArgumentBuilder<CommandSourceStack, ?> kill() {
         return literal("kill")
-            .then(argument("key", ResourceLocationArgument.id())
+            .then(argument("key", IdentifierArgument.id())
                 .suggests(ShadowRealmCommand::suggestKeys)
                 .executes(ctx -> $kill(
                     ctx.getSource(),
-                    ResourceLocationArgument.getId(ctx, "key")
+                    IdentifierArgument.getId(ctx, "key")
                 )));
     }
 

@@ -27,10 +27,13 @@ import com.railwayteam.railways.content.conductor.ConductorRenderer;
 import com.railwayteam.railways.content.conductor.vent.CopycatVentModel;
 import com.railwayteam.railways.content.conductor.whistle.ConductorWhistleFlagRenderer;
 import com.railwayteam.railways.content.coupling.coupler.TrackCouplerRenderer;
+import com.railwayteam.railways.content.animated_flywheel.FlywheelMovementRender;
 import com.railwayteam.railways.content.semaphore.SemaphoreRenderer;
 import com.railwayteam.railways.content.switches.TrackSwitchRenderer;
 import com.zurrtum.create.client.AllModels;
 import com.zurrtum.create.client.AllBlockEntityRenders;
+import com.zurrtum.create.client.AllDisplaySourceRenders;
+import com.zurrtum.create.client.content.redstone.displayLink.source.SingleLineDisplaySourceRender;
 import com.zurrtum.create.client.content.trains.bogey.BogeyBlockEntityRenderer;
 import com.zurrtum.create.client.content.trains.bogey.BogeyBlockEntityVisual;
 import com.railwayteam.railways.content.custom_tracks.casing.CasingRenderUtils;
@@ -41,11 +44,13 @@ import com.railwayteam.railways.registry.CRBogeyStyleRenders;
 import com.zurrtum.create.client.ponder.foundation.PonderIndex;
 import com.railwayteam.railways.registry.CRCommandsClient;
 import com.railwayteam.railways.registry.CRDevCaps;
+import com.railwayteam.railways.registry.CRDisplaySources;
 import com.railwayteam.railways.registry.CREdgePointTypes;
 import com.railwayteam.railways.registry.CREntities;
 import com.railwayteam.railways.registry.CRFluids;
 import com.railwayteam.railways.registry.CRKeys;
 import com.railwayteam.railways.registry.CRPackets;
+import com.railwayteam.railways.registry.CRScheduleClient;
 import com.railwayteam.railways.registry.CRTrackMaterials;
 import com.railwayteam.railways.registry.CRContainerTypes;
 import com.railwayteam.railways.util.CustomTrackOverlayRendering;
@@ -55,7 +60,6 @@ import com.zurrtum.create.client.AllTrackRenders;
 import com.zurrtum.create.client.content.trains.track.StandardTrackBlockRenderer;
 import com.zurrtum.create.client.flywheel.lib.model.baked.PartialModel;
 import com.zurrtum.create.content.trains.track.TrackMaterial;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
@@ -93,7 +97,10 @@ public class RailwaysClient {
 
     CRKeys.register();
     CRBlockPartials.init();
+    FlywheelMovementRender.register();
     CRBogeyStyleRenders.register();
+    CRScheduleClient.register();
+    registerDisplaySourceRenders();
     registerBogeyBlockEntityRenders();
     CRContainerTypes.registerScreens();
 
@@ -110,6 +117,15 @@ public class RailwaysClient {
     DevCapeUtils.INSTANCE.init();
 
     registerTrackModels();
+  }
+
+  private static void registerDisplaySourceRenders() {
+    AllDisplaySourceRenders.register(CRDisplaySources.TRACK_SWITCH.get(), SingleLineDisplaySourceRender::new);
+    AllDisplaySourceRenders.register(CRDisplaySources.SIGNAL.get(), SingleLineDisplaySourceRender::new);
+
+    if (!(CRDisplaySources.TRACK_SWITCH.get().getAttachRender() instanceof SingleLineDisplaySourceRender)
+      || !(CRDisplaySources.SIGNAL.get().getAttachRender() instanceof SingleLineDisplaySourceRender))
+      throw new IllegalStateException("Railways single-line display source renders were not attached");
   }
 
   private static void registerBogeyBlockEntityRenders() {
@@ -193,23 +209,19 @@ public class RailwaysClient {
     }
   }
 
-  @ExpectPlatform
   public static void registerClientCommands(Consumer<CommandDispatcher<SharedSuggestionProvider>> consumer) {
-    throw new AssertionError();
+    com.railwayteam.railways.fabric.RailwaysClientImpl.registerClientCommands(consumer);
   }
 
-  @ExpectPlatform
   public static void registerModelLayer(ModelLayerLocation layer, Supplier<LayerDefinition> definition) {
-    throw new AssertionError();
+    com.railwayteam.railways.fabric.RailwaysClientImpl.registerModelLayer(layer, definition);
   }
 
-  @ExpectPlatform
   public static <T extends Entity> void registerEntityRenderer(EntityType<? extends T> type, EntityRendererProvider<T> provider) {
-    throw new AssertionError();
+    com.railwayteam.railways.fabric.RailwaysClientImpl.registerEntityRenderer(type, provider);
   }
 
-  @ExpectPlatform
   public static void registerBuiltinPack(String id, String name) {
-    throw new AssertionError();
+    com.railwayteam.railways.fabric.RailwaysClientImpl.registerBuiltinPack(id, name);
   }
 }

@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(targets = "net.minecraft.client.renderer.block.model.BlockElement$Deserializer")
+@Mixin(targets = "net.minecraft.client.resources.model.cuboid.CuboidModelElement$Deserializer")
 public class BlockElementDeserializerMixin {
     @Inject(method = "getPosition", at = @At("HEAD"), cancellable = true)
     private static void railways$allowExtendedBlockModelBounds(JsonObject object, String key, CallbackInfoReturnable<Vector3f> cir) {

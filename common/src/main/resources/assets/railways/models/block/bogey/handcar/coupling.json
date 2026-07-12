@@ -2,6 +2,7 @@
 	"credit": "By Slimeist",
 	"texture_size": [128, 128],
 	"textures": {
+		"particle": "#0",
 		"0": "railways:block/bogeys/standard/handcar_frame"
 	},
 	"elements": [

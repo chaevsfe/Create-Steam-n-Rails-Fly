@@ -24,7 +24,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.railwayteam.railways.config.CRConfigs;
 import com.railwayteam.railways.content.shadow_realm.ShadowRealm;
 import com.railwayteam.railways.content.shadow_realm.ShadowRealm.RestorationTarget;
-import com.zurrtum.create.content.trains.entity.TrainRelocationPacket;
+import com.zurrtum.create.infrastructure.packet.c2s.TrainRelocationPacket;
 import com.zurrtum.create.infrastructure.component.BezierTrackPointLocation;
 import com.zurrtum.create.foundation.networking.SimplePacketBase.Context;
 import net.minecraft.core.BlockPos;

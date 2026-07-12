@@ -19,78 +19,101 @@
 package com.railwayteam.railways.content.animated_flywheel;
 
 import com.railwayteam.railways.config.CRConfigs;
-import com.railwayteam.railways.mixin_interfaces.ICarriageFlywheel;
 import com.railwayteam.railways.mixin_interfaces.IDistanceTravelled;
 import com.zurrtum.create.api.behaviour.movement.MovementBehaviour;
 import com.zurrtum.create.content.contraptions.behaviour.MovementContext;
-import com.zurrtum.create.content.contraptions.render.ContraptionMatrices;
-import com.zurrtum.create.content.kinetics.flywheel.FlywheelBlockEntity;
 import com.zurrtum.create.content.trains.entity.CarriageContraption;
 import com.zurrtum.create.content.trains.entity.CarriageContraptionEntity;
-import com.zurrtum.create.client.foundation.virtualWorld.VirtualRenderWorld;
-import com.zurrtum.create.client.catnip.animation.AnimationTickHolder;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
-public class FlywheelMovementBehaviour extends MovementBehaviour {
+/**
+ * Client-ticked actor behaviour which derives a flywheel's angle from the distance travelled by
+ * its carriage. Rendering is attached separately on the physical client so this class remains
+ * safe to load on a dedicated server.
+ */
+public final class FlywheelMovementBehaviour extends MovementBehaviour {
+    public static final FlywheelMovementBehaviour INSTANCE = new FlywheelMovementBehaviour();
+
+    static final double WHEEL_RADIUS = 1.4375;
+    private static final double WHEEL_CIRCUMFERENCE = 2 * Math.PI * WHEEL_RADIUS;
+
+    private FlywheelMovementBehaviour() {
+    }
+
+    @Override
     public boolean isActive(MovementContext context) {
         return context.world.isClientSide();
     }
 
-    private static class TemporaryData {
-        float wheelAngle0 = Float.NaN;
-        float wheelAngle1 = Float.NaN;
-    }
+    @Override
     public void tick(MovementContext context) {
-        Object temporaryDataBackup = context.temporaryData;
+        Object previousData = context.temporaryData;
         context.temporaryData = null;
 
-        // Early exit checks, don't mind them :)
-        if (!CRConfigs.client().animatedFlywheels.get()) return;
-        if (!context.world.isClientSide() || Minecraft.getInstance().isPaused()) return;
-        if (!(context.contraption instanceof CarriageContraption carriageContraption)) return;
-        if (!(carriageContraption.entity instanceof CarriageContraptionEntity carriageContraptionEntity)) return;
-        if (!(context.contraption.getOrCreateClientContraptionLazy().getBlockEntity(context.localPos) instanceof FlywheelBlockEntity flywheelBlockEntity)) return;
-        if (flywheelBlockEntity.getBlockState().getValue(BlockStateProperties.AXIS).isVertical()) return;
-        // It wasn't that bad was it? :^)
+        if (!isAnimationEnabled())
+            return;
+        if (!(context.contraption instanceof CarriageContraption carriageContraption))
+            return;
+        if (!(carriageContraption.entity instanceof CarriageContraptionEntity carriageEntity))
+            return;
 
-        Direction dir = carriageContraption.getAssemblyDirection();
-        Direction.Axis flwAxis = flywheelBlockEntity.getBlockState().getValue(BlockStateProperties.AXIS);
+        Direction.Axis flywheelAxis = context.state.getValue(BlockStateProperties.AXIS);
+        Direction assemblyDirection = carriageContraption.getAssemblyDirection();
+        if (!canRotate(assemblyDirection, flywheelAxis))
+            return;
 
-        switch (dir) {
-            case NORTH, SOUTH -> { if (flwAxis == Direction.Axis.Z) return; }
-            case EAST, WEST -> { if (flwAxis == Direction.Axis.X) return; }
-        }
+        AngleData data = previousData instanceof AngleData angleData ? angleData : new AngleData();
+        context.temporaryData = data;
 
-        TemporaryData td = temporaryDataBackup instanceof TemporaryData tempDat ? tempDat : new TemporaryData();
-        context.temporaryData = td;
-
-        ICarriageFlywheel flywheel = ((ICarriageFlywheel) flywheelBlockEntity);
-        double distanceTravelled = ((IDistanceTravelled) carriageContraptionEntity).railways$getDistanceTravelled();
-
-        double wheelRadius = 1.4375;
-        double wheelCircumference = 2 * Math.PI * wheelRadius;
-        double angleDiff = 360 * (distanceTravelled / wheelCircumference);
-
-        if (dir == Direction.SOUTH || dir == Direction.WEST)
-            angleDiff = -angleDiff;
-
-        float currentAngle = Float.isNaN(td.wheelAngle1) ? flywheel.railways$getAngle() : td.wheelAngle1;
-        td.wheelAngle0 = (currentAngle + 360) % 360;
-        td.wheelAngle1 = (float) (td.wheelAngle0 + angleDiff);
+        double distanceTravelled = ((IDistanceTravelled) carriageEntity).railways$getDistanceTravelled();
+        float currentAngle = Float.isNaN(data.nextAngle) ? 0 : data.nextAngle;
+        data.previousAngle = Mth.positiveModulo(currentAngle, 360);
+        data.nextAngle = (float) (data.previousAngle + angleDelta(distanceTravelled, assemblyDirection));
     }
 
-    public void renderInContraption(MovementContext context, VirtualRenderWorld renderWorld, ContraptionMatrices matrices, MultiBufferSource buffer) {
-        if (!(context.contraption.getOrCreateClientContraptionLazy().getBlockEntity(context.localPos) instanceof FlywheelBlockEntity flywheelBlockEntity)) return;
-        if (!(context.temporaryData instanceof TemporaryData temporaryData)) return;
+    /** The actor renderer replaces the virtual flywheel block entity in both rendering backends. */
+    @Override
+    public boolean disableBlockEntityRendering() {
+        return true;
+    }
 
-        ((ICarriageFlywheel) flywheelBlockEntity).railways$setAngle(Mth.lerp(
-            AnimationTickHolder.getPartialTicks(),
-            temporaryData.wheelAngle0,
-            temporaryData.wheelAngle1
-        ));
+    public static float getAngle(MovementContext context, float partialTick) {
+        if (!isAnimationEnabled() || !(context.temporaryData instanceof AngleData data))
+            return 0;
+        return Mth.lerp(partialTick, data.previousAngle, data.nextAngle);
+    }
+
+    public static boolean isAnimationEnabled() {
+        // Config registration finishes before a client level can tick, but treating a missing config
+        // as the default value keeps early renderer construction deterministic.
+        return CRConfigs.client() == null || CRConfigs.client().animatedFlywheels.get();
+    }
+
+    static boolean canRotate(Direction assemblyDirection, Direction.Axis flywheelAxis) {
+        return !flywheelAxis.isVertical() && assemblyDirection.getAxis() != flywheelAxis;
+    }
+
+    static double angleDelta(double distanceTravelled, Direction assemblyDirection) {
+        double angle = 360 * distanceTravelled / WHEEL_CIRCUMFERENCE;
+        return assemblyDirection == Direction.SOUTH || assemblyDirection == Direction.WEST ? -angle : angle;
+    }
+
+    /** Fail-fast checks for the upstream wheel geometry and direction convention. */
+    public static void verifyMath() {
+        double fullTurn = angleDelta(WHEEL_CIRCUMFERENCE, Direction.NORTH);
+        double reverseTurn = angleDelta(WHEEL_CIRCUMFERENCE, Direction.SOUTH);
+        if (Math.abs(fullTurn - 360) > 1.0e-6 || Math.abs(reverseTurn + 360) > 1.0e-6)
+            throw new IllegalStateException("Animated flywheel distance-to-angle conversion is invalid");
+        if (!canRotate(Direction.NORTH, Direction.Axis.X)
+            || canRotate(Direction.NORTH, Direction.Axis.Z)
+            || canRotate(Direction.NORTH, Direction.Axis.Y))
+            throw new IllegalStateException("Animated flywheel carriage-axis filtering is invalid");
+    }
+
+    private static final class AngleData {
+        private float previousAngle = Float.NaN;
+        private float nextAngle = Float.NaN;
     }
 }

@@ -1,25 +1,15 @@
-accessWidener   v2  named
+accessWidener   v2  official
 accessible class net/minecraft/client/multiplayer/ClientChunkCache$Storage
 accessible field net/minecraft/client/multiplayer/ClientChunkCache$Storage viewCenterX I
 accessible field net/minecraft/client/multiplayer/ClientChunkCache$Storage viewCenterZ I
 accessible method net/minecraft/client/multiplayer/ClientChunkCache$Storage inRange (II)Z
 accessible method net/minecraft/client/multiplayer/ClientChunkCache$Storage getIndex (II)I
-accessible method net/minecraft/client/multiplayer/ClientChunkCache$Storage getChunk (I)Lnet/minecraft/world/level/chunk/LevelChunk;
 accessible field net/minecraft/client/multiplayer/ClientChunkCache$Storage chunks Ljava/util/concurrent/atomic/AtomicReferenceArray;
 accessible method net/minecraft/client/multiplayer/ClientChunkCache$Storage replace (ILnet/minecraft/world/level/chunk/LevelChunk;)V
 accessible method net/minecraft/client/multiplayer/ClientChunkCache$Storage <init> (Lnet/minecraft/client/multiplayer/ClientChunkCache;I)V
 accessible class net/minecraft/server/level/ChunkMap$TrackedEntity
 accessible field net/minecraft/server/level/ServerPlayer camera Lnet/minecraft/world/entity/Entity;
-accessible field net/minecraft/client/player/LocalPlayer xRotLast F
-accessible field net/minecraft/client/player/LocalPlayer yRotLast F
 accessible field net/minecraft/world/entity/Entity level Lnet/minecraft/world/level/Level;
 accessible field net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate$StructureBlockInfo state Lnet/minecraft/world/level/block/state/BlockState;
 
 accessible class net/minecraft/client/renderer/texture/SpriteContents$AnimatedTexture
-accessible class net/minecraft/world/inventory/MenuType$MenuSupplier
-accessible method net/minecraft/world/inventory/MenuType <init> (Lnet/minecraft/world/inventory/MenuType$MenuSupplier;Lnet/minecraft/world/flag/FeatureFlagSet;)V
-accessible class net/minecraft/client/gui/screens/MenuScreens$ScreenConstructor
-accessible method net/minecraft/client/gui/screens/MenuScreens register (Lnet/minecraft/world/inventory/MenuType;Lnet/minecraft/client/gui/screens/MenuScreens$ScreenConstructor;)V
-accessible field net/minecraft/world/item/CreativeModeTabs SEARCH Lnet/minecraft/resources/ResourceKey;
-accessible field net/minecraft/client/gui/GuiGraphics guiRenderState Lnet/minecraft/client/gui/render/state/GuiRenderState;
-accessible method net/minecraft/client/renderer/rendertype/RenderType create (Ljava/lang/String;Lnet/minecraft/client/renderer/rendertype/RenderSetup;)Lnet/minecraft/client/renderer/rendertype/RenderType;

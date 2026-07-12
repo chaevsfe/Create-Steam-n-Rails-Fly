@@ -44,7 +44,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockAndLightGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.GrassColor;
 import net.minecraft.world.level.Level;
@@ -87,7 +87,8 @@ public class CopycatHeadstockBlock extends WaterloggedCopycatBlock implements Bl
     public boolean isAcceptedRegardless(BlockState material) {
         return CopycatSpecialCases.isBarsMaterial(material);
     }
-    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face,
+    @Override
+    public boolean isIgnoredConnectivitySide(BlockAndLightGetter reader, BlockState state, Direction face,
                                              BlockPos fromPos, BlockPos toPos) {
         Direction facing = state.getValue(FACING);
         BlockState toState = reader.getBlockState(toPos);
@@ -105,7 +106,8 @@ public class CopycatHeadstockBlock extends WaterloggedCopycatBlock implements Bl
             && !(coord != 0 && coord == facing.getAxisDirection()
             .getStep());
     }
-    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
+    @Override
+    public boolean canConnectTexturesToward(BlockAndLightGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
         Direction facing = state.getValue(FACING);
         boolean upsideDown = state.getValue(UPSIDE_DOWN);
         BlockState toState = reader.getBlockState(toPos);

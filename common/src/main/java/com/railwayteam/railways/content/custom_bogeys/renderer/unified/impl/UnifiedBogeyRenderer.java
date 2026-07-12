@@ -32,6 +32,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.CardinalLighting;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
@@ -63,33 +64,39 @@ public class UnifiedBogeyRenderer implements BogeyRenderer, BogeyDisplayHolder {
     }
     @Override
     public BogeyRenderState getRenderData(@Nullable CompoundTag bogeyData, float wheelAngle, float partialTick,
-                                          int packedLight, boolean inContraption) {
+                                          int packedLight, @Nullable CardinalLighting cardinalLighting,
+                                          boolean inContraption) {
         final Renderer renderer = renderers.get(inContraption);
         if (bogeyData == null)
             bogeyData = new CompoundTag();
         renderer.reset();
         renderer.display.update(bogeyData, wheelAngle);
         BogeyRenderState customState = customRenderer == null ? null
-            : customRenderer.getRenderData(bogeyData, wheelAngle, partialTick, packedLight, inContraption);
+            : customRenderer.getRenderData(bogeyData, wheelAngle, partialTick, packedLight, cardinalLighting,
+                inContraption);
         List<Matrix4f> elementPoses = renderer.allElements.stream()
             .map(element -> new Matrix4f(element.pose))
             .toList();
         List<Float> scrollingOffsets = renderer.scrollingElements.stream()
             .map(element -> element.shiftV)
             .toList();
-        return new RenderState(renderer, elementPoses, scrollingOffsets, customState, packedLight);
+        return new RenderState(renderer, elementPoses, scrollingOffsets, customState, packedLight, cardinalLighting);
     }
 
     private record RenderState(Renderer renderer, List<Matrix4f> elementPoses, List<Float> scrollingOffsets,
-                               @Nullable BogeyRenderState customState, int packedLight)
+                               @Nullable BogeyRenderState customState, int packedLight,
+                               @Nullable CardinalLighting cardinalLighting)
         implements BogeyRenderState, SubmitNodeCollector.CustomGeometryRenderer {
 
         @Override
-        public void render(PoseStack poseStack, SubmitNodeCollector queue) {
+        public void submit(PoseStack poseStack, SubmitNodeCollector queue) {
+            poseStack.pushPose();
             poseStack.translate(0, -1.5 - 1 / 128f, 0);
             queue.submitCustomGeometry(poseStack, RenderTypes.cutoutMovingBlock(), this);
+            poseStack.popPose();
+
             if (customState != null)
-                customState.render(poseStack, queue);
+                customState.submit(poseStack, queue);
         }
 
         @Override
@@ -101,6 +108,7 @@ public class UnifiedBogeyRenderer implements BogeyRenderer, BogeyDisplayHolder {
                 setPose(ms.last(), matrices, elementPoses.get(poseIndex++));
 
                 CachedBuffers.partial(element.model(), Blocks.AIR.defaultBlockState())
+                    .cardinalLighting(cardinalLighting)
                     .light(packedLight)
                     .overlay(OverlayTexture.NO_OVERLAY)
                     .renderInto(ms.last(), buffer);
@@ -112,7 +120,8 @@ public class UnifiedBogeyRenderer implements BogeyRenderer, BogeyDisplayHolder {
                 for (RenderedElement element : elements.elements()) {
                     setPose(ms.last(), matrices, elementPoses.get(poseIndex++));
 
-                    sbb.light(packedLight)
+                    sbb.cardinalLighting(cardinalLighting)
+                        .light(packedLight)
                         .overlay(OverlayTexture.NO_OVERLAY)
                         .renderInto(ms.last(), buffer);
                 }
@@ -126,6 +135,7 @@ public class UnifiedBogeyRenderer implements BogeyRenderer, BogeyDisplayHolder {
                 float scrollV = shiftV - Mth.floor(shiftV);
                 scrollV = scrollV * spriteSize * 0.5f;
                 CachedBuffers.partial(element.model, Blocks.AIR.defaultBlockState())
+                    .cardinalLighting(cardinalLighting)
                     .light(packedLight)
                     .overlay(OverlayTexture.NO_OVERLAY)
                     .shiftUVScrolling(element.entry, scrollV)

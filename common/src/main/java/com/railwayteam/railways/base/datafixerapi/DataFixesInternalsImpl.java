@@ -20,6 +20,7 @@ import com.mojang.datafixers.DSL.TypeReference;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.serialization.Dynamic;
+import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.mixin.AccessorDataFixTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.datafix.DataFixTypes;
@@ -29,12 +30,15 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
 import java.util.function.BiFunction;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @ApiStatus.Internal
 public final class DataFixesInternalsImpl extends DataFixesInternals {
     private final @NotNull Schema latestVanillaSchema;
 
     private DataFixerEntry dataFixer;
+    private final AtomicBoolean updateFailureLogged = new AtomicBoolean();
+    private final AtomicBoolean newerVersionLogged = new AtomicBoolean();
 
     public DataFixesInternalsImpl(@NotNull Schema latestVanillaSchema) {
         this.latestVanillaSchema = latestVanillaSchema;
@@ -63,7 +67,37 @@ public final class DataFixesInternalsImpl extends DataFixesInternals {
             return dynamic;
 
         int modDataVersion = DataFixesInternals.getModDataVersion(dynamic);
-        return dataFixer.dataFixer().update(rootType, dynamic, modDataVersion, dataFixer.currentVersion());
+        if (modDataVersion > dataFixer.currentVersion()) {
+            if (newerVersionLogged.compareAndSet(false, true))
+                Railways.LOGGER.warn(
+                    "[Railways DFU] Data version {} is newer than supported version {}; leaving it unchanged",
+                    modDataVersion,
+                    dataFixer.currentVersion()
+                );
+            return dynamic;
+        }
+        if (modDataVersion == dataFixer.currentVersion())
+            return dynamic;
+
+        try {
+            Dynamic<T> updated = dataFixer.dataFixer().update(
+                rootType,
+                dynamic,
+                modDataVersion,
+                dataFixer.currentVersion()
+            );
+            return updated.set(
+                "Railways_DataVersion",
+                updated.createInt(dataFixer.currentVersion())
+            );
+        } catch (RuntimeException | LinkageError exception) {
+            if (updateFailureLogged.compareAndSet(false, true))
+                Railways.LOGGER.error(
+                    "[Railways DFU] A legacy update failed; preserving the original data and disabling no world data",
+                    exception
+                );
+            return dynamic;
+        }
     }
     public void addModDataVersions(@NotNull CompoundTag compound) {
         if (dataFixer != null)

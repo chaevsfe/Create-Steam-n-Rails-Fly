@@ -4,18 +4,14 @@ import com.railwayteam.railways.content.coupling.coupler.TrackCoupler;
 import com.railwayteam.railways.mixin_interfaces.IOccupiedCouplers;
 import com.railwayteam.railways.registry.CREdgePointTypes;
 import com.zurrtum.create.foundation.codec.CreateCodecs;
-import com.zurrtum.create.catnip.data.Couple;
-import com.zurrtum.create.catnip.data.Pair;
+import com.zurrtum.create.content.trains.entity.Carriage;
 import com.zurrtum.create.content.trains.entity.Train;
 import com.zurrtum.create.content.trains.entity.TravellingPoint;
 import com.zurrtum.create.content.trains.graph.DimensionPalette;
 import com.zurrtum.create.content.trains.graph.TrackGraph;
-import com.zurrtum.create.content.trains.graph.TrackNode;
-import com.zurrtum.create.content.trains.signal.TrackEdgePoint;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import org.apache.commons.lang3.mutable.MutableObject;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -25,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -36,6 +33,9 @@ public abstract class MixinTrainCoupler implements IOccupiedCouplers {
 
     @Shadow
     public boolean updateSignalBlocks;
+
+    @Shadow
+    public List<Carriage> carriages;
 
     @Unique
     private final Set<UUID> railways$occupiedCouplers = new HashSet<>();
@@ -94,18 +94,38 @@ public abstract class MixinTrainCoupler implements IOccupiedCouplers {
         railways$occupiedCouplers.clear();
     }
 
-    @Inject(
-        method = "lambda$collectInitiallyOccupiedSignalBlocks$28",
-        at = @At("HEAD"),
-        cancellable = true
-    )
-    private void railways$reAddOccupiedCouplers(MutableObject<UUID> prevGroup, Double distance,
-                                                Pair<TrackEdgePoint, Couple<TrackNode>> couple,
-                                                CallbackInfoReturnable<Boolean> cir) {
-        if (couple.getFirst() instanceof TrackCoupler coupler) {
-            railways$occupiedCouplers.add(coupler.getId());
-            cir.setReturnValue(false);
-        }
+    /**
+     * Re-scan the initially occupied train path for couplers after Create has rebuilt its signal
+     * occupancy.  Older ports injected into a numbered compiler-generated lambda here; those
+     * names are not stable across Create releases (the same lambda is {@code $1} in 26.2).
+     * Keeping the hook on the declared method makes it resilient to lambda renumbering.
+     */
+    @Inject(method = "collectInitiallyOccupiedSignalBlocks", at = @At("TAIL"))
+    private void railways$reAddOccupiedCouplers(CallbackInfo ci) {
+        TravellingPoint trailingPoint = carriages.getLast().getTrailingPoint();
+        if (trailingPoint.edge == null)
+            return;
+
+        TravellingPoint couplerScout = new TravellingPoint(
+            trailingPoint.node1,
+            trailingPoint.node2,
+            trailingPoint.edge,
+            trailingPoint.position,
+            false
+        );
+        ((Train) (Object) this).forEachTravellingPointBackwards((point, distance) ->
+            couplerScout.travel(
+                graph,
+                distance,
+                couplerScout.follow(point),
+                (distanceToPoint, edgePoint) -> {
+                    if (edgePoint.getFirst() instanceof TrackCoupler coupler)
+                        railways$occupiedCouplers.add(coupler.getId());
+                    return false;
+                },
+                couplerScout.ignoreTurns()
+            )
+        );
     }
 
     @Inject(method = "write", at = @At("RETURN"))

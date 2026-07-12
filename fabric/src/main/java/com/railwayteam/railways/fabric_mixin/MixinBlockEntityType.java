@@ -4,6 +4,7 @@ import com.railwayteam.railways.content.buffer.headstock.CopycatHeadstockBlock;
 import com.railwayteam.railways.content.conductor.vent.VentBlock;
 import com.zurrtum.create.AllBlockEntityTypes;
 import com.zurrtum.create.content.decoration.slidingDoor.SlidingDoorBlock;
+import com.zurrtum.create.content.kinetics.flywheel.FlywheelBlock;
 import com.zurrtum.create.content.trains.track.TrackBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,6 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * The same problem applies to Railways' locometal sliding/folding doors ({@link SlidingDoorBlock}
  * subclasses) — they share {@code AllBlockEntityTypes.SLIDING_DOOR} with Create's own doors but are
  * not in its valid-block set, causing a crash on placement in 1.21.
+ * Locometal flywheels likewise share {@code AllBlockEntityTypes.FLYWHEEL}.
  */
 @Mixin(BlockEntityType.class)
 public class MixinBlockEntityType {
@@ -36,6 +38,8 @@ public class MixinBlockEntityType {
         if ((Object) this == AllBlockEntityTypes.COPYCAT && state.getBlock() instanceof VentBlock)
             cir.setReturnValue(true);
         if ((Object) this == AllBlockEntityTypes.SLIDING_DOOR && state.getBlock() instanceof SlidingDoorBlock)
+            cir.setReturnValue(true);
+        if ((Object) this == AllBlockEntityTypes.FLYWHEEL && state.getBlock() instanceof FlywheelBlock)
             cir.setReturnValue(true);
     }
 }

@@ -23,7 +23,7 @@ import com.zurrtum.create.client.content.trains.TrainHUD;
 import com.zurrtum.create.content.trains.entity.CarriageContraptionEntity;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -40,7 +40,7 @@ public class MixinTrainHUD {
     }
 
     @Inject(method = "renderOverlay", at = @At("HEAD"))
-    private static void railways$renderOverlayHook(Minecraft mc, GuiGraphics graphics, DeltaTracker deltaTracker, CallbackInfoReturnable<Boolean> ci) {
+    private static void railways$renderOverlayHook(Minecraft mc, GuiGraphicsExtractor graphics, DeltaTracker deltaTracker, CallbackInfoReturnable<Boolean> ci) {
         TrainHUDSwitchExtension.renderOverlay(graphics, deltaTracker.getGameTimeDeltaPartialTick(false),
                 mc.getWindow().getGuiScaledWidth(), mc.getWindow().getGuiScaledHeight());
     }

@@ -21,7 +21,7 @@ package com.railwayteam.railways.content.fuel;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import net.minecraft.ResourceLocationException;
+import net.minecraft.IdentifierException;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -84,7 +84,7 @@ public class LiquidFuelType {
                                         type.fluids.add(() -> fluid);
                                     }
                                 }
-                            } catch (ResourceLocationException ignored) {}
+                            } catch (IdentifierException ignored) {}
                         }
                     }
                 }

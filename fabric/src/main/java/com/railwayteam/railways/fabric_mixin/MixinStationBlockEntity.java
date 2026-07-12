@@ -9,6 +9,7 @@ import com.zurrtum.create.content.trains.bogey.BogeyStyle;
 import com.zurrtum.create.content.trains.station.StationBlockEntity;
 import com.zurrtum.create.content.trains.track.ITrackBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -21,7 +22,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Mixin(value = StationBlockEntity.class, remap = false)
@@ -36,6 +36,37 @@ public class MixinStationBlockEntity {
 		railways$bogeysBeforeClick = railways$collectBogeys(pos);
 	}
 
+	@Inject(
+		method = "trackClicked(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;Lcom/zurrtum/create/content/trains/track/ITrackBlock;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;)Z",
+		at = @At(
+			value = "INVOKE",
+			target = "Lnet/minecraft/world/level/Level;destroyBlock(Lnet/minecraft/core/BlockPos;Z)Z",
+			ordinal = 0,
+			shift = At.Shift.BEFORE,
+			remap = true
+		),
+		cancellable = true,
+		remap = false
+	)
+	private void railways$rejectIncompatibleBogey(Player player, InteractionHand hand, ITrackBlock track,
+														BlockState state, BlockPos pos,
+														CallbackInfoReturnable<Boolean> cir) {
+		Identifier trackType = CRTrackMaterials.getType(track.getMaterial());
+		if (trackType.equals(CRTrackMaterials.CRTrackType.MONORAIL)
+			|| trackType.equals(CRTrackMaterials.CRTrackType.UNIVERSAL))
+			return;
+
+		var styleData = BogeyMenuHandlerServer.getStyle(player.getUUID());
+		if (CRBogeyStyles.resolveForTrack(
+			styleData.getFirst(), styleData.getSecond(), trackType, true
+		).isPresent())
+			return;
+
+		player.sendOverlayMessage(Component.translatable("railways.bogey.wrong_gauge"));
+		railways$clearPlacementContext();
+		cir.setReturnValue(false);
+	}
+
 	@Inject(method = "trackClicked", at = @At("RETURN"))
 	private void railways$clearPlayer(Player player, InteractionHand hand, ITrackBlock track, BlockState state,
 									  BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
@@ -43,9 +74,14 @@ public class MixinStationBlockEntity {
 			if (cir.getReturnValueZ())
 				railways$applyStyleToNewBogeys(player, track, pos);
 		} finally {
-			BogeyMenuHandlerServer.setCurrentPlayer(null);
-			railways$bogeysBeforeClick = Set.of();
+			railways$clearPlacementContext();
 		}
+	}
+
+	@Unique
+	private void railways$clearPlacementContext() {
+		BogeyMenuHandlerServer.setCurrentPlayer(null);
+		railways$bogeysBeforeClick = Set.of();
 	}
 
 	@Unique
@@ -73,10 +109,12 @@ public class MixinStationBlockEntity {
 			return;
 
 		var styleData = BogeyMenuHandlerServer.getStyle(player.getUUID());
-		BogeyStyle style = styleData.getFirst();
-		Optional<BogeyStyle> mappedStyle = CRBogeyStyles.getMapped(style, trackType, true);
-		if (mappedStyle.isPresent())
-			style = mappedStyle.get();
+		var resolved = CRBogeyStyles.resolveForTrack(
+			styleData.getFirst(), styleData.getSecond(), trackType, true
+		);
+		if (resolved.isEmpty())
+			return;
+		BogeyStyle style = resolved.get().style();
 		if (style == AllBogeyStyles.STANDARD)
 			return;
 

@@ -174,7 +174,7 @@ public class TrackEdgePointHighlighter {
                 Vec3 point, sideA, sideB;
 
                 if (padHovered) {
-                    Vec3 arrowCenter = be.getBlockPos().getCenter().add(0, 0.625f, 0);
+                    Vec3 arrowCenter = Vec3.atCenterOf(be.getBlockPos()).add(0, 0.625f, 0);
                     Vec3 back = forward.scale(0.3f);
                     Vec3 realSide = side.scale(0.45f + 0.3f + 0.5f);
 

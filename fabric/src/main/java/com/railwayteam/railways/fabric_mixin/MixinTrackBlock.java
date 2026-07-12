@@ -8,8 +8,6 @@ import com.railwayteam.railways.registry.CRBogeyStyles;
 import com.railwayteam.railways.registry.CRShapes;
 import com.railwayteam.railways.registry.CRTrackMaterials;
 import com.zurrtum.create.AllBogeyStyles;
-import com.zurrtum.create.content.trains.bogey.AllBogeySizes;
-import com.zurrtum.create.content.trains.bogey.BogeySize;
 import com.zurrtum.create.content.trains.bogey.BogeyStyle;
 import com.zurrtum.create.content.trains.track.TrackBlock;
 import com.zurrtum.create.content.trains.track.TrackBlockEntity;
@@ -23,7 +21,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
@@ -33,8 +30,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Optional;
 
 @Mixin(value = TrackBlock.class, remap = false)
 public class MixinTrackBlock {
@@ -66,27 +61,18 @@ public class MixinTrackBlock {
             return;
 
         var styleData = BogeyMenuHandlerServer.getStyle(BogeyMenuHandlerServer.getCurrentPlayer());
-        BogeyStyle style = styleData.getFirst();
         Identifier trackType = CRTrackMaterials.getType(((TrackBlock) (Object) this).getMaterial());
+		var resolved = CRBogeyStyles.resolveForTrack(
+			styleData.getFirst(), styleData.getSecond(), trackType, true
+		);
+		if (resolved.isEmpty())
+			return;
 
-        Optional<BogeyStyle> mappedStyleOptional = CRBogeyStyles.getMapped(style, trackType, true);
-        if (mappedStyleOptional.isPresent())
-            style = mappedStyleOptional.get();
+		BogeyStyle style = resolved.get().style();
         if (style == AllBogeyStyles.STANDARD)
             return;
 
-        BogeySize size = styleData.getSecond() != null
-            ? styleData.getSecond()
-            : AllBogeySizes.allSortedIncreasing().get(0);
-        int escape = AllBogeySizes.allSortedIncreasing().size();
-        while (!style.validSizes().contains(size)) {
-            if (escape-- <= 0)
-                return;
-            size = size.nextBySize();
-        }
-
-        Block block = style.getBlockForSize(size);
-        cir.setReturnValue(block.defaultBlockState()
+		cir.setReturnValue(resolved.get().block().defaultBlockState()
             .setValue(BlockStateProperties.HORIZONTAL_AXIS,
                 state.getValue(TrackBlock.SHAPE) == TrackShape.XO ? Direction.Axis.X : Direction.Axis.Z));
     }

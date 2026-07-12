@@ -20,6 +20,12 @@ package com.railwayteam.railways.fabric;
 
 import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.config.fabric.CRConfigsImpl;
+import com.railwayteam.railways.content.custom_bogeys.BogeyGaugeRuntimeChecks;
+import com.railwayteam.railways.content.custom_tracks.monorail.MonorailRuntimeChecks;
+import com.railwayteam.railways.content.fuel.tank.FuelRuntimeChecks;
+import com.railwayteam.railways.content.palettes.painting.fabric.PaintPitcherRuntimeChecks;
+import com.railwayteam.railways.content.roller_extensions.TrackReplacePaverRuntimeChecks;
+import com.railwayteam.railways.content.shadow_realm.ShadowRealmRuntimeChecks;
 import com.railwayteam.railways.fabric.events.CommonEventsFabric;
 import com.railwayteam.railways.multiloader.CommandRegistrar;
 import com.railwayteam.railways.multiloader.fabric.PlayerSelectionImpl;
@@ -32,8 +38,15 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 
 public class RailwaysImpl implements ModInitializer {
 	public void onInitialize() {
+		RailwaysCreateRegisterPlugin.verifyEarlyRegistrationComplete();
 		PlayerSelectionImpl.init();
 		Railways.init();
+		BogeyGaugeRuntimeChecks.register();
+		MonorailRuntimeChecks.register();
+		PaintPitcherRuntimeChecks.register();
+		FuelRuntimeChecks.register();
+		TrackReplacePaverRuntimeChecks.register();
+		ShadowRealmRuntimeChecks.register();
 		CRConfigsImpl.register();
 		CRParticleTypesParticleEntryImpl.register();
 		CommonEventsFabric.init();

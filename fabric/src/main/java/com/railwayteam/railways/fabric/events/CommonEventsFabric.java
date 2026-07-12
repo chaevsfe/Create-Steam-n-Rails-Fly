@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CommonEventsFabric {
 	public static void init() {
-		ServerTickEvents.START_WORLD_TICK.register(CommonEvents::onWorldTickStart);
+		ServerTickEvents.START_LEVEL_TICK.register(CommonEvents::onWorldTickStart);
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> CommonEvents.onPlayerJoin(handler.player));
 		ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(((server, resourceManager, success) -> {
 			CommonEvents.onTagsUpdated();

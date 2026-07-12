@@ -6,6 +6,7 @@
 	"flip_v": true,
 	"model": "railways:models/block/bogey/narrow/scotch_wheel_pins.obj",
 	"textures": {
+		"particle": "#0",
 		"0": "railways:block/bogeys/narrow/small_bogey"
 	}
 }

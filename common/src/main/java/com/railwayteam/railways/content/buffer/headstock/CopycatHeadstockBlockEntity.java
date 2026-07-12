@@ -21,6 +21,7 @@ package com.railwayteam.railways.content.buffer.headstock;
 import com.railwayteam.railways.content.buffer.IDyedBuffer;
 import com.railwayteam.railways.util.BlockStateUtils;
 import com.zurrtum.create.content.decoration.copycat.CopycatBlockEntity;
+import com.zurrtum.create.AllItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.DyeColor;
@@ -80,7 +81,7 @@ public class CopycatHeadstockBlockEntity extends CopycatBlockEntity implements I
     public InteractionResult applyDyeIfValid(ItemStack stack) {
         if (!(stack.getItem()instanceof DyeItem dyeItem))
             return InteractionResult.PASS;
-        DyeColor color = dyeItem.getDyeColor();
+        DyeColor color = AllItemTags.getDyeColor(stack);
         if (color == this.color)
             return InteractionResult.PASS;
         if (level.isClientSide() && !isVirtual())

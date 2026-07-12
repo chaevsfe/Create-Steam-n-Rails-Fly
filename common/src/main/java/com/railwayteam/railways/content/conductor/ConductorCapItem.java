@@ -20,7 +20,6 @@ package com.railwayteam.railways.content.conductor;
 
 import com.railwayteam.railways.Railways;
 import com.zurrtum.create.AllBlocks;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
@@ -54,9 +53,8 @@ public abstract class ConductorCapItem extends ArmorItem {
     this.textureStr = textureId.toString();
   }
 
-  @ExpectPlatform
   public static ConductorCapItem create(Properties props, DyeColor color) {
-    throw new AssertionError();
+    return com.railwayteam.railways.content.conductor.fabric.ConductorCapItemImpl.create(props, color);
   }
 
   static boolean isCasing (Block block) { return block == AllBlocks.ANDESITE_CASING; }

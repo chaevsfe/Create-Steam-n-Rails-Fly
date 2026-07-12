@@ -127,7 +127,7 @@ public abstract class RailwaysRecipeProvider implements DataProvider {
         }
 
         public static ItemLike brassCasing() {
-            return Blocks.COPPER_BLOCK;
+            return Blocks.COPPER_BLOCK.weathering().unaffected();
         }
 
         public static ItemLike andesiteCasing() {

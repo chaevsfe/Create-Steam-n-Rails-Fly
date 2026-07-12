@@ -116,14 +116,14 @@ public class TrackBufferBlockItem extends TrackTargetingBlockItem {
 				return InteractionResult.FAIL;
 
 			if (result.getValue().feedback != null) {
-				player.displayClientMessage(CreateLang.translateDirect(result.getValue().feedback)
-					.withStyle(ChatFormatting.RED), true);
+				player.sendOverlayMessage(CreateLang.translateDirect(result.getValue().feedback)
+					.withStyle(ChatFormatting.RED));
 				AllSoundEvents.DENY.play(level, null, pos, .5f, 1);
 				return InteractionResult.FAIL;
 			}
 			if (!isOkShape(state)) {
-				player.displayClientMessage(Component.translatable("railways.buffer.invalid_shape")
-					.withStyle(ChatFormatting.RED), true);
+				player.sendOverlayMessage(Component.translatable("railways.buffer.invalid_shape")
+					.withStyle(ChatFormatting.RED));
 				AllSoundEvents.DENY.play(level, null, pos, .5f, 1);
 				return InteractionResult.FAIL;
 			}
@@ -183,8 +183,8 @@ public class TrackBufferBlockItem extends TrackTargetingBlockItem {
 		Level level = net.minecraft.client.Minecraft.getInstance().level;
 
 		if (player != null) {
-			player.displayClientMessage(CreateLang.translateDirect("track_target.invalid")
-				.withStyle(ChatFormatting.RED), true);
+			player.sendOverlayMessage(CreateLang.translateDirect("track_target.invalid")
+				.withStyle(ChatFormatting.RED));
 			AllSoundEvents.DENY.play(level, player, player.position(), .5f, 1);
 		}
 		return false;

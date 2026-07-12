@@ -5,7 +5,6 @@ import com.railwayteam.railways.multiloader.C2SPacket;
 import com.zurrtum.create.AllSynchedDatas;
 import com.zurrtum.create.content.equipment.toolbox.ToolboxHandler;
 import com.zurrtum.create.content.equipment.toolbox.ToolboxInventory;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -86,8 +85,7 @@ public class MountedToolboxEquipPacket implements C2SPacket {
 		ToolboxHandler.syncData(player, compound);
 	}
 
-	@ExpectPlatform
 	public static void doEquip(ServerPlayer player, int hotbarSlot, ItemStack held, ToolboxInventory inv) {
-		throw new AssertionError();
+		com.railwayteam.railways.content.conductor.toolbox.fabric.MountedToolboxEquipPacketImpl.doEquip(player, hotbarSlot, held, inv);
 	}
 }

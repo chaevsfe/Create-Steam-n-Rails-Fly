@@ -21,7 +21,6 @@ package com.railwayteam.railways.content.palettes.boiler;
 import com.railwayteam.railways.content.palettes.PalettesColor;
 import com.railwayteam.railways.registry.CRPalettes.Wrapping;
 import com.zurrtum.create.foundation.data.SpecialBlockStateGen;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,9 +34,8 @@ public abstract class BoilerGenerator extends SpecialBlockStateGen {
         this.wrapping = wrapping;
     }
 
-    @ExpectPlatform
     public static BoilerGenerator create(@NotNull PalettesColor color, @Nullable Wrapping wrapping) {
-        throw new AssertionError();
+        return com.railwayteam.railways.content.palettes.boiler.fabric.BoilerGeneratorImpl.create(color, wrapping);
     }
     protected int getXRotation(BlockState state) {
         return 0;

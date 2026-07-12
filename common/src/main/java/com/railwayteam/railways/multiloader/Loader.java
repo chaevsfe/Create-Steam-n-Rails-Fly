@@ -20,7 +20,6 @@ package com.railwayteam.railways.multiloader;
 
 import com.railwayteam.railways.compat.Mods;
 import com.railwayteam.railways.util.TextUtils;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
 import java.util.Locale;
@@ -53,8 +52,7 @@ public enum Loader {
 	}
 
 	@Internal
-	@ExpectPlatform
 	private static Loader getCurrent() {
-		throw new AssertionError();
+		return com.railwayteam.railways.multiloader.fabric.LoaderImpl.getCurrent();
 	}
 }

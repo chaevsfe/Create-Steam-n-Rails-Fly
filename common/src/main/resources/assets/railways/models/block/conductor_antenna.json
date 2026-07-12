@@ -2,6 +2,7 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
+		"particle": "#redstone_antenna",
 		"redstone_antenna": "create:block/redstone_antenna_powered"
 	},
 	"elements": [

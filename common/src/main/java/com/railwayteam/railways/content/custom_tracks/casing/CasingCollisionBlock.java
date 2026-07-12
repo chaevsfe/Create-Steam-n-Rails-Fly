@@ -21,7 +21,6 @@ package com.railwayteam.railways.content.custom_tracks.casing;
 import com.railwayteam.railways.registry.CRBlockEntities;
 import com.railwayteam.railways.registry.CRShapes;
 import com.zurrtum.create.foundation.block.ProperWaterloggedBlock;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -56,9 +55,8 @@ public abstract class CasingCollisionBlock extends Block implements EntityBlock,
         registerDefaultState(defaultBlockState().setValue(WATERLOGGED, false));
     }
 
-    @ExpectPlatform
     public static CasingCollisionBlock create(Properties properties) {
-        throw new AssertionError();
+        return com.railwayteam.railways.content.custom_tracks.casing.fabric.CasingCollisionBlockImpl.create(properties);
     }
 
     @SuppressWarnings("deprecation")

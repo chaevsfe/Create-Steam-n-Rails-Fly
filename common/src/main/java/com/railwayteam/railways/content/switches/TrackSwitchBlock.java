@@ -25,7 +25,6 @@ import com.zurrtum.create.AllTags;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import com.zurrtum.create.content.trains.entity.TravellingPoint;
 import com.zurrtum.create.foundation.block.IBE;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
@@ -162,14 +161,12 @@ public abstract class TrackSwitchBlock extends HorizontalDirectionalBlock implem
       }
   }
 
-  @ExpectPlatform
   public static TrackSwitchBlock manual(Properties properties) {
-    throw new AssertionError();
+    return com.railwayteam.railways.content.switches.fabric.TrackSwitchBlockImpl.manual(properties);
   }
 
-  @ExpectPlatform
   public static TrackSwitchBlock automatic(Properties properties) {
-    throw new AssertionError();
+    return com.railwayteam.railways.content.switches.fabric.TrackSwitchBlockImpl.automatic(properties);
   }
 
   protected TrackSwitchBlock(Properties properties, boolean isAutomatic) {

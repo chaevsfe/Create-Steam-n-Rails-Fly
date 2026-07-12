@@ -70,14 +70,14 @@ import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import com.zurrtum.create.catnip.data.Couple;
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.BlockItemTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
@@ -107,19 +107,16 @@ import static com.railwayteam.railways.util.CreateBehaviourCompat.interactionBeh
 import static com.zurrtum.create.foundation.data.TagGen.pickaxeOnly;
 
 public class BuilderTransformers {
-    @ExpectPlatform
     public static <B extends MonoBogeyBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> monobogey() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.monobogey();
     }
 
-    @ExpectPlatform
     public static <B extends InvisibleBogeyBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> invisibleBogey() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.invisibleBogey();
     }
 
-    @ExpectPlatform
     public static <B extends InvisibleMonoBogeyBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> invisibleMonoBogey() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.invisibleMonoBogey();
     }
 
     @ApiStatus.Internal
@@ -132,49 +129,40 @@ public class BuilderTransformers {
             .loot((p, l) -> p.dropOther(l, Blocks.ANDESITE));
     }
 
-    @ExpectPlatform
     public static <B extends CRBogeyBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> standardBogey() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.standardBogey();
     }
 
-    @ExpectPlatform
     public static <B extends CRBogeyBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> wideBogey() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.wideBogey();
     }
 
-    @ExpectPlatform
     public static <B extends CRBogeyBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> narrowBogey() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.narrowBogey();
     }
 
-    @ExpectPlatform
     public static <B extends SemaphoreBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> semaphore() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.semaphore();
     }
 
-    @ExpectPlatform
     public static <B extends TrackCouplerBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> trackCoupler() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.trackCoupler();
     }
 
-    @ExpectPlatform
     public static <B extends TrackSwitchBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> trackSwitch(boolean andesite) {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.trackSwitch(andesite);
     }
 
-    @ExpectPlatform
     public static <B extends ConductorWhistleFlagBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> conductorWhistleFlag() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.conductorWhistleFlag();
     }
 
-    @ExpectPlatform
     public static <B extends DieselSmokeStackBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> dieselSmokeStack() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.dieselSmokeStack();
     }
 
-    @ExpectPlatform
     public static <B extends VentBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> conductorVent() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.conductorVent();
     }
 
     public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> smokestack() {
@@ -207,56 +195,46 @@ public class BuilderTransformers {
             });
     }
 
-    @ExpectPlatform
     public static NonNullBiConsumer<DataGenContext<Block, SmokeStackBlock>, RegistrateBlockstateProvider> defaultSmokeStack(String variant, RotationType rotType) {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.defaultSmokeStack(variant, rotType);
     }
 
-    @ExpectPlatform
     public static <B extends Block & VariableStack> NonNullBiConsumer<DataGenContext<Block, B>, RegistrateBlockstateProvider> variableSmokeStack(String variant, RotationType rotType) {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.variableSmokeStack(variant, rotType);
     }
 
-    @ExpectPlatform
     public static <B extends CasingCollisionBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> casingCollision() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.casingCollision();
     }
 
-    @ExpectPlatform
     public static <B extends HandcarBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> handcar() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.handcar();
     }
 
-    @ExpectPlatform
     public static <B extends GenericCrossingBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> genericCrossing() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.genericCrossing();
     }
 
-    @ExpectPlatform
     public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> locoMetalBase(PalettesColor color, @Nullable String type) {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.locoMetalBase(color, type);
     }
 
-    @ExpectPlatform
     public static <B extends RotatedPillarBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> locoMetalPillar(PalettesColor color) {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.locoMetalPillar(color);
     }
 
     @SafeVarargs
-    @ExpectPlatform
     public static <B extends MetalLadderBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> locoMetalLadder(PalettesColor color, String ladderType, TagKey<Item>... tags) {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.locoMetalLadder(color, ladderType, tags);
     }
 
     @SafeVarargs
-    @ExpectPlatform
     public static <B extends FlywheelBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> locoMetalFlywheel(PalettesColor color, TagKey<Item>... tags) {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.locoMetalFlywheel(color, tags);
     }
 
-    @ExpectPlatform
     public static <B extends PalettesSmokeboxBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> locoMetalSmokeBox(PalettesColor color, @Nullable Wrapping wrapping) {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.locoMetalSmokeBox(color, wrapping);
     }
 
     public static <B extends BoilerBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> locoMetalBoiler(PalettesColor color, @Nullable Wrapping wrapping) {
@@ -288,55 +266,46 @@ public class BuilderTransformers {
             .tag(blockTags)
             .loot((lr, block) -> lr.add(block, lr.createDoorTable(block)))
             .item()
-            .tag(ItemTags.DOORS)
+            .tag(BlockItemTags.DOORS.item())
             .tag(itemTags)
             .transform(locometalDoorItemModel(color, type))
             .build();
     }
 
-    @ExpectPlatform
     public static <B extends DoorBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> locometalHingedDoorBlockState(PalettesColor color, String type) {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.locometalHingedDoorBlockState(color, type);
     }
 
-    @ExpectPlatform
     public static <B extends DoorBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> locometalSlidingDoorBlockState(PalettesColor color, String type) {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.locometalSlidingDoorBlockState(color, type);
     }
 
-    @ExpectPlatform
     public static <B extends DoorBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> locometalFoldingDoorBlockState(PalettesColor color, String type) {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.locometalFoldingDoorBlockState(color, type);
     }
 
-    @ExpectPlatform
     public static <B extends RotatedPillarWindowBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> locometalWindow(PalettesColor color, WindowType type) {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.locometalWindow(color, type);
     }
 
-    @ExpectPlatform
     public static <B extends PalettesTrapDoorBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> locometalTrapdoor(PalettesColor color) {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.locometalTrapdoor(color);
     }
 
-    @ExpectPlatform
     public static <B extends HazardStripesBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> hazardStripes(boolean chevron) {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.hazardStripes(chevron);
     }
 
-    @ExpectPlatform
     public static <I extends BlockItem, P> NonNullUnaryOperator<ItemBuilder<I, P>> locometalDoorItemModel(PalettesColor color, String type) {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.locometalDoorItemModel(color, type);
     }
 
-    @ExpectPlatform
     public static <I extends Item, P> NonNullUnaryOperator<ItemBuilder<I, P>> locoMetalItem(PalettesColor color) {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.locoMetalItem(color);
     }
 
-    @ExpectPlatform
     public static <I extends PaintPitcherItem, P> NonNullUnaryOperator<ItemBuilder<I, P>> paintPitcher() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.paintPitcher();
     }
 
     public static String colorNameUnderscore(@NotNull PalettesColor color) {
@@ -347,63 +316,51 @@ public class BuilderTransformers {
         return color == null ? "" : color.getSerializedName() + "_";
     }
 
-    @ExpectPlatform
     public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> variantBuffer() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.variantBuffer();
     }
 
-    @ExpectPlatform
     public static <I extends Item, P> NonNullUnaryOperator<ItemBuilder<I, P>> variantBufferItem() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.variantBufferItem();
     }
 
-    @ExpectPlatform
     public static <B extends CopycatHeadstockBarsBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> copycatHeadstockBars() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.copycatHeadstockBars();
     }
 
-    @ExpectPlatform
     public static <B extends TrackBufferBlock<?>, P> NonNullUnaryOperator<BlockBuilder<B, P>> bufferBlockState(Function<BlockState, Identifier> modelFunc, Function<BlockState, Direction> facingFunc) {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.bufferBlockState(modelFunc, facingFunc);
     }
 
-    @ExpectPlatform
     public static <B extends MonoTrackBufferBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> monoBuffer() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.monoBuffer();
     }
 
-    @ExpectPlatform
     public static <B extends LinkPinBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> linkAndPin() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.linkAndPin();
     }
 
-    @ExpectPlatform
     public static <B extends HeadstockBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> headstock() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.headstock();
     }
 
-    @ExpectPlatform
     public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> invisibleBlockState() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.invisibleBlockState();
     }
 
-    @ExpectPlatform
     public static <B extends CopycatHeadstockBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> copycatHeadstock() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.copycatHeadstock();
     }
 
-    @ExpectPlatform
     public static <I extends Item, P> NonNullUnaryOperator<ItemBuilder<I, P>> copycatHeadstockItem() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.copycatHeadstockItem();
     }
 
-    @ExpectPlatform
     public static <B extends GenericDyeableSingleBufferBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> bigBuffer() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.bigBuffer();
     }
 
-    @ExpectPlatform
     public static <B extends GenericDyeableSingleBufferBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> smallBuffer() {
-        throw new AssertionError();
+        return com.railwayteam.railways.base.data.fabric.BuilderTransformersImpl.smallBuffer();
     }
 }

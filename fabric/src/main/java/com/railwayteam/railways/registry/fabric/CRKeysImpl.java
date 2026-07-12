@@ -18,15 +18,15 @@
 
 package com.railwayteam.railways.registry.fabric;
 
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 
 public class CRKeysImpl {
     public static void registerKeyBinding(KeyMapping keyMapping) {
-        KeyBindingHelper.registerKeyBinding(keyMapping);
+        KeyMappingHelper.registerKeyMapping(keyMapping);
     }
 
     public static int getBoundCode(KeyMapping keyMapping) {
-        return KeyBindingHelper.getBoundKeyOf(keyMapping).getValue();
+        return KeyMappingHelper.getBoundKeyOf(keyMapping).getValue();
     }
 }

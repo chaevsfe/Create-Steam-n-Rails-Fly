@@ -20,7 +20,6 @@ package com.railwayteam.railways.multiloader.fluid;
 
 import com.mojang.serialization.Codec;
 import com.zurrtum.create.foundation.fluid.FluidIngredient;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -31,14 +30,12 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class MultiloaderFluidStack {
 
-    @ExpectPlatform
     private static Codec<MultiloaderFluidStack> makeCodec() {
-        throw new AssertionError();
+        return com.railwayteam.railways.multiloader.fluid.fabric.MultiloaderFluidStackImpl.makeCodec();
     }
 
-    @ExpectPlatform
     private static MultiloaderFluidStack makeEmpty() {
-        throw new AssertionError();
+        return com.railwayteam.railways.multiloader.fluid.fabric.MultiloaderFluidStackImpl.makeEmpty();
     }
 
     public static final Codec<MultiloaderFluidStack> CODEC = makeCodec();
@@ -49,9 +46,8 @@ public abstract class MultiloaderFluidStack {
         return create(fluid, amount, null);
     }
 
-    @ExpectPlatform
     public static MultiloaderFluidStack create(Fluid fluid, long amount, @Nullable CompoundTag nbt) {
-        throw new AssertionError();
+        return com.railwayteam.railways.multiloader.fluid.fabric.MultiloaderFluidStackImpl.create(fluid, amount, nbt);
     }
 
     public abstract MultiloaderFluidStack setAmount(long amount);
@@ -85,9 +81,8 @@ public abstract class MultiloaderFluidStack {
 
     public abstract CompoundTag writeToNBT(CompoundTag nbt);
 
-    @ExpectPlatform
     public static MultiloaderFluidStack loadFluidStackFromNBT(CompoundTag tag) {
-        throw new AssertionError();
+        return com.railwayteam.railways.multiloader.fluid.fabric.MultiloaderFluidStackImpl.loadFluidStackFromNBT(tag);
     }
 
     public abstract void setTag(CompoundTag tag);
@@ -111,9 +106,8 @@ public abstract class MultiloaderFluidStack {
         return getTag() != null;
     }
 
-    @ExpectPlatform
     public static MultiloaderFluidStack readFromPacket(FriendlyByteBuf buffer) {
-        throw new AssertionError();
+        return com.railwayteam.railways.multiloader.fluid.fabric.MultiloaderFluidStackImpl.readFromPacket(buffer);
     }
 
     public abstract FriendlyByteBuf writeToPacket(FriendlyByteBuf buffer);

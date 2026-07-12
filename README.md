@@ -1,57 +1,97 @@
 <div align="center">
-  <img src=".idea/icon.png" width="192" height="192" alt="Logo of mod">
-  <h1>Create Steam 'n' Rails</h1>
+  <img src=".idea/icon.png" width="192" height="192" alt="Create: Steam 'n' Rails logo">
+  <h1>Create: Steam 'n' Rails — Create Fly port</h1>
+  <p>Steam 'n' Rails for Fabric, Minecraft 26.2, and Create Fly.</p>
 
 [![discord-plural](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-plural_vector.svg)](https://discord.gg/UKFkg5NQzu)
 </div>
 
-**Create Steam 'n' Rails** is an addon mod for Create that aims to extend Create's train and steam systems. Current features include custom tracks, semaphores, and conductors.
+This repository ports [Create: Steam 'n' Rails](https://github.com/Layers-of-Railways/Railway) to the latest public version of [Create Fly](https://github.com/ZurrTum/Create-Fly) for stable Minecraft 26.2. Steam 'n' Rails expands Create's train and steam systems with custom tracks, semaphores, conductors, bogeys, palettes, and other railway content.
 
-## Contributing (for translators):
-We use [Crowdin](https://crowdin.com/project/create-steam-n-rails-official) as our translation platform. Please use the [translator's chat](https://discord.com/channels/706277846389227612/1049156352553000970) on our Discord to ask questions or request a new language.  
-Please DM [`@slimeistdev`](https://discord.com/users/880626913813598219) on Discord to request access to the translator's chat.
+Ready-to-install builds are available on the [GitHub Releases page](https://github.com/cat4blep/Create-Steam-n-Rails-Fly/releases).
 
-## Contributing (for team members):
-1. Create a new branch for your feature (named `1.20/<feat>`). This branch should probably be in the [development repo](https://github.com/Layers-of-Railways/RailwaySecretDev)
-2. Make a pull request so that it doesn't get lost
-3. Write your feature
-4. Have somebody review it, and merge
+> [!IMPORTANT]
+> This build targets stable Minecraft **26.2** exactly. The `rc-2` text in the historical Create Fly artifact filename does not change its published Minecraft compatibility metadata, which targets stable 26.2.
 
-## Contributing (for community members):
-1. Open an issue clearly describing the feature you want to implement
-2. Don't start writing your feature until a core dev recommends you to
-3. Fork the repository (if you haven't already), and make a branch for your feature
-4. Happy coding!
-5. Open a pull request, preferably linking to your issue - include your Discord username, and those of the people who helped you, so you can get the contributor role
-6. (For core devs) at least 2 core devs should approve before merging - probably have discussion in Discord first as well.
+## Compatibility
 
-### Datagen:
-Make sure to set the following environment variable when running datagen.
+| Component | Required version |
+| --- | --- |
+| Minecraft | `26.2` exactly |
+| Mod loader | Fabric Loader `0.19.3` or newer |
+| Fabric API | `0.152.0+26.2` or newer |
+| Create | [Create Fly](https://github.com/ZurrTum/Create-Fly) `6.0.9-1` or newer |
+| Java | 25 |
+| This port | `1.7.2-fly.26.2-beta.2` |
+
+This is a Fabric-only port. Forge and NeoForge are not supported. Use Create Fly rather than another Create implementation, and do not install the original Steam 'n' Rails JAR alongside this port.
+
+## Installation
+
+1. Install Java 25, Fabric Loader, and Fabric API for Minecraft 26.2.
+2. Install the latest public Create Fly build compatible with Minecraft 26.2.
+3. Put this port's non-sources JAR in the instance's `mods` directory.
+4. Start the game and confirm that Fabric reports `railways`, `create`, and their dependencies as loaded.
+
+Back up existing worlds before opening them with a beta port or a new Minecraft version.
+
+## Port status
+
+The port is currently in beta. The main mod is playable, but optional third-party integrations and development/datagen paths inherited from the upstream 1.20.x project are not all validated on 26.2.
+
+Recent Create Fly compatibility work includes:
+
+- enforcing bogey gauge compatibility when placing or cycling bogeys;
+- restoring curved monorail geometry and monorail-specific selection outlines;
+- fixing track-switch rendering, rail overlays, flickering, and related crashes;
+- preventing animated locometal flywheels from rendering a second static wheel.
+
+When reporting a problem, include the complete `latest.log` or crash report, a short reproduction sequence, and whether the issue also occurs with only Steam 'n' Rails and its required dependencies installed.
+
+## Building from source
+
+The project uses the included Gradle wrapper and requires JDK 25. Set `JAVA_HOME` to that JDK before building.
+
+Windows PowerShell:
+
+```powershell
+./gradlew.bat clean build validateAccessWidener --no-daemon
+```
+
+Linux or macOS:
+
+```bash
+./gradlew clean build validateAccessWidener --no-daemon
+```
+
+The distributable JAR is written to `build/libs/`. Use the JAR without the `-sources` suffix. The first build also downloads the development dependencies and generates the connected-texture sprites used by this port.
+
+### Datagen
+
+For maintainer datagen tasks, set the following environment variable before running the relevant Gradle task:
+
 ```env
 DATAGEN=TRUE
 ```
 
-### Commit Tricks:
+## Contributing
 
-- Include `[ci skip]` in your commit message to skip the automatic preview build
-you can use this for example if the change you made is very minor, and not worth
-a preview, or if you are just fixing a typo in the README, etc.
+Open an issue before starting a large change so its scope can be agreed on and duplicate work can be avoided. Pull requests should describe the affected Minecraft/Create Fly versions and include the checks used to verify the change.
 
+Branches for this port must be named **exactly** `<modloader>-<version>`, with no additional words or suffixes. The current branch is `fabric-26.2`.
+
+Translations for the upstream project are managed through [Crowdin](https://crowdin.com/project/create-steam-n-rails-official). Translation questions can be asked in the [translator's chat](https://discord.com/channels/706277846389227612/1049156352553000970) on the Steam 'n' Rails Discord.
 
 ## License
-Steam 'n' Rails is licensed under the LGPL license. See [LICENSE](LICENSE) for more information.
 
-Certain sections of the code are from the Create mod, which is licensed under the MIT license. See [Create's license](https://github.com/Creators-of-Create/Create/blob/mc1.18/dev/LICENSE) for more information.
+Steam 'n' Rails is licensed under the LGPL license. See [LICENSE](LICENSE) for details.
 
-Some datafixer code is from the Quilt Standard Libraries, which is licensed under the Apache-2.0 license. See [QSL's license](https://github.com/QuiltMC/quilt-standard-libraries/blob/1.19.4/LICENSE) for more information.
+Certain sections of the code are derived from projects with compatible licenses, including Create (MIT), Quilt Standard Libraries (Apache-2.0), SecurityCraft (MIT), Neruina (MIT), and FramedBlocks (LGPL). Their copyright and license notices remain applicable to the corresponding code.
 
-Most of the code for spy conductors is from Security Craft, which is licensed under the MIT license. See [Security Craft's license](https://github.com/Geforce132/SecurityCraft/blob/1.18.2/LICENSE) for more information.
+## Credits
 
-Most of the code for annotation based conditional mixins is from Neruina, which is licensed under the MIT license. See [Neruina's license](https://github.com/Bawnorton/Neruina/blob/multi-version/LICENSE.txt) for more information.
+- [Layers of Railways](https://github.com/Layers-of-Railways/Railway) and its contributors for Create: Steam 'n' Rails.
+- [ZurrTum/Create-Fly](https://github.com/ZurrTum/Create-Fly) and its contributors for the Create Fly port used by Minecraft 26.2.
+- The original Create team and all projects credited in the source and license notices.
 
-Most of the code for the sloped/custom hitbox outlines is from FramedBlocks, which is licensed under the LGPL license. See [FramedBlock's license](https://github.com/XFactHD/FramedBlocks/blob/17c8274ca380c3a868763b1b05657d07860c364b/LICENSE) for more information.
-
-## Acknowledgements
-<img src="https://www.yourkit.com/images/yklogo.png"></img>
-
-We make use of [YourKit's Java profiler](https://www.yourkit.com/java/profiler/) when working our mods. Many thanks to them for providing a free license for this project.
+We use [YourKit Java Profiler](https://www.yourkit.com/java/profiler/) during mod development and thank YourKit for supporting open-source projects.
