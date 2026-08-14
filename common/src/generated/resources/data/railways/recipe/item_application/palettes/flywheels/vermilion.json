@@ -1,0 +1,10 @@
+{
+  "type": "create:item_application",
+  "target": "create:flywheel",
+  "ingredient": "railways:vermilion_riveted_locometal",
+  "results": [
+    {
+      "id": "railways:vermilion_locometal_flywheel"
+    }
+  ]
+}

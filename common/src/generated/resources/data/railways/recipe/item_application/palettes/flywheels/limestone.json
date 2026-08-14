@@ -1,0 +1,10 @@
+{
+  "type": "create:item_application",
+  "target": "create:flywheel",
+  "ingredient": "railways:limestone_riveted_locometal",
+  "results": [
+    {
+      "id": "railways:limestone_locometal_flywheel"
+    }
+  ]
+}

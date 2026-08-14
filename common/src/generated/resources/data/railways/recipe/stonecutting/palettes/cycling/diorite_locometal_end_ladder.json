@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/diorite/ladders",
+  "result": {
+    "id": "railways:diorite_locometal_end_ladder",
+    "count": 1
+  }
+}

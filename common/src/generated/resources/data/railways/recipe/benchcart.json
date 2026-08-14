@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:minecart",
+    "#railways:internal/workbench"
+  ],
+  "result": {
+    "id": "railways:benchcart"
+  }
+}

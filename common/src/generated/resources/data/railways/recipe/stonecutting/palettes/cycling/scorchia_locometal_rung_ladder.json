@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/scorchia/ladders",
+  "result": {
+    "id": "railways:scorchia_locometal_rung_ladder",
+    "count": 1
+  }
+}

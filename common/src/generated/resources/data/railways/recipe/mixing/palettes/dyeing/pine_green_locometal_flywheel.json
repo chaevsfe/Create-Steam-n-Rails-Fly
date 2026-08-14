@@ -1,0 +1,18 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    "#railways:palettes/dye_groups/flywheel"
+  ],
+  "results": [
+    {
+      "id": "railways:pine_green_locometal_flywheel"
+    }
+  ],
+  "fluid_ingredients": [
+    {
+      "fluid": "railways:paint",
+      "amount": 10125,
+      "type": "fluid_stack"
+    }
+  ]
+}

@@ -519,7 +519,7 @@ tasks.processResources {
             paintRecipes++
         }
 
-        if (paintIngredientStacks != 964 || paintResultStacks != 40 || paintRecipes != 970) {
+        if (paintIngredientStacks != 1057 || paintResultStacks != 40 || paintRecipes != 1063) {
             throw GradleException(
                 "Unexpected Railway paint recipe coverage after component migration: " +
                     "$paintIngredientStacks ingredients, $paintResultStacks results, $paintRecipes recipes",

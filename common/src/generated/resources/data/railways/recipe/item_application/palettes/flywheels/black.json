@@ -1,0 +1,10 @@
+{
+  "type": "create:item_application",
+  "target": "create:flywheel",
+  "ingredient": "railways:black_riveted_locometal",
+  "results": [
+    {
+      "id": "railways:black_locometal_flywheel"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "#railways:conductor_caps",
+    "#railways:internal/dyes/purple_dyes"
+  ],
+  "result": {
+    "id": "railways:purple_conductor_cap"
+  }
+}

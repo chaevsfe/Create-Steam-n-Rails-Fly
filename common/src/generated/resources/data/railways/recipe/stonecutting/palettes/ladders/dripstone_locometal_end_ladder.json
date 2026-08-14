@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/dripstone/base",
+  "result": {
+    "id": "railways:dripstone_locometal_end_ladder",
+    "count": 2
+  }
+}

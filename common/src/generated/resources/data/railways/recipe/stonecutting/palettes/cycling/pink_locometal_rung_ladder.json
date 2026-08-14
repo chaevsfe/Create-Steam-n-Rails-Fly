@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/pink/ladders",
+  "result": {
+    "id": "railways:pink_locometal_rung_ladder",
+    "count": 1
+  }
+}

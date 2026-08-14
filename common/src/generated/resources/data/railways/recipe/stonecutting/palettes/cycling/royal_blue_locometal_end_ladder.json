@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/royal_blue/ladders",
+  "result": {
+    "id": "railways:royal_blue_locometal_end_ladder",
+    "count": 1
+  }
+}

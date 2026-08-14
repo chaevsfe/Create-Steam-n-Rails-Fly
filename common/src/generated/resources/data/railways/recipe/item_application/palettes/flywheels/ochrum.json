@@ -1,0 +1,10 @@
+{
+  "type": "create:item_application",
+  "target": "create:flywheel",
+  "ingredient": "railways:ochrum_riveted_locometal",
+  "results": [
+    {
+      "id": "railways:ochrum_locometal_flywheel"
+    }
+  ]
+}

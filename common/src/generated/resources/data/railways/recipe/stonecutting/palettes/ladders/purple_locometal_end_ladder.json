@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/purple/base",
+  "result": {
+    "id": "railways:purple_locometal_end_ladder",
+    "count": 2
+  }
+}

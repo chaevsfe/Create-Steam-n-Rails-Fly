@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "#railways:palettes/cycle_groups/pine_green/ladders",
+  "result": {
+    "id": "railways:pine_green_locometal_end_ladder",
+    "count": 1
+  }
+}

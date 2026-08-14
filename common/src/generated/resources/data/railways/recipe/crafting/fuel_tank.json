@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": "create:fluid_tank",
+    "S": "create:sturdy_sheet"
+  },
+  "pattern": [
+    "S",
+    "F",
+    "S"
+  ],
+  "result": {
+    "id": "railways:fuel_tank"
+  },
+  "show_notification": true
+}
