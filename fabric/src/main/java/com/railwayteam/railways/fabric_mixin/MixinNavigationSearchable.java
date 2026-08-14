@@ -122,7 +122,9 @@ public abstract class MixinNavigationSearchable implements IGenerallySearchableN
 
         TrackNode initialNode1 = forward ? startingPoint.node1 : startingPoint.node2;
         TrackNode initialNode2 = forward ? startingPoint.node2 : startingPoint.node1;
-        TrackEdge initialEdge = graph.getConnectionsFrom(initialNode1).get(initialNode2);
+        Map<TrackNode, TrackEdge> initialConnections = graph.getConnectionsFrom(initialNode1);
+        if (initialConnections == null) return;
+        TrackEdge initialEdge = initialConnections.get(initialNode2);
         if (initialEdge == null) return;
 
         double distanceToNode2 = forward
@@ -186,8 +188,9 @@ public abstract class MixinNavigationSearchable implements IGenerallySearchableN
 
             if (costRelevant && distance + penalty > maxCost) continue;
 
-            List<Map.Entry<TrackNode, TrackEdge>> validTargets = new ArrayList<>();
             Map<TrackNode, TrackEdge> connectionsFrom = graph.getConnectionsFrom(node2);
+            if (connectionsFrom == null) continue;
+            List<Map.Entry<TrackNode, TrackEdge>> validTargets = new ArrayList<>();
             for (Map.Entry<TrackNode, TrackEdge> connection : connectionsFrom.entrySet()) {
                 TrackNode newNode = connection.getKey();
                 if (newNode == node1) continue;

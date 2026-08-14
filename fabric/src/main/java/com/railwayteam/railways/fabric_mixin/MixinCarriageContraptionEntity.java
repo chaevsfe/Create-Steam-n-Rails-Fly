@@ -106,10 +106,14 @@ public abstract class MixinCarriageContraptionEntity extends OrientedContraption
         double directedSpeed = targetSpeed != 0 ? targetSpeed : carriage.train.speed;
         boolean forward = !carriage.train.doubleEnded || (directedSpeed != 0 ? directedSpeed > 0 : !inverted);
 
+        boolean previousSkipSwitches = MixinVariables.temporarilySkipSwitches;
+        Pair<TrackSwitch, Pair<Boolean, Optional<SwitchState>>> lookAheadData;
         MixinVariables.temporarilySkipSwitches = true;
-        Pair<TrackSwitch, Pair<Boolean, Optional<SwitchState>>> lookAheadData =
-                ((IGenerallySearchableNavigation) nav).railways$findNearestApproachableSwitch(forward);
-        MixinVariables.temporarilySkipSwitches = false;
+        try {
+            lookAheadData = ((IGenerallySearchableNavigation) nav).railways$findNearestApproachableSwitch(forward);
+        } finally {
+            MixinVariables.temporarilySkipSwitches = previousSkipSwitches;
+        }
 
         TrackSwitch lookAhead = lookAheadData == null ? null : lookAheadData.getFirst();
         boolean headOn = lookAheadData != null && lookAheadData.getSecond().getFirst();

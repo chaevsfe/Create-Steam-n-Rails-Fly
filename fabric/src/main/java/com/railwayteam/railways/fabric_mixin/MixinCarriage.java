@@ -1,5 +1,7 @@
 package com.railwayteam.railways.fabric_mixin;
 
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.railwayteam.railways.registry.CRTrackMaterials;
 import com.railwayteam.railways.util.MixinVariables;
 import com.zurrtum.create.content.trains.bogey.AbstractBogeyBlock;
@@ -39,19 +41,20 @@ public abstract class MixinCarriage {
 		cir.setReturnValue(railways$isIncompatible(true) || railways$isIncompatible(false));
 	}
 
-	@Inject(method = "travel", at = @At("HEAD"))
-	private void railways$markSwitchTravelStart(Level level, TrackGraph graph, double distance,
-												TravellingPoint toFollowForward, TravellingPoint toFollowBackward,
-												int type, CallbackInfoReturnable<Double> cir) {
+	@WrapMethod(
+		method = "travel(Lnet/minecraft/world/level/Level;Lcom/zurrtum/create/content/trains/graph/TrackGraph;DLcom/zurrtum/create/content/trains/entity/TravellingPoint;Lcom/zurrtum/create/content/trains/entity/TravellingPoint;I)D"
+	)
+	private double railways$markSwitchTravel(Level level, TrackGraph graph, double distance,
+			TravellingPoint toFollowForward, TravellingPoint toFollowBackward, int type,
+			Operation<Double> original) {
+		boolean previouslyTravelling = MixinVariables.trackEdgeCarriageTravelling;
 		if (train.navigation.isActive())
 			MixinVariables.trackEdgeCarriageTravelling = true;
-	}
-
-	@Inject(method = "travel", at = @At("RETURN"))
-	private void railways$markSwitchTravelEnd(Level level, TrackGraph graph, double distance,
-											  TravellingPoint toFollowForward, TravellingPoint toFollowBackward,
-											  int type, CallbackInfoReturnable<Double> cir) {
-		MixinVariables.trackEdgeCarriageTravelling = false;
+		try {
+			return original.call(level, graph, distance, toFollowForward, toFollowBackward, type);
+		} finally {
+			MixinVariables.trackEdgeCarriageTravelling = previouslyTravelling;
+		}
 	}
 
 	@Unique
