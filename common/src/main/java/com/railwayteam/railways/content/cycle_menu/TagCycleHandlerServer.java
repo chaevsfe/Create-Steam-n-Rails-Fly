@@ -4,7 +4,7 @@ import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.annotation.multiloader.MultiLoaderEvent;
 import com.railwayteam.railways.content.smokestack.SmokestackStyle;
 import com.railwayteam.railways.registry.CRPalettes;
-import net.minecraft.network.chat.Component;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
@@ -42,11 +42,10 @@ public class TagCycleHandlerServer {
     }
 
     public static void select(ServerPlayer player, Item target) {
-        if (!select(player, target, InteractionHand.MAIN_HAND) && !select(player, target, InteractionHand.OFF_HAND)) {
-            Railways.LOGGER.warn("Player {} tried to select {} through tag cycling but failed",
-                player.getName().getString(), target.getName(new ItemStack(target)).getString());
-            player.connection.disconnect(Component.literal("Invalid tag selection"));
-        }
+        if (select(player, target, InteractionHand.MAIN_HAND) || select(player, target, InteractionHand.OFF_HAND))
+            return;
+        Railways.LOGGER.debug("Player {} tried to select {} through tag cycling but no held item matched",
+            player.getScoreboardName(), BuiltInRegistries.ITEM.getKey(target));
     }
 
     @MultiLoaderEvent

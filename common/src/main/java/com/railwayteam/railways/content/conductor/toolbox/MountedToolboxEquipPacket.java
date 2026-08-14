@@ -10,6 +10,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
 public class MountedToolboxEquipPacket implements C2SPacket {
@@ -39,6 +40,9 @@ public class MountedToolboxEquipPacket implements C2SPacket {
 	}
 
 	public void handle(ServerPlayer player) {
+		if (!Inventory.isHotbarSlot(hotbarSlot))
+			return;
+
 		CompoundTag compound = AllSynchedDatas.TOOLBOX.get(player);
 
 		if (toolboxCarrierId == null) {
