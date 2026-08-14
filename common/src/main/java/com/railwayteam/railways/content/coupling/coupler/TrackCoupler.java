@@ -10,6 +10,10 @@
 
 package com.railwayteam.railways.content.coupling.coupler;
 
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.MapLike;
+import com.mojang.serialization.RecordBuilder;
 import com.railwayteam.railways.mixin_interfaces.IHandcarTrain;
 import com.railwayteam.railways.registry.CREdgePointTypes;
 import com.zurrtum.create.content.trains.entity.Train;
@@ -22,6 +26,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class TrackCoupler extends SingleBlockEntityEdgePoint {
@@ -65,6 +70,19 @@ public class TrackCoupler extends SingleBlockEntityEdgePoint {
 		currentTrain = input.getString("TrainId").map(UUID::fromString).orElse(null);
 	}
 
+	@Override
+	public <T> void decode(DynamicOps<T> ops, T input, boolean migration, DimensionPalette dimensions) {
+		super.decode(ops, input, migration, dimensions);
+		if (migration)
+			return;
+		MapLike<T> map = ops.getMap(input).getOrThrow();
+		activated = Optional.ofNullable(map.get("Activated")).map(value -> ops.getNumberValue(value, 0).intValue()).orElse(0);
+		currentTrain = Optional.ofNullable(map.get("TrainId"))
+			.flatMap(value -> ops.getStringValue(value).result())
+			.map(UUID::fromString)
+			.orElse(null);
+	}
+
 	public void read(FriendlyByteBuf buffer, DimensionPalette dimensions) {
 		super.read(buffer, dimensions);
 		if (buffer.readBoolean())
@@ -77,6 +95,16 @@ public class TrackCoupler extends SingleBlockEntityEdgePoint {
 		output.putInt("Activated", activated);
 		if (currentTrain != null)
 			output.putString("TrainId", currentTrain.toString());
+	}
+
+	@Override
+	public <T> DataResult<T> encode(DynamicOps<T> ops, T prefix, DimensionPalette dimensions) {
+		DataResult<T> result = super.encode(ops, prefix, dimensions);
+		RecordBuilder<T> builder = ops.mapBuilder();
+		builder.add("Activated", ops.createInt(activated));
+		if (currentTrain != null)
+			builder.add("TrainId", ops.createString(currentTrain.toString()));
+		return builder.build(result);
 	}
 
 	public void write(FriendlyByteBuf buffer, DimensionPalette dimensions) {

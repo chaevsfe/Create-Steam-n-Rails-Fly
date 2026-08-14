@@ -10,6 +10,11 @@
 
 package com.railwayteam.railways.content.switches;
 
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.ListBuilder;
+import com.mojang.serialization.MapLike;
+import com.mojang.serialization.RecordBuilder;
 import com.railwayteam.railways.content.switches.TrackSwitchBlock.SwitchState;
 import com.railwayteam.railways.mixin_interfaces.ISwitchDisabledEdge;
 import com.railwayteam.railways.registry.CREdgePointTypes;
@@ -293,6 +298,23 @@ public class TrackSwitch extends SingleBlockEntityEdgePoint {
 		output.putBoolean("AutoTrainsSwitch", autoTrainsSwitch);
 	}
 
+	@Override
+	public <T> DataResult<T> encode(DynamicOps<T> ops, T prefix, DimensionPalette dimensions) {
+		DataResult<T> result = super.encode(ops, prefix, dimensions);
+		RecordBuilder<T> builder = ops.mapBuilder();
+		if (switchPoint != null)
+			builder.add("SwitchPoint", TrackNodeLocation.encode(switchPoint, ops, prefix, dimensions));
+		ListBuilder<T> exitList = ops.listBuilder();
+		for (TrackNodeLocation exit : exits)
+			exitList.add(TrackNodeLocation.encode(exit, ops, prefix, dimensions));
+		builder.add("Exits", exitList.build(prefix));
+		builder.add("SwitchState", ops.createString(switchState.getSerializedName()));
+		builder.add("Automatic", ops.createBoolean(automatic));
+		builder.add("Locked", ops.createBoolean(locked));
+		builder.add("AutoTrainsSwitch", ops.createBoolean(autoTrainsSwitch));
+		return builder.build(result);
+	}
+
 	public void write(FriendlyByteBuf buffer, DimensionPalette dimensions) {
 		super.write(buffer, dimensions);
 		buffer.writeInt(switchState.ordinal());
@@ -326,6 +348,37 @@ public class TrackSwitch extends SingleBlockEntityEdgePoint {
 					.map(t -> TrackNodeLocation.read(t, dimensions))
 					.toList()
 			);
+		} else {
+			exits.clear();
+			sortExits();
+			ensureValidState();
+		}
+	}
+
+	@Override
+	public <T> void decode(DynamicOps<T> ops, T input, boolean migration, DimensionPalette dimensions) {
+		super.decode(ops, input, migration, dimensions);
+		if (migration)
+			return;
+		MapLike<T> map = ops.getMap(input).getOrThrow();
+		String exit = Optional.ofNullable(map.get("SwitchState"))
+			.flatMap(value -> ops.getStringValue(value).result())
+			.orElse(SwitchState.NORMAL.getSerializedName());
+		try {
+			switchState = SwitchState.valueOf(exit.toUpperCase(Locale.ROOT));
+		} catch (IllegalArgumentException e) {
+			switchState = getValidSwitchState();
+		}
+		automatic = Optional.ofNullable(map.get("Automatic")).map(value -> ops.getBooleanValue(value).getOrThrow()).orElse(false);
+		locked = Optional.ofNullable(map.get("Locked")).map(value -> ops.getBooleanValue(value).getOrThrow()).orElse(false);
+		autoTrainsSwitch = Optional.ofNullable(map.get("AutoTrainsSwitch")).map(value -> ops.getBooleanValue(value).getOrThrow()).orElse(false);
+		T encodedSwitchPoint = map.get("SwitchPoint");
+		if (encodedSwitchPoint != null) {
+			List<TrackNodeLocation> decodedExits = new ArrayList<>();
+			T encodedExits = map.get("Exits");
+			if (encodedExits != null)
+				ops.getList(encodedExits).getOrThrow().accept(element -> decodedExits.add(TrackNodeLocation.decode(ops, element, dimensions)));
+			updateExits(TrackNodeLocation.decode(ops, encodedSwitchPoint, dimensions), decodedExits);
 		} else {
 			exits.clear();
 			sortExits();
