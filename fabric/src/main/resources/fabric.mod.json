@@ -5,12 +5,17 @@
   "name": "Create: Steam 'n' Rails",
   "description": "Create: Steam 'n' Rails port for Create Fly 26.2",
   "authors": [
-    "R2bEEaton"
+    "R2bEEaton",
+    "chaevsfe"
   ],
   "contact": {
-    "sources": "https://github.com/cat4blep/Create-Steam-n-Rails-Fly"
+    "homepage": "https://modrinth.com/mod/steam-n-rails",
+    "sources": "https://github.com/chaevsfe/Create-Steam-n-Rails-Fly",
+    "issues": "https://github.com/chaevsfe/Create-Steam-n-Rails-Fly/issues"
   },
-  "license": ["LGPL v3"],
+  "license": [
+    "LGPL v3"
+  ],
   "icon": "assets/railways/icon.png",
   "environment": "*",
   "accessWidener": "railways.accesswidener",
@@ -48,5 +53,9 @@
         "CurseForge": "https://curseforge.com/minecraft/mc-mods/steam-n-rails-fly"
       }
     }
-  }
+  },
+  "contributors": [
+    "cat4blep",
+    "chaevsfe"
+  ]
 }
