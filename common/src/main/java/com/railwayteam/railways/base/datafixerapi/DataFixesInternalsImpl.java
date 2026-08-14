@@ -60,6 +60,8 @@ public final class DataFixesInternalsImpl extends DataFixesInternals {
         return factory.apply(0, this.latestVanillaSchema);
     }
     public @NotNull <T> Dynamic<T> updateWithAllFixers(@NotNull DataFixTypes dataFixTypes, @NotNull Dynamic<T> dynamic) {
+        if (dataFixTypes == DataFixTypes.ADVANCEMENTS || dataFixTypes == DataFixTypes.STATS)
+            return dynamic;
         return updateWithAllFixers(((AccessorDataFixTypes) (Object) dataFixTypes).railways$getType(), dynamic);
     }
     public @NotNull <T> Dynamic<T> updateWithAllFixers(@NotNull TypeReference rootType, @NotNull Dynamic<T> dynamic) {
