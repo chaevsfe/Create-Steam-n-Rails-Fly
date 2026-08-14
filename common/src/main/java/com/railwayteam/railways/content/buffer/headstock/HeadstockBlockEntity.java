@@ -31,7 +31,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 public class HeadstockBlockEntity extends DyeableBlockEntity implements IMaterialAdaptingBuffer {
 
@@ -64,21 +68,25 @@ public class HeadstockBlockEntity extends DyeableBlockEntity implements IMateria
         return InteractionResult.SUCCESS;
     }
 
-        protected void read(CompoundTag compound, boolean clientPacket) {
-        super.read(compound, clientPacket);
+    @Override
+    protected void read(ValueInput input, boolean clientPacket) {
+        super.read(input, clientPacket);
         BlockState prevMaterial = material;
-        if (!compound.contains("Material"))
+        Optional<CompoundTag> stored = input.read("Material", CompoundTag.CODEC);
+        if (stored.isEmpty())
             return;
 
-        material = NbtUtils.readBlockState(blockHolderGetter(), compound.getCompound("Material").orElse(new CompoundTag()));
+        material = NbtUtils.readBlockState(blockHolderGetter(), stored.get());
         if (material.isAir())
             material = Blocks.SPRUCE_PLANKS.defaultBlockState();
 
         if (clientPacket && prevMaterial != material)
             redraw();
     }
-    public void write(CompoundTag compound, boolean clientPacket) {
-        super.write(compound, clientPacket);
-        compound.put("Material", NbtUtils.writeBlockState(material));
+
+    @Override
+    protected void write(ValueOutput output, boolean clientPacket) {
+        super.write(output, clientPacket);
+        output.store("Material", CompoundTag.CODEC, NbtUtils.writeBlockState(material));
     }
 }
