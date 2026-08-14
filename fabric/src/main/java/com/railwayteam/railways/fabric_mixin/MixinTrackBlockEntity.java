@@ -112,6 +112,36 @@ public abstract class MixinTrackBlockEntity extends SmartBlockEntity implements 
         railways$setTrackCasing(null);
     }
 
+    @Inject(
+        method = "removeConnection",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/level/Level;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"
+        ),
+        cancellable = true
+    )
+    private void railways$preventCasedTileRemoval(BlockPos target, CallbackInfo ci) {
+        if (railways$getTrackCasing() != null) {
+            notifyUpdate();
+            ci.cancel();
+        }
+    }
+
+    @Inject(
+        method = "removeInboundConnections",
+        at = @At(
+            value = "INVOKE",
+            target = "Lcom/zurrtum/create/infrastructure/packet/s2c/RemoveBlockEntityPacket;<init>(Lnet/minecraft/core/BlockPos;)V"
+        ),
+        cancellable = true
+    )
+    private void railways$preventCasedTileRemovalInbound(boolean dropItems, CallbackInfo ci) {
+        if (railways$getTrackCasing() != null) {
+            notifyUpdate();
+            ci.cancel();
+        }
+    }
+
     @Inject(method = "lazyTick", at = @At("HEAD"))
     private void manageCasingCollisions(CallbackInfo ci) {
         if (railways$trackCasing == null || railways$isAlternateModel || level instanceof SchematicLevel)
