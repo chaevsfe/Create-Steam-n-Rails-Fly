@@ -120,9 +120,6 @@ public class Railways {
   public static void gatherData(DataGenerator.PackGenerator gen) {
     REGISTRATE.addDataGenerator(ProviderType.BLOCK_TAGS, CRTagGen::generateBlockTags);
     REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, CRTagGen::generateItemTags);
-    // TODO 1.21: recipe/lang/hat datagen depends on APIs removed by Create 6 / Minecraft 1.21.
-    // Keep runtime compilation moving; restore these providers after the client launches.
-
     gen.addProvider(CRAdvancements::new);
     gen.addProvider(EmiExcludedTagGen::new);
     gen.addProvider(EmiRecipeDefaultsGen::new);

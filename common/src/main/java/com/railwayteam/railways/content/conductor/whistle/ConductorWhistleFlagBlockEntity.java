@@ -44,7 +44,6 @@ import java.util.List;
 
 public class ConductorWhistleFlagBlockEntity extends SmartBlockEntity implements TransformableBlockEntity {
 
-    private static final String LOG_PREFIX = "[ConductorWhistleFlag]";
 
     public TrackTargetingBehaviour<GlobalStation> station;
     private boolean tickedOnce = false;
@@ -68,16 +67,10 @@ public class ConductorWhistleFlagBlockEntity extends SmartBlockEntity implements
             return;
 
         if (station.getEdgePoint() == null) {
-            Railways.LOGGER.info("{} lazyTick: no edge point yet at {}; targetTrack={} validTrack={}",
-                LOG_PREFIX, getBlockPos(), station.getGlobalPosition(), station.hasValidTrack());
             station.tick();
-            Railways.LOGGER.info("{} lazyTick: edge point after tick at {} -> {}",
-                LOG_PREFIX, getBlockPos(), station.getEdgePoint() == null ? "<none>" : station.getEdgePoint().getId());
         }
         if (station.getEdgePoint() != null) {
             station.getEdgePoint().name = targetStationName();
-            Railways.LOGGER.info("{} lazyTick: station active at {} name={}",
-                LOG_PREFIX, getBlockPos(), station.getEdgePoint().name);
         }
 
         if (tickedOnce) {
@@ -88,26 +81,17 @@ public class ConductorWhistleFlagBlockEntity extends SmartBlockEntity implements
                         destInst.getData() != null && destInst.getData().getStringOr("Text", "").equals(targetStationName())) {
                     if (!train.runtime.completed) {
                         found = true;
-                        Railways.LOGGER.info("{} lazyTick: keeping flag at {}; train={} still targets {} completed={} navDestination={}",
-                            LOG_PREFIX, getBlockPos(), train.id, targetStationName(), train.runtime.completed,
-                            train.navigation.destination == null ? "<none>" : train.navigation.destination.name);
                         break;
                     } else {
-                        Railways.LOGGER.info("{} lazyTick: discarding completed auto schedule for train={} at flag {}",
-                            LOG_PREFIX, train.id, getBlockPos());
                         train.runtime.discardSchedule();
                     }
                 }
             }
             if (!found) {
-                Railways.LOGGER.info("{} lazyTick: removing flag at {}; no train schedule targets {}",
-                    LOG_PREFIX, getBlockPos(), targetStationName());
                 level.setBlock(this.getBlockPos(), Blocks.AIR.defaultBlockState(), 3);
                 return;
             }
         } else {
-            Railways.LOGGER.info("{} lazyTick: first tick complete at {}; stationName={}",
-                LOG_PREFIX, getBlockPos(), targetStationName());
             tickedOnce = true;
         }
     }

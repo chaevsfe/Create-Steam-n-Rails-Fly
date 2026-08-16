@@ -60,8 +60,6 @@ sourceSets {
             "com/railwayteam/railways/content/conductor/ConductorSecondaryHeadLayer.java",
             "com/railwayteam/railways/content/bogey_menu/components/**",
             "com/railwayteam/railways/registry/advancement/**",
-            // Keep the production Shadow Realm command while the unrelated dev/admin command
-            // suite is still being ported to 26.2.
             "com/railwayteam/railways/registry/commands/ClearCapCacheCommand.java",
             "com/railwayteam/railways/registry/commands/ClearCasingCacheCommand.java",
             "com/railwayteam/railways/registry/commands/ConductorDemoCommand.java",
@@ -898,6 +896,15 @@ java {
 
 tasks.jar {
     from("LICENSE")
+    from("NOTICE")
+    from("common/src/main/java/com/railwayteam/railways/base/datafixerapi/LICENSE") {
+        into("com/railwayteam/railways/base/datafixerapi")
+    }
+}
+
+tasks.named<Jar>("sourcesJar") {
+    from("LICENSE")
+    from("NOTICE")
 }
 
 publishing {

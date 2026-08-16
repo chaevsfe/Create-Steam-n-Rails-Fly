@@ -24,7 +24,6 @@ import com.railwayteam.railways.RailwaysClient;
 import com.railwayteam.railways.base.reload.ClientResourceReloadListener;
 import com.railwayteam.railways.content.buffer.headstock.fabric.CopycatHeadstockModelRegistration;
 import com.railwayteam.railways.content.conductor.fabric.ConductorCapItemRenderer;
-import com.railwayteam.railways.content.custom_tracks.monorail.MonorailClientRuntimeChecks;
 import com.railwayteam.railways.events.ClientEvents;
 import com.railwayteam.railways.registry.CRParticleTypes;
 import com.railwayteam.railways.registry.fabric.CRBlockEntitiesClientImpl;
@@ -58,7 +57,6 @@ public class RailwaysClientImpl implements ClientModInitializer {
 		CopycatHeadstockModelRegistration.register();
 		CRBlockEntitiesClientImpl.register();
 		RailwaysClient.init();
-		MonorailClientRuntimeChecks.run();
 		if (FabricLoader.getInstance().isModLoaded("jei")) {
 			registerJeiCompat();
 		}
