@@ -5,18 +5,20 @@
   "name": "Create: Steam 'n' Rails",
   "description": "Create: Steam 'n' Rails port for Create Fly 26.2",
   "authors": [
+    "The Railways Team",
     "R2bEEaton",
     "chaevsfe"
   ],
   "contact": {
-    "homepage": "https://modrinth.com/mod/steam-n-rails",
+    "homepage": "https://modrinth.com/project/13eOfSPn",
     "sources": "https://github.com/chaevsfe/Create-Steam-n-Rails-Fly",
-    "issues": "https://github.com/chaevsfe/Create-Steam-n-Rails-Fly/issues"
+    "issues": "https://github.com/chaevsfe/Create-Steam-n-Rails-Fly/issues",
+    "upstream": "https://modrinth.com/mod/create-steam-n-rails"
   },
   "license": [
-    "LGPL v3"
+    "LGPL-3.0-only"
   ],
-  "icon": "assets/railways/icon.png",
+  "icon": "assets/railways/icon_fly_port.png",
   "environment": "*",
   "accessWidener": "railways.accesswidener",
   "entrypoints": {
@@ -44,13 +46,14 @@
     "minecraft": "${minecraft_dependency_version}",
     "fabricloader": ">=${fabric_loader_version}",
     "fabric-api": ">=${fabric_api_version}",
-    "create": "${create_fabric_version_range}"
+    "create": "${create_fabric_version_range}",
+    "java": ">=25"
   },
   "custom": {
     "modmenu": {
       "links": {
-        "Modrinth": "https://modrinth.com/mod/steam-n-rails-fly",
-        "CurseForge": "https://curseforge.com/minecraft/mc-mods/steam-n-rails-fly"
+        "Modrinth": "https://modrinth.com/project/13eOfSPn",
+        "Upstream project": "https://modrinth.com/mod/create-steam-n-rails"
       }
     }
   },

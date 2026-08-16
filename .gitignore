@@ -33,7 +33,6 @@ jars/
 **/changelog.html
 **/recent_changelog.html
 .DS_Store
-PORT_HANDOFF.md
 
 ##################
 # Dev's Personal #
@@ -49,3 +48,5 @@ last_run_console.txt
 last_run_error.txt
 .vscode/*
 net/*
+
+local-maven/
