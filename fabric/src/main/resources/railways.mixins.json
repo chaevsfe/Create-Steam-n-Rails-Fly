@@ -81,6 +81,7 @@
     "MixinTrainCoupler",
     "MixinTrainFuel",
     "MixinTrainHandcar",
+    "MixinTrainRealism",
     "MixinTrainRelocationPacketShadow",
     "MixinTrainShadow",
     "MixinTrainWaypoint",
