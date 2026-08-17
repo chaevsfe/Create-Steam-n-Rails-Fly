@@ -18,14 +18,7 @@
 
 package com.railwayteam.railways.mixin_interfaces;
 
-import com.zurrtum.create.infrastructure.packet.c2s.StationEditPacket;
-import net.minecraft.core.BlockPos;
-
 public interface ILimited {
     void setLimitEnabled(boolean limitEnabled);
     boolean isLimitEnabled();
-
-    static StationEditPacket makeLimitEnabledPacket(BlockPos pos, boolean limitEnabled) {
-        return StationEditPacket.configure(pos, limitEnabled, "", null);
-    }
 }
