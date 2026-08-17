@@ -41,6 +41,7 @@
   ],
   "mixins": [
     "MixinAbstractBogeyBlock",
+    "MixinAllHandleRelocationRange",
     "MixinBezierConnection",
     "MixinBlockEntityType",
     "MixinCarriage",
