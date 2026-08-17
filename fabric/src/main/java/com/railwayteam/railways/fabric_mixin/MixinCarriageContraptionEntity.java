@@ -20,6 +20,10 @@ package com.railwayteam.railways.fabric_mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
+import com.railwayteam.railways.mixin_interfaces.IBufferBlockCheckableNavigation;
+import com.railwayteam.railways.mixin_interfaces.IBufferBlockedTrain;
 import com.railwayteam.railways.mixin_interfaces.ICarriageBufferDistanceTracker;
 import com.railwayteam.railways.util.BlockPosUtils;
 import com.zurrtum.create.content.trains.bogey.AbstractBogeyBlock;
@@ -46,6 +50,7 @@ import com.zurrtum.create.content.trains.entity.Navigation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -160,6 +165,31 @@ public abstract class MixinCarriageContraptionEntity extends OrientedContraption
     private void railways$cancelClientDerailing(CallbackInfo ci) {
         if (level().isClientSide() && CRConfigs.client().skipClientDerailing.get())
             ci.cancel();
+    }
+
+    @Inject(
+        method = "control",
+        at = @At(
+            value = "INVOKE",
+            target = "Lcom/zurrtum/create/content/trains/entity/Train;getCurrentStation()Lcom/zurrtum/create/content/trains/station/GlobalStation;"
+        )
+    )
+    private void railways$noBufferOverrun(BlockPos controlsLocalPos, Collection<Integer> heldControls, Player player,
+                                          CallbackInfoReturnable<Boolean> cir, @Local(name = "targetSpeed") LocalIntRef targetSpeedRef) {
+        int targetSpeed = targetSpeedRef.get();
+        if (targetSpeed == 0)
+            return;
+
+        IBufferBlockedTrain bufferBlockedTrain = (IBufferBlockedTrain) carriage.train;
+
+        if (!bufferBlockedTrain.railways$isControlBlocked() && bufferBlockedTrain.railways$getBlockedSign() == 0 && targetSpeed < 0)
+            ((IBufferBlockCheckableNavigation) carriage.train.navigation).railways$updateControlsBlock(true);
+
+        if (bufferBlockedTrain.railways$isControlBlocked()) {
+            int blockedSign = bufferBlockedTrain.railways$getBlockedSign();
+            if ((blockedSign == 0 && targetSpeed > 0) || blockedSign == Mth.sign(targetSpeed))
+                targetSpeedRef.set(0);
+        }
     }
 
     @Inject(method = "control", at = @At("TAIL"))

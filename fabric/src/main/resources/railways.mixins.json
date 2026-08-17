@@ -58,6 +58,7 @@
     "MixinIOWorkerDataVersion",
     "MixinMountedStorageManagerFuel",
     "MixinNavigation",
+    "MixinNavigationBuffer",
     "MixinNavigationSearchable",
     "MixinNavigationWaypoint",
     "MixinNbtUtilsDataFix",
