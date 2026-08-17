@@ -59,13 +59,17 @@ public abstract class MixinTrainRealism implements ITrueMaxSpeedTrain {
 
     @Inject(method = "maxSpeed", at = @At("RETURN"), cancellable = true)
     private void railways$limitMaxSpeed(CallbackInfoReturnable<Float> cir) {
-        if (railways$realismLimited())
+        if (((IHandcarTrain) this).railways$isHandcar())
+            cir.setReturnValue(cir.getReturnValue() * 0.5f);
+        else if (railways$realismLimited())
             cir.setReturnValue(AllConfigs.server().trains.trainTopSpeed.getF() / (20 * 20));
     }
 
     @Inject(method = "maxTurnSpeed", at = @At("RETURN"), cancellable = true)
     private void railways$limitMaxTurnSpeed(CallbackInfoReturnable<Float> cir) {
-        if (railways$realismLimited())
+        if (((IHandcarTrain) this).railways$isHandcar())
+            cir.setReturnValue(cir.getReturnValue() * 0.75f);
+        else if (railways$realismLimited())
             cir.setReturnValue(AllConfigs.server().trains.trainTurningTopSpeed.getF() / (20 * 20));
     }
 
