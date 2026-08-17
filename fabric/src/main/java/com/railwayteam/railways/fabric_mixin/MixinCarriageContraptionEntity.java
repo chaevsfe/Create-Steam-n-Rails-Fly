@@ -20,6 +20,11 @@ package com.railwayteam.railways.fabric_mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.railwayteam.railways.mixin_interfaces.ICarriageBufferDistanceTracker;
+import com.railwayteam.railways.util.BlockPosUtils;
+import com.zurrtum.create.content.trains.bogey.AbstractBogeyBlock;
+import com.zurrtum.create.content.trains.entity.CarriageContraption;
+import java.util.Map;
 import com.railwayteam.railways.mixin_interfaces.IHandcarTrain;
 import com.zurrtum.create.AllItems;
 import net.minecraft.world.InteractionHand;
@@ -89,6 +94,57 @@ public abstract class MixinCarriageContraptionEntity extends OrientedContraption
     @Override
     public double railways$getDistanceTravelled() {
         return railways$distanceTravelled;
+    }
+
+    @Inject(
+        method = "tickContraption",
+        at = @At(value = "INVOKE", target = "Lcom/zurrtum/create/content/trains/entity/CarriageContraptionEntity;tickActors()V")
+    )
+    private void railways$setupBufferDistanceData(CallbackInfo ci) {
+        if (level().isClientSide())
+            return;
+        ICarriageBufferDistanceTracker distanceTracker = (ICarriageBufferDistanceTracker) carriage;
+        if (distanceTracker.railways$getLeadingDistance() != null && distanceTracker.railways$getTrailingDistance() != null)
+            return;
+        if (!(contraption instanceof CarriageContraption cc))
+            return;
+
+        BlockPos leadingBogeyPos = null;
+        BlockPos trailingBogeyPos = null;
+        BlockPos maxPos = new BlockPos(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
+        BlockPos minPos = new BlockPos(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+
+        for (Map.Entry<BlockPos, StructureBlockInfo> info : contraption.getBlocks().entrySet()) {
+            minPos = BlockPosUtils.min(minPos, info.getKey());
+            maxPos = BlockPosUtils.max(maxPos, info.getKey());
+            if (info.getValue().state().getBlock() instanceof AbstractBogeyBlock<?>) {
+                if (leadingBogeyPos == null) {
+                    leadingBogeyPos = info.getKey();
+                } else if (trailingBogeyPos == null) {
+                    if (BlockPosUtils.normalize(info.getKey().subtract(leadingBogeyPos))
+                        .equals(cc.getAssemblyDirection().getUnitVec3i())) {
+                        trailingBogeyPos = info.getKey();
+                    } else {
+                        trailingBogeyPos = leadingBogeyPos;
+                        leadingBogeyPos = info.getKey();
+                    }
+                }
+            }
+        }
+
+        Direction.Axis axis = cc.getAssemblyDirection().getAxis();
+        boolean forward = cc.getAssemblyDirection().getAxisDirection() == Direction.AxisDirection.POSITIVE;
+
+        int leadingBounds = forward ? minPos.get(axis) : maxPos.get(axis);
+        int trailingBounds = forward ? maxPos.get(axis) : minPos.get(axis);
+
+        int leadingDistance = leadingBogeyPos == null ? 0 : Math.abs(leadingBounds - leadingBogeyPos.get(axis));
+        if (trailingBogeyPos == null)
+            trailingBogeyPos = leadingBogeyPos;
+        int trailingDistance = trailingBogeyPos == null ? 0 : Math.abs(trailingBounds - trailingBogeyPos.get(axis));
+
+        distanceTracker.railways$setLeadingDistance(leadingDistance);
+        distanceTracker.railways$setTrailingDistance(trailingDistance);
     }
 
     @Inject(
