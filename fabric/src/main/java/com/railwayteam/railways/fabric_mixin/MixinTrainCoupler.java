@@ -1,6 +1,12 @@
 package com.railwayteam.railways.fabric_mixin;
 
 import com.railwayteam.railways.content.coupling.coupler.TrackCoupler;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.MapLike;
+import com.mojang.serialization.RecordBuilder;
 import com.railwayteam.railways.mixin_interfaces.IOccupiedCouplers;
 import com.railwayteam.railways.registry.CREdgePointTypes;
 import com.zurrtum.create.foundation.codec.CreateCodecs;
@@ -139,5 +145,42 @@ public abstract class MixinTrainCoupler implements IOccupiedCouplers {
         input.read("OccupiedCouplers", CreateCodecs.UUID_SET_CODEC)
             .ifPresent(occupiedCouplers -> ((IOccupiedCouplers) cir.getReturnValue()).railways$getOccupiedCouplers()
                 .addAll(occupiedCouplers));
+    }
+
+    @WrapOperation(
+        method = "encode",
+        at = @At(
+            value = "INVOKE",
+            target = "Lcom/mojang/serialization/DynamicOps;mapBuilder()Lcom/mojang/serialization/RecordBuilder;",
+            ordinal = 0
+        )
+    )
+    private static <T> RecordBuilder<T> railways$encodeOccupiedCouplers(
+        DynamicOps<T> ops,
+        Operation<RecordBuilder<T>> original,
+        @Local(argsOnly = true) Train input
+    ) {
+        RecordBuilder<T> builder = original.call(ops);
+        Set<UUID> occupied = ((IOccupiedCouplers) input).railways$getOccupiedCouplers();
+        if (!occupied.isEmpty()) {
+            builder.add("OccupiedCouplers", occupied, CreateCodecs.UUID_SET_CODEC);
+        }
+        return builder;
+    }
+
+    @Inject(method = "decode", at = @At("RETURN"))
+    private static <T> void railways$decodeOccupiedCouplers(
+        DynamicOps<T> ops,
+        T input,
+        Map<UUID, TrackGraph> trackNetworks,
+        DimensionPalette dimensions,
+        CallbackInfoReturnable<Train> cir
+    ) {
+        MapLike<T> map = ops.getMap(input).getOrThrow();
+        T encoded = map.get("OccupiedCouplers");
+        if (encoded == null)
+            return;
+        CreateCodecs.UUID_SET_CODEC.parse(ops, encoded).result().ifPresent(
+            occupied -> ((IOccupiedCouplers) cir.getReturnValue()).railways$getOccupiedCouplers().addAll(occupied));
     }
 }
