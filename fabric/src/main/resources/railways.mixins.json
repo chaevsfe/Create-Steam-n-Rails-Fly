@@ -67,6 +67,7 @@
     "MixinSavedDataStorage",
     "MixinScheduleRuntime",
     "MixinSchematicItemDataFix",
+    "MixinSeatMovementBehaviour",
     "MixinSignalPropagator",
     "MixinSlidingDoorBlock",
     "MixinSlidingDoorBlockEntity",
