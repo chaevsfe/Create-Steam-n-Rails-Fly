@@ -20,6 +20,9 @@ package com.railwayteam.railways.fabric_mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.railwayteam.railways.mixin_interfaces.IHandcarTrain;
+import com.zurrtum.create.AllItems;
+import net.minecraft.world.InteractionHand;
 import com.railwayteam.railways.config.CRConfigs;
 import com.railwayteam.railways.content.switches.TrackSwitch;
 import com.railwayteam.railways.content.switches.TrackSwitchBlock.SwitchState;
@@ -47,6 +50,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Collection;
@@ -84,6 +89,29 @@ public abstract class MixinCarriageContraptionEntity extends OrientedContraption
     @Override
     public double railways$getDistanceTravelled() {
         return railways$distanceTravelled;
+    }
+
+    @Inject(
+        method = "updateTrackGraph",
+        at = @At(
+            value = "FIELD",
+            target = "Lcom/zurrtum/create/content/trains/entity/Train;graph:Lcom/zurrtum/create/content/trains/graph/TrackGraph;",
+            opcode = Opcodes.PUTFIELD,
+            ordinal = 0
+        ),
+        cancellable = true
+    )
+    private void railways$cancelClientDerailing(CallbackInfo ci) {
+        if (level().isClientSide() && CRConfigs.client().skipClientDerailing.get())
+            ci.cancel();
+    }
+
+    @Inject(method = "control", at = @At("TAIL"))
+    private void railways$handcarHungerDepletion(BlockPos controlsLocalPos, Collection<Integer> heldControls, Player player,
+                                                 CallbackInfoReturnable<Boolean> cir) {
+        if (((IHandcarTrain) this.carriage.train).railways$isHandcar()
+            && !player.getItemInHand(InteractionHand.MAIN_HAND).is(AllItems.EXTENDO_GRIP))
+            player.causeFoodExhaustion((float) Math.abs(carriage.train.speed) * CRConfigs.server().handcarHungerMultiplier.getF());
     }
 
     @Inject(method = "control", at = @At("TAIL"))
