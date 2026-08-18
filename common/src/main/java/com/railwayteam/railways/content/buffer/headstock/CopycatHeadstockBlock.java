@@ -294,13 +294,14 @@ public class CopycatHeadstockBlock extends WaterloggedCopycatBlock implements Bl
     protected VoxelShape getHeadstockShape(BlockState state) {
         return CRShapes.HEADSTOCK_PLAIN.get(state.getValue(FACING));
     }
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
-                                 BlockHitResult pHit) {
+    @Override
+    protected InteractionResult useItemOn(ItemStack held, BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer,
+                                          InteractionHand pHand, BlockHitResult pHit) {
         if (AdventureUtils.isAdventure(pPlayer))
             return InteractionResult.PASS;
         InteractionResult result = onBlockEntityUse(pLevel, pPos, be -> {
             if (be instanceof CopycatHeadstockBlockEntity copycatHeadstock) {
-                return copycatHeadstock.applyDyeIfValid(pPlayer.getItemInHand(pHand));
+                return copycatHeadstock.applyDyeIfValid(held);
             }
             return InteractionResult.PASS;
         });

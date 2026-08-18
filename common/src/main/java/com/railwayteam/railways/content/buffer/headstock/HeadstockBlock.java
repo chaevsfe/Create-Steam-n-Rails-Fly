@@ -136,13 +136,14 @@ public class HeadstockBlock extends HorizontalDirectionalBlock implements IBE<He
     }
 
     @SuppressWarnings("deprecation")
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
-                                 BlockHitResult pHit) {
+    @Override
+    protected InteractionResult useItemOn(ItemStack held, BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer,
+                                          InteractionHand pHand, BlockHitResult pHit) {
         if (AdventureUtils.isAdventure(pPlayer))
             return InteractionResult.PASS;
-        InteractionResult result = onBlockEntityUse(pLevel, pPos, be -> be.applyMaterialIfValid(pPlayer.getItemInHand(pHand)));
+        InteractionResult result = onBlockEntityUse(pLevel, pPos, be -> be.applyMaterialIfValid(held));
         if (result.consumesAction()) return result;
-        return onBlockEntityUse(pLevel, pPos, be -> be.applyDyeIfValid(pPlayer.getItemInHand(pHand)));
+        return onBlockEntityUse(pLevel, pPos, be -> be.applyDyeIfValid(held));
     }
     public Class<HeadstockBlockEntity> getBlockEntityClass() {
         return HeadstockBlockEntity.class;

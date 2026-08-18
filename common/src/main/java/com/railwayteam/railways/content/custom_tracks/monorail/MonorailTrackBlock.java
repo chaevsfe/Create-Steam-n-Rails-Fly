@@ -45,6 +45,7 @@ import com.zurrtum.create.catnip.math.AngleHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -173,12 +174,14 @@ public class MonorailTrackBlock extends TrackBlock {
         if (edge.getTrackMaterial() != getMaterial())
             TrackPropagator.onRailAdded(level, pos, state);
     }
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    @Override
+    protected InteractionResult useItemOn(ItemStack heldItem, BlockState state, Level world, BlockPos pos, Player player,
+                                          InteractionHand hand, BlockHitResult hit) {
         InteractionResult result = InteractionResult.PASS;
         if (result.consumesAction())
             return result;
 
-        if (!world.isClientSide() && player.getItemInHand(hand).is(AllItems.BRASS_HAND)) {
+        if (!world.isClientSide() && heldItem.is(AllItems.BRASS_HAND)) {
             TrackPropagator.onRailAdded(world, pos, state);
             return InteractionResult.SUCCESS;
         }

@@ -159,8 +159,9 @@ public non-sealed class VariableSmokeStackBlock extends StyledSmokeStackBlock im
         if (oldState.getBlock() != this || oldState.getValue(partProperty) != state.getValue(partProperty))
             queueHeightUpdate(level, pos);
     }
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        ItemStack heldItem = pPlayer.getItemInHand(pHand);
+    @Override
+    protected InteractionResult useItemOn(ItemStack heldItem, BlockState pState, Level pLevel, BlockPos pPos,
+                                          Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (heldItem.is(getCloneItemStack(pLevel, pPos, pState, false).getItem())) {
             incrementSize(pLevel, pPos);
             return InteractionResult.SUCCESS;

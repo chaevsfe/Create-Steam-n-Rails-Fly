@@ -28,6 +28,7 @@ import com.zurrtum.create.foundation.block.ProperWaterloggedBlock;
 import com.zurrtum.create.catnip.math.VoxelShaper;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -115,11 +116,12 @@ public abstract class AbstractDyeableSingleBufferBlock extends HorizontalDirecti
     }
 
     @SuppressWarnings("deprecation")
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
-                                 BlockHitResult pHit) {
+    @Override
+    protected InteractionResult useItemOn(ItemStack held, BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer,
+                                          InteractionHand pHand, BlockHitResult pHit) {
         if (AdventureUtils.isAdventure(pPlayer))
             return InteractionResult.PASS;
-        return onBlockEntityUse(pLevel, pPos, be -> be.applyDyeIfValid(pPlayer.getItemInHand(pHand)));
+        return onBlockEntityUse(pLevel, pPos, be -> be.applyDyeIfValid(held));
     }
     public Class<DyeableBlockEntity> getBlockEntityClass() {
         return DyeableBlockEntity.class;

@@ -24,6 +24,7 @@ import com.zurrtum.create.AllItems;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -59,11 +60,13 @@ public class HingedDoorBlock extends DoorBlock implements IWrenchable {
         world.setBlock(pos, newState, UPDATE_ALL);
         return InteractionResult.SUCCESS;
     }
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    @Override
+    protected InteractionResult useItemOn(ItemStack heldItem, BlockState state, Level level, BlockPos pos, Player player,
+                                          InteractionHand hand, BlockHitResult hit) {
         if (EntityUtils.isHolding(player, stack -> stack.is(AllItems.WRENCH))) {
             return InteractionResult.PASS;
         }
-        return InteractionResult.PASS;
+        return super.useItemOn(heldItem, state, level, pos, player, hand, hit);
     }
     public InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {
         if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {

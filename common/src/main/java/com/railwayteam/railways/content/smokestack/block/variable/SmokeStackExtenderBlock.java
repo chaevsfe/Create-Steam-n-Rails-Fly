@@ -156,11 +156,13 @@ public non-sealed class SmokeStackExtenderBlock extends Block implements ProperW
         }
     }
     @SuppressWarnings("deprecation")
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    @Override
+    protected InteractionResult useItemOn(ItemStack heldItem, BlockState state, Level level, BlockPos pos, Player player,
+                                          InteractionHand hand, BlockHitResult hit) {
         BlockPos rootPos = findRoot(level, pos);
         BlockState rootState = level.getBlockState(rootPos);
         if (rootState.getBlock() instanceof VariableSmokeStackBlock rootBlock)
-            return rootBlock.use(rootState, level, rootPos, player, hand, new BlockHitResult(
+            return rootBlock.useItemOn(heldItem, rootState, level, rootPos, player, hand, new BlockHitResult(
                 hit.getLocation(),
                 hit.getDirection(),
                 rootPos,
