@@ -42,11 +42,6 @@ public class ConductorWhistleFlagBlock extends Block implements IBE<ConductorWhi
         return CRBlockEntities.CONDUCTOR_WHISTLE_FLAG.get();
     }
     @SuppressWarnings("deprecation")
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        if (!pState.is(pNewState.getBlock()))
-            pLevel.removeBlockEntity(pPos);
-    }
-    @SuppressWarnings("deprecation")
     public @NotNull VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return CRShapes.CONDUCTOR_WHISTLE_FLAG;
     }

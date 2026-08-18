@@ -199,10 +199,6 @@ public abstract class TrackSwitchBlock extends HorizontalDirectionalBlock implem
       CRBlockEntities.BRASS_SWITCH.get() :
       CRBlockEntities.ANDESITE_SWITCH.get();
   }
-  public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-    if (!state.is(newState.getBlock()))
-      level.removeBlockEntity(pos);
-  }
 
   @SuppressWarnings("deprecation")
   public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level,
@@ -295,7 +291,8 @@ public abstract class TrackSwitchBlock extends HorizontalDirectionalBlock implem
    */
   @SuppressWarnings("deprecation")
   @Deprecated
-  public int getAnalogOutputSignal(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos) {
+  @Override
+  protected int getAnalogOutputSignal(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Direction direction) {
     if (level.getBlockEntity(pos) instanceof TrackSwitchBlockEntity te)
       return te.getTargetAnalogOutput();
     return 0;

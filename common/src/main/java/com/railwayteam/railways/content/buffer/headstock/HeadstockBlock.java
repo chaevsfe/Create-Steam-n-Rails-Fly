@@ -30,6 +30,8 @@ import com.zurrtum.create.foundation.block.IBE;
 import com.zurrtum.create.foundation.block.ProperWaterloggedBlock;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -80,12 +82,6 @@ public class HeadstockBlock extends HorizontalDirectionalBlock implements IBE<He
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder.add(FACING, WATERLOGGED, STYLE, UPSIDE_DOWN));
     }
-    @SuppressWarnings("deprecation")
-    public void onRemove(@NotNull BlockState state, @NotNull Level worldIn,
-                         @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
-        if (!state.is(newState.getBlock()))
-            worldIn.removeBlockEntity(pos);
-    }
 
     @SuppressWarnings("deprecation")
     public FluidState getFluidState(BlockState state) {
@@ -129,9 +125,11 @@ public class HeadstockBlock extends HorizontalDirectionalBlock implements IBE<He
         }
     }
 
-    @SuppressWarnings("deprecation")
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos) {
-        updateWater(level, level, state, currentPos);
+    @Override
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess tickAccess,
+                                     BlockPos currentPos, Direction direction, BlockPos neighborPos,
+                                     BlockState neighborState, RandomSource random) {
+        updateWater(level, tickAccess, state, currentPos);
         return state;
     }
 

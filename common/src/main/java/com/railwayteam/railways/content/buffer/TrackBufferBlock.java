@@ -26,6 +26,8 @@ import com.zurrtum.create.foundation.block.IBE;
 import com.zurrtum.create.foundation.block.ProperWaterloggedBlock;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -74,12 +76,6 @@ public abstract class TrackBufferBlock<BE extends TrackBufferBlockEntity> extend
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder.add(FACING, WATERLOGGED, DIAGONAL));
 	}
-	@SuppressWarnings("deprecation")
-	public void onRemove(@NotNull BlockState state, @NotNull Level worldIn,
-											 @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
-		if (!state.is(newState.getBlock()))
-            worldIn.removeBlockEntity(pos);
-	}
 
 	protected abstract BlockState getCycledStyle(BlockState originalState, Direction targetedFace);
 	public BlockState getRotatedBlockState(BlockState originalState, Direction targetedFace) {
@@ -104,18 +100,20 @@ public abstract class TrackBufferBlock<BE extends TrackBufferBlockEntity> extend
 		return withWater(state, context);
 	}
 
-	@SuppressWarnings("deprecation")
-	public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos) {
-		updateWater(level, level, state, currentPos);
-		return state;
+	@Override
+	protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess tickAccess,
+	                                 BlockPos currentPos, Direction direction, BlockPos neighborPos,
+	                                 BlockState neighborState, RandomSource random) {
+	    updateWater(level, tickAccess, state, currentPos);
+	    return state;
 	}
 	@Override
 	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
 		return CRBlocks.TRACK_BUFFER.asStack();
 	}
 
-	@SuppressWarnings("deprecation")
-	public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
+	@Override
+	protected VoxelShape getOcclusionShape(BlockState state) {
 		return Shapes.empty();
 	}
 

@@ -128,11 +128,6 @@ public class SmokeStackBlock extends AbstractSmokeStackBlock<SmokeStackBlockEnti
         }
         return super.useItemOn(itemStack, pState, pLevel, pPos, pPlayer, pHand, pHit);
     }
-    @SuppressWarnings("deprecation")
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()))
-            level.removeBlockEntity(pos);
-    }
     public Class<SmokeStackBlockEntity> getBlockEntityClass() {
         return SmokeStackBlockEntity.class;
     }

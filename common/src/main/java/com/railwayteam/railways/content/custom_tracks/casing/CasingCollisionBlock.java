@@ -23,6 +23,8 @@ import com.railwayteam.railways.registry.CRShapes;
 import com.zurrtum.create.foundation.block.ProperWaterloggedBlock;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -80,10 +82,11 @@ public abstract class CasingCollisionBlock extends Block implements EntityBlock,
         return withWater(super.getStateForPlacement(pContext), pContext);
     }
 
-    @SuppressWarnings("deprecation")
-    public @NotNull BlockState updateShape(BlockState pState, Direction pDirection, BlockState pNeighborState,
-                                           LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pNeighborPos) {
-        updateWater(pLevel, pLevel, pState, pCurrentPos);
+    @Override
+    protected BlockState updateShape(BlockState pState, LevelReader level, ScheduledTickAccess tickAccess,
+                                     BlockPos pCurrentPos, Direction direction, BlockPos neighborPos,
+                                     BlockState neighborState, RandomSource random) {
+        updateWater(level, tickAccess, pState, pCurrentPos);
         return pState;
     }
 
