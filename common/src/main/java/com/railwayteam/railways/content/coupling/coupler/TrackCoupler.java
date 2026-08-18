@@ -27,6 +27,8 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.Optional;
+import net.minecraft.server.MinecraftServer;
+
 import java.util.UUID;
 
 public class TrackCoupler extends SingleBlockEntityEdgePoint {
@@ -37,7 +39,9 @@ public class TrackCoupler extends SingleBlockEntityEdgePoint {
 		return CREdgePointTypes.COUPLER;
 	}
 
-	public void tick(TrackGraph graph, boolean preTrains) {
+	@Override
+	public void tick(MinecraftServer server, TrackGraph graph, boolean preTrains) {
+		super.tick(server, graph, preTrains);
 		if (activated > 0)
 			activated--;
 		if (activated <= 0)
