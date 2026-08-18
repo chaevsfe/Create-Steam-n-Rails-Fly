@@ -29,6 +29,8 @@ import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
 import com.zurrtum.create.catnip.data.Couple;
 import com.zurrtum.create.catnip.data.Pair;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.Containers;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -48,6 +50,17 @@ public class GenericCrossingBlockEntity extends SmartBlockEntity implements IMer
     public GenericCrossingBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         setLazyTickRate(100);
+    }
+
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        super.preRemoveSideEffects(pos, state);
+        if (level == null || cancelDrops)
+            return;
+        Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(),
+                new ItemStack(getPrimary().getBlock().asItem()));
+        Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(),
+                new ItemStack(getSecondary().getBlock().asItem()));
     }
 
     @NotNull

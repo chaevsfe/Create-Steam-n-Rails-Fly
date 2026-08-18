@@ -293,19 +293,8 @@ public class GenericCrossingBlock extends Block implements IBE<GenericCrossingBl
         return IWrenchable.super.onSneakWrenched(state, context);
     }
 
-    @SuppressWarnings("deprecation")
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.is(newState.getBlock())) {
-            BlockEntity blockEntity = level.getBlockEntity(pos);
-            if (blockEntity instanceof GenericCrossingBlockEntity crossingBE && !crossingBE.cancelDrops) {
-                Item a = crossingBE.getPrimary().getBlock().asItem();
-                Item b = crossingBE.getSecondary().getBlock().asItem();
-                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(a));
-                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(b));
-            }
-
-            TrackPropagator.onRailRemoved(level, pos, state);
-            level.removeBlockEntity(pos);
-        }
+    @Override
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        TrackPropagator.onRailRemoved(level, pos, state);
     }
 }
