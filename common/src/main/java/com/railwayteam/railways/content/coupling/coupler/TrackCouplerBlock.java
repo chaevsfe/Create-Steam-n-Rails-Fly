@@ -62,8 +62,6 @@ public abstract class TrackCouplerBlock extends Block implements IBE<TrackCouple
 	@Nullable
 	public BlockState getStateForPlacement(BlockPlaceContext pContext) {
 		boolean hasSignal = pContext.getLevel().hasNeighborSignal(pContext.getClickedPos());
-		if (!pContext.getLevel().isClientSide())
-			Railways.LOGGER.info("[TrackCouplerBlock {}] placed hasSignal={}", pContext.getClickedPos(), hasSignal);
 		return this.defaultBlockState().setValue(POWERED, hasSignal);
 	}
 
@@ -104,22 +102,17 @@ public abstract class TrackCouplerBlock extends Block implements IBE<TrackCouple
 			return;
 		boolean powered = pState.getValue(POWERED);
 		boolean hasSignal = pLevel.hasNeighborSignal(pPos);
-		Railways.LOGGER.info("[TrackCouplerBlock {}] neighborChanged powered={} hasSignal={} moving={}",
-			pPos, powered, hasSignal, pIsMoving);
 		if (powered == hasSignal)
 			return;
 		if (powered) {
-			Railways.LOGGER.info("[TrackCouplerBlock {}] scheduling unpower tick", pPos);
 			pLevel.scheduleTick(pPos, this, 4);
 		} else {
-			Railways.LOGGER.info("[TrackCouplerBlock {}] setting powered=true", pPos);
 			pLevel.setBlock(pPos, pState.cycle(POWERED), 2);
 		}
 	}
 	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRand) {
 		boolean powered = pState.getValue(POWERED);
 		boolean hasSignal = pLevel.hasNeighborSignal(pPos);
-		Railways.LOGGER.info("[TrackCouplerBlock {}] scheduled tick powered={} hasSignal={}", pPos, powered, hasSignal);
 		if (powered && !hasSignal)
 			pLevel.setBlock(pPos, pState.cycle(POWERED), 2);
 	}
@@ -130,8 +123,6 @@ public abstract class TrackCouplerBlock extends Block implements IBE<TrackCouple
 		BlockPos pos = context.getClickedPos();
 		BlockState newState = state.cycle(MODE);
 		level.setBlock(pos, newState, 3);
-		Railways.LOGGER.info("[TrackCouplerBlock {}] wrenched mode {} -> {} powered={}",
-			pos, state.getValue(MODE), newState.getValue(MODE), newState.getValue(POWERED));
 		Player player = context.getPlayer();
 		if (player != null)
 			player.sendOverlayMessage(newState.getValue(MODE).getTranslatedName());
