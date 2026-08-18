@@ -93,7 +93,6 @@ import com.zurrtum.create.api.contraption.BlockMovementChecks;
 import com.zurrtum.create.content.trains.track.TrackBlock;
 import com.zurrtum.create.content.trains.track.TrackBlockItem;
 import com.zurrtum.create.content.trains.track.TrackMaterial;
-import com.zurrtum.create.foundation.block.ItemUseOverrides;
 import com.zurrtum.create.foundation.data.CreateRegistrate;
 import com.zurrtum.create.foundation.data.SharedProperties;
 import com.zurrtum.create.client.foundation.item.ItemDescription;
@@ -363,7 +362,6 @@ public class CRBlocks {
             .properties(BlockBehaviour.Properties::noOcclusion)
             .properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
             .transform(pickaxeOnly())
-            .onRegister(ItemUseOverrides::addBlock)
             .lang("Andesite Track Switch")
             .item(TrackSwitchBlockItem.ofType(CREdgePointTypes.SWITCH))
             .transform(customItemModel())
@@ -378,7 +376,6 @@ public class CRBlocks {
             .properties(BlockBehaviour.Properties::noOcclusion)
             .properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
             .transform(pickaxeOnly())
-            .onRegister(ItemUseOverrides::addBlock)
             .lang("Brass Track Switch")
             .item(TrackSwitchBlockItem.ofType(CREdgePointTypes.SWITCH))
             .transform(customItemModel())

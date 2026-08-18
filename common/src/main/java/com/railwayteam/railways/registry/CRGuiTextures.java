@@ -59,8 +59,4 @@ public enum CRGuiTextures implements ScreenElement {
     public void render(GuiGraphicsExtractor graphics, int x, int y, int textureWidth, int textureHeight) {
         graphics.blit(RenderPipelines.GUI_TEXTURED, location, x, y, startX, startY, width, height, textureWidth, textureHeight);
     }
-
-    public void render(GuiGraphicsExtractor graphics, int x, int y, Color c) {
-        render(graphics, x, y);
-    }
 }
