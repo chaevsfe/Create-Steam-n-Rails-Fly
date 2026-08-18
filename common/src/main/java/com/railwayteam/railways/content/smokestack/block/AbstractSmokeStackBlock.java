@@ -119,6 +119,7 @@ public abstract class AbstractSmokeStackBlock<T extends SmartBlockEntity> extend
         return InteractionResult.SUCCESS;
     }
     @SuppressWarnings("deprecation")
+    @Override
     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, Orientation orientation, boolean isMoving) {
         super.neighborChanged(state, level, pos, block, orientation, isMoving);
         if (!level.isClientSide()) {

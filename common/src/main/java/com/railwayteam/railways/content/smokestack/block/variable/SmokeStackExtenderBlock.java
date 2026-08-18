@@ -202,6 +202,7 @@ public non-sealed class SmokeStackExtenderBlock extends Block implements ProperW
         return rotationType.cloneRotation(state.setValue(STYLE, below.getValue(STYLE)), below);
     }
     @SuppressWarnings("deprecation")
+    @Override
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
         if (oldState.getBlock() != this || oldState.getValue(partProperty) != state.getValue(partProperty))
             VariableSmokeStackBlock.queueHeightUpdate(level, findRoot(level, pos));

@@ -235,6 +235,7 @@ public class GenericCrossingBlock extends Block implements IBE<GenericCrossingBl
     }
 
     @SuppressWarnings("deprecation")
+    @Override
     public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
         if (pOldState.getBlock() == this)
             return;

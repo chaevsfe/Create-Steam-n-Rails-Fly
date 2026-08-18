@@ -163,6 +163,7 @@ public class SemaphoreBlock extends HorizontalDirectionalBlock implements IBE<Se
     }
 
     @SuppressWarnings("deprecation")
+    @Override
     public void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean isMoving) {
         super.onPlace(state, world, pos, oldState, isMoving);
         BlockPos currentPos = pos.below();

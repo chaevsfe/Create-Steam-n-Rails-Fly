@@ -154,6 +154,7 @@ public non-sealed class VariableSmokeStackBlock extends StyledSmokeStackBlock im
         withBlockEntityDo(level, pos, SmokeStackBlockEntity::updateHeight);
     }
     @SuppressWarnings("deprecation")
+    @Override
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
         super.onPlace(state, level, pos, oldState, movedByPiston);
         if (oldState.getBlock() != this || oldState.getValue(partProperty) != state.getValue(partProperty))

@@ -79,6 +79,7 @@ public class RemoteLensItem extends Item {
 		return use(context.getLevel(), context.getPlayer(), context.getHand());
 	}
 
+	@Override
 	public @NotNull InteractionResult use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
 		if (level.isClientSide())

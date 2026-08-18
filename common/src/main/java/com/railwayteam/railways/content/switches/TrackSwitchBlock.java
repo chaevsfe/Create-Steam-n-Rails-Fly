@@ -264,6 +264,7 @@ public abstract class TrackSwitchBlock extends HorizontalDirectionalBlock implem
       projectile.discard();
     }
   }
+  @Override
   protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, Orientation orientation, boolean isMoving) {
     super.neighborChanged(state, level, pos, block, orientation, isMoving);
 
