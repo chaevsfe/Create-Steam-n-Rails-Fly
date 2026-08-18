@@ -108,6 +108,11 @@ public class BoilerBlock extends Block implements IWrenchable, IHasCustomOutline
         return Shapes.empty();
     }
 
+    @Override
+    protected @NotNull VoxelShape getBlockSupportShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos) {
+        return Shapes.block();
+    }
+
     @SuppressWarnings("deprecation")
     public float getShadeBrightness(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos) {
         return 1.0f;
