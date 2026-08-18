@@ -22,6 +22,7 @@ import com.railwayteam.railways.registry.CRBlockEntities;
 import com.railwayteam.railways.util.AdventureUtils;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -45,14 +46,14 @@ public abstract class WoodVariantTrackBufferBlock extends TrackBufferBlock<WoodV
         return CRBlockEntities.TRACK_BUFFER_WOOD_VARIANT.get();
     }
 
-    @SuppressWarnings("deprecation")
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
-                                 BlockHitResult pHit) {
+    @Override
+    protected InteractionResult useItemOn(ItemStack held, BlockState pState, Level pLevel, BlockPos pPos,
+                                          Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (AdventureUtils.isAdventure(pPlayer))
             return InteractionResult.PASS;
-        InteractionResult result = onBlockEntityUse(pLevel, pPos, be -> be.applyMaterialIfValid(pPlayer.getItemInHand(pHand)));
+        InteractionResult result = onBlockEntityUse(pLevel, pPos, be -> be.applyMaterialIfValid(held));
         if (result.consumesAction())
             return result;
-        return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
+        return super.useItemOn(held, pState, pLevel, pPos, pPlayer, pHand, pHit);
     }
 }

@@ -117,12 +117,12 @@ public abstract class TrackBufferBlock<BE extends TrackBufferBlockEntity> extend
 		return Shapes.empty();
 	}
 
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
-															 BlockHitResult pHit) {
+	@Override
+	protected InteractionResult useItemOn(ItemStack held, BlockState pState, Level pLevel, BlockPos pPos,
+																			 Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
 		if (AdventureUtils.isAdventure(pPlayer))
 			return InteractionResult.PASS;
-		return onBlockEntityUse(pLevel, pPos, be -> be.applyDyeIfValid(pPlayer.getItemInHand(pHand)));
+		return onBlockEntityUse(pLevel, pPos, be -> be.applyDyeIfValid(held));
 	}
 
 	public static int getBaseModelYRotationOf(BlockState state) {

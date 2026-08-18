@@ -24,6 +24,7 @@ import com.railwayteam.railways.registry.CRShapes;
 import com.zurrtum.create.content.decoration.copycat.CopycatBlock;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -167,7 +168,8 @@ public abstract class VentBlock extends CopycatBlock implements IWrenchable {
         }
         return false;
     }
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (player instanceof ServerPlayer serverPlayer && level instanceof ServerLevel serverLevel && ConductorEntity.isPlayerDisguised(player)) {
             Direction direction = hit.getDirection().getOpposite();
 
@@ -184,8 +186,10 @@ public abstract class VentBlock extends CopycatBlock implements IWrenchable {
         }
         return InteractionResult.PASS;
     }
-    @SuppressWarnings("deprecation")
-    public void entityInside(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Entity entity) {
+    @Override
+    protected void entityInside(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
+                                @NotNull Entity entity, @NotNull InsideBlockEffectApplier applier,
+                                boolean isActuallyInside) {
         teleportConductor(level, pos, entity, null);
     }
 
