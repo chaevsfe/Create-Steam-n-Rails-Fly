@@ -118,7 +118,8 @@ public non-sealed class SmokeStackExtenderBlock extends Block implements ProperW
         super.createBlockStateDefinition(builder.add(WATERLOGGED, STYLE, getConstructSafePartProperty()));
         getConstructSafeRotationType().createBlockStateDefinition(builder);
     }
-    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
+    @Override
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
         return cycleGroup.get().get(state.getValue(STYLE)).asStack();
     }
     @SuppressWarnings("deprecation")

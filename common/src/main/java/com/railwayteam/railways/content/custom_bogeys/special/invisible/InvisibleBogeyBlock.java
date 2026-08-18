@@ -35,6 +35,7 @@ import net.minecraft.resources.Identifier;
 import com.zurrtum.create.foundation.block.IBE;
 import com.zurrtum.create.foundation.block.ProperWaterloggedBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
@@ -84,7 +85,8 @@ public class InvisibleBogeyBlock extends AbstractBogeyBlock<InvisibleBogeyBlockE
 		return CRBogeyStyles.INVISIBLE;
 	}
 
-	public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
+	@Override
+	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
 		return Blocks.ANDESITE.asItem().getDefaultInstance();
 	}
 	public Class<InvisibleBogeyBlockEntity> getBlockEntityClass() {

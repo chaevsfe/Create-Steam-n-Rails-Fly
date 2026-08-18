@@ -25,6 +25,7 @@ import com.railwayteam.railways.registry.CRShapes;
 import com.zurrtum.create.catnip.math.VoxelShaper;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
@@ -94,7 +95,8 @@ public class LinkPinBlock extends AbstractDyeableSingleBufferBlock implements Bl
             return name().toLowerCase(Locale.ROOT);
         }
     }
-    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
+    @Override
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
         return CRBlocks.LINK_AND_PIN_GROUP.get(state.getValue(STYLE)).asStack();
     }
 }

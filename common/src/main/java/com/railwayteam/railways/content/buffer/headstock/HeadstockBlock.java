@@ -30,6 +30,7 @@ import com.zurrtum.create.foundation.block.IBE;
 import com.zurrtum.create.foundation.block.ProperWaterloggedBlock;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -149,7 +150,8 @@ public class HeadstockBlock extends HorizontalDirectionalBlock implements IBE<He
     public BlockEntityType<? extends HeadstockBlockEntity> getBlockEntityType() {
         return CRBlockEntities.HEADSTOCK.get();
     }
-    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
+    @Override
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
         return CRBlocks.HEADSTOCK_GROUP.get(state.getValue(STYLE)).asStack();
     }
 }

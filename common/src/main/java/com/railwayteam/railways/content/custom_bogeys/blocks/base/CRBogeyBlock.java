@@ -29,6 +29,7 @@ import com.zurrtum.create.content.trains.track.TrackMaterial;
 import com.zurrtum.create.foundation.block.IBE;
 import com.zurrtum.create.foundation.block.ProperWaterloggedBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -66,7 +67,8 @@ public class CRBogeyBlock extends AbstractBogeyBlock<CRBogeyBlockEntity>
 		return defaultStyle;
 	}
 
-	public @NotNull ItemStack getCloneItemStack(@NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull BlockState state) {
+	@Override
+	public @NotNull ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
 		return Blocks.ANDESITE.asItem().getDefaultInstance();
 	}
 	public Class<CRBogeyBlockEntity> getBlockEntityClass() {
