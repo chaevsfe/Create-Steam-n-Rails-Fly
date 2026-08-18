@@ -40,7 +40,6 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -103,8 +102,8 @@ public class BoilerBlock extends Block implements IWrenchable, IHasCustomOutline
                 && adjacentBlockState.getValue(RAISED) == state.getValue(RAISED);
     }
 
-    @SuppressWarnings("deprecation")
-    public @NotNull VoxelShape getOcclusionShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos) {
+    @Override
+    protected @NotNull VoxelShape getOcclusionShape(@NotNull BlockState state) {
         return Shapes.empty();
     }
 
@@ -136,19 +135,19 @@ public class BoilerBlock extends Block implements IWrenchable, IHasCustomOutline
                 .setValue(HORIZONTAL_AXIS, axis)
                 .setValue(RAISED, raised);
     }
-    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
-                                          Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
+    @Override
+    protected @NotNull InteractionResult useItemOn(@NotNull ItemStack heldItem, @NotNull BlockState state,
+                                                   @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player,
+                                                   @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
         if (player.isShiftKeyDown() || !player.mayBuild())
-            return InteractionResult.PASS;
-
-        ItemStack heldItem = player.getItemInHand(hand);
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
 
         IPlacementHelper helper = PlacementHelpers.get(placementHelperId);
         if (helper.matchesItem(heldItem))
             return helper.getOffset(player, level, state, pos, hit)
                     .placeInWorld(level, (BlockItem) heldItem.getItem(), player, hand);
 
-        return InteractionResult.PASS;
+        return InteractionResult.TRY_WITH_EMPTY_HAND;
     }
     public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
                                         @NotNull CollisionContext context) {
@@ -248,6 +247,11 @@ public class BoilerBlock extends Block implements IWrenchable, IHasCustomOutline
             for (Direction dir : directions) {
                 dir = dir.getOpposite();
                 int range = AllConfigs.server().equipment.placementAssistRange.get();
+                if (player != null) {
+                    AttributeInstance reach = player.getAttribute(Attributes.BLOCK_INTERACTION_RANGE);
+                    if (reach != null && reach.hasModifier(ExtendoGripItem.singleRangeAttributeModifier.id()))
+                        range += 4;
+                }
                 int poles = attachedPoles(level, pos, dir);
                 if (poles >= range)
                     continue;
@@ -265,10 +269,6 @@ public class BoilerBlock extends Block implements IWrenchable, IHasCustomOutline
             }
 
             return offset;
-        }
-
-        public static Attribute getAttribute() {
-            return Attributes.BLOCK_INTERACTION_RANGE.value();
         }
     }
 }
