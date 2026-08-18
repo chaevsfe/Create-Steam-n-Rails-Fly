@@ -27,6 +27,8 @@ import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import com.zurrtum.create.foundation.block.ProperWaterloggedBlock;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.util.RandomSource;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.server.level.ServerLevel;
@@ -171,9 +173,11 @@ public non-sealed class SmokeStackExtenderBlock extends Block implements ProperW
         BlockState below = level.getBlockState(pos.below());
         return (below.is(this) || below.is(baseBlock())) && below.getValue(partProperty).isFullHeight();
     }
-    @SuppressWarnings("deprecation")
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos) {
-        updateWater(level, level, state, currentPos);
+    @Override
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess tickAccess,
+                                     BlockPos currentPos, Direction direction, BlockPos neighborPos,
+                                     BlockState neighborState, RandomSource random) {
+        updateWater(level, tickAccess, state, currentPos);
 
         if (direction.getAxis() != Axis.Y)
             return state;
@@ -199,10 +203,9 @@ public non-sealed class SmokeStackExtenderBlock extends Block implements ProperW
         if (oldState.getBlock() != this || oldState.getValue(partProperty) != state.getValue(partProperty))
             VariableSmokeStackBlock.queueHeightUpdate(level, findRoot(level, pos));
     }
-    @SuppressWarnings("deprecation")
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (newState.getBlock() != this)
-            VariableSmokeStackBlock.queueHeightUpdate(level, findRoot(level, pos));
+    @Override
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        VariableSmokeStackBlock.queueHeightUpdate(level, findRoot(level, pos));
     }
     public BlockPos getInformationSource(Level level, BlockPos pos, BlockState state) {
         return findRoot(level, pos);

@@ -26,6 +26,9 @@ import com.zurrtum.create.foundation.block.ProperWaterloggedBlock;
 import com.zurrtum.create.foundation.blockEntity.SmartBlockEntity;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.util.RandomSource;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -96,9 +99,11 @@ public abstract class AbstractSmokeStackBlock<T extends SmartBlockEntity> extend
 
         return blockstate.setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
     }
-    @SuppressWarnings("deprecation")
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos) {
-        updateWater(level, level, state, currentPos);
+    @Override
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess tickAccess,
+                                     BlockPos currentPos, Direction direction, BlockPos neighborPos,
+                                     BlockState neighborState, RandomSource random) {
+        updateWater(level, tickAccess, state, currentPos);
         return state;
     }
     @SuppressWarnings("deprecation")

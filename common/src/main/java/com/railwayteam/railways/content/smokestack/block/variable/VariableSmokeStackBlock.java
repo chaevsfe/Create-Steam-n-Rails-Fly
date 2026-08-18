@@ -28,6 +28,8 @@ import com.railwayteam.railways.util.ShapeWrapper;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -120,8 +122,11 @@ public non-sealed class VariableSmokeStackBlock extends StyledSmokeStackBlock im
         BlockState below = level.getBlockState(pos.below());
         return !(below.isAir() || below.is(this) || below.is(extenderBlock()));
     }*/
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos) {
-        state = super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
+    @Override
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess tickAccess,
+                                     BlockPos currentPos, Direction direction, BlockPos neighborPos,
+                                     BlockState neighborState, RandomSource random) {
+        state = super.updateShape(state, level, tickAccess, currentPos, direction, neighborPos, neighborState, random);
 
         if (direction.getAxis() != Axis.Y)
             return state;
