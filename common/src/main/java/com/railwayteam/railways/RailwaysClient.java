@@ -19,6 +19,7 @@
 package com.railwayteam.railways;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.railwayteam.railways.content.palettes.ct.PaletteConnectedTextures;
 import com.railwayteam.railways.base.reload.ClientResourceReloadCallback;
 import com.railwayteam.railways.content.buffer.BufferModelUtils;
 import com.railwayteam.railways.content.conductor.ConductorCapModel;
@@ -105,6 +106,7 @@ public class RailwaysClient {
     CRContainerTypes.registerScreens();
 
     AllModels.register(com.railwayteam.railways.registry.CRBlocks.CONDUCTOR_VENT.get(), CopycatVentModel::new);
+    PaletteConnectedTextures.register();
 
     CustomTrackOverlayRendering.register(CREdgePointTypes.COUPLER, CRBlockPartials.COUPLER_BOTH);
     CustomTrackOverlayRendering.register(CREdgePointTypes.SWITCH, CRBlockPartials.SWITCH_RIGHT_TURN);

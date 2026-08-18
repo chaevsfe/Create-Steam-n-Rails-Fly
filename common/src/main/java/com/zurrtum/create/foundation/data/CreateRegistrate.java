@@ -27,18 +27,6 @@ public class CreateRegistrate extends Registrate {
         return new CreateRegistrate(modid);
     }
 
-    public static <T extends Block> NonNullConsumer<T> blockModel(Supplier<?> factory) {
-        return NonNullConsumer.noop();
-    }
-
-    public static <T extends Block> NonNullConsumer<T> connectedTextures(Supplier<? extends ConnectedTextureBehaviour> behaviour) {
-        return NonNullConsumer.noop();
-    }
-
-    public static <T extends Item> NonNullConsumer<T> itemModel(Supplier<?> factory) {
-        return NonNullConsumer.noop();
-    }
-
     public void setTooltipModifierFactory(Function<Item, TooltipModifier> factory) {
         this.tooltipModifierFactory = factory;
     }
