@@ -39,6 +39,7 @@ public abstract class PhantomSpriteManager {
     public static boolean firstRun = true;
     public static boolean hasChanged = false;
     private static boolean visible = false;
+    private static boolean reported = false;
 
     public static boolean isVisible() {
         return visible;
@@ -74,6 +75,12 @@ public abstract class PhantomSpriteManager {
     }
 
     public static void renderTick() {
+        if (!reported) {
+            reported = true;
+            Railways.LOGGER.info("Phantom track sprites registered: {}", map.size());
+            if (map.isEmpty())
+                Railways.LOGGER.warn("No phantom track sprites registered - phantom tracks will never turn invisible");
+        }
         if (hasChanged) {
             hasChanged = false;
             for (WeakReference<SpriteContents> ref : map.values()) {
