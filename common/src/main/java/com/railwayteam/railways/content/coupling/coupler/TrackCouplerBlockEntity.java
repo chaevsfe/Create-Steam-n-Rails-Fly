@@ -142,8 +142,6 @@ public class TrackCouplerBlockEntity extends SmartBlockEntity implements Transfo
         blockState.getOptionalValue(TrackCouplerBlock.POWERED).ifPresent(powered -> {
             if (lastReportedPower == powered)
                 return;
-            Railways.LOGGER.info("[TrackCoupler {}] block entity power transition previous={} current={} mode={} edgePointsOk={}",
-                getBlockPos(), lastReportedPower, powered, getAllowedOperationMode(), edgePointsOk);
             lastReportedPower = powered;
             if (powered)
                 onPowered();
@@ -163,7 +161,6 @@ public class TrackCouplerBlockEntity extends SmartBlockEntity implements Transfo
         if (level == null || level.isClientSide())
             return;
 //        this.getSecondaryCoupler().blockEntityAdded(this, false); //FIX_ME remove this
-        debugCouplerOperation = true;
         try {
             debugCoupler("powered: allowedMode={} edgePointsOk={} spacing={} primaryTarget={} secondaryTarget={} primaryGlobal={} secondaryGlobal={}",
                 getAllowedOperationMode(), edgePointsOk, edgeSpacing, getTargetTrack(edgePoint), getTargetTrack(secondEdgePoint),

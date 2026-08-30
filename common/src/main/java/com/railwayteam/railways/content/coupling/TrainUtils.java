@@ -113,8 +113,6 @@ public class TrainUtils {
         if (train.carriages.isEmpty())
             Create.RAILWAYS.removeTrain(train.id);
 
-        Railways.LOGGER.info("[TrainUtils] split train {} -> {} movedCarriages={} remainingCarriages={} newCarriages={}",
-            train.id, newTrain.id, numberOffEnd, train.carriages.size(), newTrain.carriages.size());
         return newTrain;
     }
 
@@ -173,9 +171,6 @@ public class TrainUtils {
         CRPackets.PACKETS.sendTo(allPlayers, new AddTrainEndPacket(frontTrain, backTrain, carriageSpacing, frontTrain.doubleEnded));
         frontTrain.carriages.forEach(carriage -> carriage.forEachPresentEntity(
             cce -> CRPackets.PACKETS.sendTo(allPlayers, new CarriageContraptionEntityUpdatePacket(cce, frontTrain))));
-
-        Railways.LOGGER.info("[TrainUtils] combined train {} + {} -> carriages={}",
-            frontTrain.id, backTrain.id, frontTrain.carriages.size());
 
         return frontTrain;
     }
