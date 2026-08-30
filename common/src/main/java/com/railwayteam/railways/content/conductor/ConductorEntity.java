@@ -48,6 +48,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -828,6 +829,15 @@ public class ConductorEntity extends AbstractGolem {
     @Override
     public void onClientRemoval() {
         WITH_TOOLBOXES.get(level()).remove(this);
+    }
+
+    @Override
+    public boolean hurtServer(@NotNull ServerLevel level, @NotNull DamageSource source, float amount) {
+        if (getRootVehicle() instanceof CarriageContraptionEntity)
+            return false;
+        if (source.getEntity() instanceof LivingEntity living && living.getMainHandItem().is(AllItems.WRENCH))
+            amount = 10;
+        return super.hurtServer(level, source, amount);
     }
 
     @Override
