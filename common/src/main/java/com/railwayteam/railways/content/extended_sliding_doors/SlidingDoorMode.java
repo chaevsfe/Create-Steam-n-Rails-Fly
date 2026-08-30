@@ -48,7 +48,7 @@ public enum SlidingDoorMode {
         return true;
     }
     public String getTranslationKey() {
-        return "sliding_door.mode." + name().toLowerCase(Locale.ROOT);
+        return "create.sliding_door.mode." + name().toLowerCase(Locale.ROOT);
     }
 
     public static SlidingDoorMode fromNbt(CompoundTag nbt) {
