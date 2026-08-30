@@ -142,6 +142,13 @@ public abstract class MixinTrackBlockEntity extends SmartBlockEntity implements 
         }
     }
 
+    @Inject(method = "preRemoveSideEffects", at = @At("HEAD"))
+    private void railways$removeCasingCollisions(BlockPos pos, BlockState oldState, CallbackInfo ci) {
+        if (level == null || level.isClientSide() || level instanceof SchematicLevel)
+            return;
+        CasingCollisionUtils.manageTracks((TrackBlockEntity) (Object) this, true);
+    }
+
     @Inject(method = "lazyTick", at = @At("HEAD"))
     private void manageCasingCollisions(CallbackInfo ci) {
         if (railways$trackCasing == null || railways$isAlternateModel || level instanceof SchematicLevel)
