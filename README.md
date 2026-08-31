@@ -21,6 +21,7 @@ Expands Create's train and steam systems with custom tracks, semaphores, conduct
 ## Download
 
 - [Modrinth](https://modrinth.com/project/13eOfSPn)
+- [CurseForge](https://www.curseforge.com/minecraft/mc-mods/create-fly-steam-n-rails)
 - [GitHub releases](https://github.com/chaevsfe/Create-Steam-n-Rails-Fly/releases)
 
 
