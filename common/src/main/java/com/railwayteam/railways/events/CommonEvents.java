@@ -37,6 +37,7 @@ public class CommonEvents {
     @MultiLoaderEvent
     public static void onPlayerJoin(ServerPlayer player) {
         PacketSender.notifyServerVersion(player);
+        PacketSender.syncServerConfig(player);
     }
 
     @MultiLoaderEvent

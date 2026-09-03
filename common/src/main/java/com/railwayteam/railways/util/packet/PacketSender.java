@@ -18,8 +18,10 @@
 
 package com.railwayteam.railways.util.packet;
 
+import com.google.gson.JsonObject;
 import com.railwayteam.railways.RailwaysBuildInfo;
 import com.railwayteam.railways.annotation.multiloader.MultiLoaderEvent;
+import com.railwayteam.railways.config.CRConfigs;
 import com.railwayteam.railways.content.minecarts.MinecartJukebox;
 import com.railwayteam.railways.multiloader.PlayerSelection;
 import com.railwayteam.railways.registry.CRPackets;
@@ -41,5 +43,11 @@ public class PacketSender {
   public static void notifyServerVersion(ServerPlayer player) {
     CRPackets.PACKETS.onPlayerJoin(player);
     CRPackets.PACKETS.sendTo(player, new ModVersionPacket(RailwaysBuildInfo.VERSION));
+  }
+
+  public static void syncServerConfig(ServerPlayer player) {
+    JsonObject values = CRConfigs.server().getValues();
+    if (values != null)
+      CRPackets.PACKETS.sendTo(player, ServerConfigPacket.of(values));
   }
 }

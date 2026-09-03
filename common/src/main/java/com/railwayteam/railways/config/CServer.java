@@ -18,8 +18,11 @@
 
 package com.railwayteam.railways.config;
 
+import com.google.gson.JsonObject;
+import com.zurrtum.create.catnip.config.Builder;
 import com.zurrtum.create.catnip.config.ConfigBase;
 import com.zurrtum.create.catnip.config.ui.ConfigAnnotations;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
 public class CServer extends ConfigBase {
@@ -37,8 +40,41 @@ public class CServer extends ConfigBase {
     public final CSemaphores semaphores = nested(0, CSemaphores::new, Comments.semaphores);
     public final CConductors conductors = nested(0, CConductors::new, Comments.conductors);
     public final CRealism realism = nested(0, CRealism::new, Comments.realism);
+
+    private Builder builder;
+    private JsonObject localValues;
+
     public String getName() {
         return "server";
+    }
+
+    @Override
+    public void registerAll(Builder builder) {
+        this.builder = builder;
+        super.registerAll(builder);
+    }
+
+    public JsonObject getValues() {
+        return builder == null ? null : builder.object;
+    }
+
+    public void reload(@Nullable JsonObject synced) {
+        if (builder == null)
+            return;
+
+        if (synced == null) {
+            if (localValues == null)
+                return;
+            builder.object = localValues;
+            localValues = null;
+        } else {
+            if (localValues == null)
+                localValues = builder.object;
+            builder.object = synced;
+        }
+
+        depth = 0;
+        super.registerAll(builder);
     }
 
     private static class Comments {

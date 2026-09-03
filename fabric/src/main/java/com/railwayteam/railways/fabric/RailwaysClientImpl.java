@@ -31,6 +31,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLevelEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
@@ -79,6 +80,7 @@ public class RailwaysClientImpl implements ClientModInitializer {
 		ClientTickEvents.START_CLIENT_TICK.register(ClientEvents::onClientTickStart);
 		ClientTickEvents.END_CLIENT_TICK.register(ClientEvents::onClientTickEnd);
 		ClientLevelEvents.AFTER_CLIENT_LEVEL_CHANGE.register((mc, level) -> ClientEvents.onClientWorldLoad(level));
+		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> ClientEvents.onClientDisconnect());
 		ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
 			@Override
 			public Identifier getFabricId() {

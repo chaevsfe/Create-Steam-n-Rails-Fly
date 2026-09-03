@@ -38,6 +38,11 @@ public class ClientEvents {
     public static boolean previousDevCapeSetting = false;
 
     @MultiLoaderEvent
+    public static void onClientDisconnect() {
+        CRConfigs.server().reload(null);
+    }
+
+    @MultiLoaderEvent
     public static void onClientTickStart(Minecraft mc) {
         CRKeys.fixBinds();
         PhantomSpriteManager.tick(mc);
