@@ -18,6 +18,11 @@
 
 package com.railwayteam.railways.config;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.util.Utils;
 import com.zurrtum.create.catnip.config.Builder;
@@ -26,6 +31,9 @@ import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -198,8 +206,31 @@ public class CRConfigs {
     }
 
     private static void preloadValues() {
-        cachedDisableDatafixer = false;
-        cachedRegisterMissingTracks = false;
+        Path commonConfig = Utils.configDir().resolve(Railways.MOD_ID).resolve("common.json");
+        try (Reader reader = Files.newBufferedReader(commonConfig)) {
+            if (JsonParser.parseReader(reader) instanceof JsonObject config) {
+                cachedDisableDatafixer = readBoolean(config, "disableDatafixer");
+                cachedRegisterMissingTracks = readBoolean(config, "registerMissingTracks");
+            }
+        } catch (IOException | JsonParseException e) {
+            cachedDisableDatafixer = null;
+            cachedRegisterMissingTracks = null;
+        }
+
+        if (cachedDisableDatafixer == null)
+            cachedDisableDatafixer = false;
+
+        if (cachedRegisterMissingTracks == null)
+            cachedRegisterMissingTracks = false;
+    }
+
+    private static Boolean readBoolean(JsonObject config, String key) {
+        JsonElement element = config.get(key);
+        if (element instanceof JsonObject object)
+            element = object.get("value");
+        if (element instanceof JsonPrimitive primitive && primitive.isBoolean())
+            return primitive.getAsBoolean();
+        return null;
     }
 
 
