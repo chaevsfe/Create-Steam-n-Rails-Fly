@@ -43,7 +43,6 @@ public class CRPackets {
         .s2c(JukeboxCartPacket.class, JukeboxCartPacket::new)
         .s2c(MountedToolboxSyncPacket.class, MountedToolboxSyncPacket::new)
         .s2c(ModVersionPacket.class, ModVersionPacket::new)
-        .s2c(ServerConfigPacket.class, ServerConfigPacket::new)
         .s2c(CarriageContraptionEntityUpdatePacket.class, CarriageContraptionEntityUpdatePacket::new)
         .s2c(ChopTrainEndPacket.class, ChopTrainEndPacket::new)
         .s2c(AddTrainEndPacket.class, AddTrainEndPacket::new)
@@ -54,6 +53,7 @@ public class CRPackets {
         .s2c(CameraMovePacket.class, CameraMovePacket::new)
         .s2c(ConfigureDevCapeS2CPacket.class, ConfigureDevCapeS2CPacket::new)
         .s2c(ShadowTrainRestorePacket.class, ShadowTrainRestorePacket::new)
+        .s2c(ServerConfigPacket.class, ServerConfigPacket::new)
 
         .build();
 }

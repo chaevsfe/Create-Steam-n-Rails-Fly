@@ -45,6 +45,9 @@ public record ServerConfigPacket(byte[] values) implements S2CPacket {
 
   @Environment(EnvType.CLIENT)
   public void handle(Minecraft mc) {
+    if (mc.hasSingleplayerServer())
+      return;
+
     try {
       CRConfigs.server().reload(Builder.GSON.fromJson(new String(values, StandardCharsets.UTF_8), JsonObject.class));
     } catch (RuntimeException e) {

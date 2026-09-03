@@ -65,16 +65,22 @@ public class CServer extends ConfigBase {
         if (synced == null) {
             if (localValues == null)
                 return;
-            builder.object = localValues;
+            bind(localValues);
             localValues = null;
         } else {
             if (localValues == null)
                 localValues = builder.object;
-            builder.object = synced;
+            bind(synced);
+            builder.object = localValues;
         }
+    }
 
+    private void bind(JsonObject values) {
+        builder.object = values;
         depth = 0;
         super.registerAll(builder);
+        builder.pop(depth);
+        depth = 0;
     }
 
     private static class Comments {
