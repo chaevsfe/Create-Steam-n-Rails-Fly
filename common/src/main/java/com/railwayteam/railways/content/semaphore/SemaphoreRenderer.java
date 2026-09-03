@@ -139,47 +139,43 @@ public class SemaphoreRenderer extends SmartBlockEntityRenderer<SemaphoreBlockEn
         super.submit(state, matrices, queue, cameraState);
 
         if (state.armBuf != null) {
-            queue.submitCustomGeometry(matrices, RenderTypes.cutoutMovingBlock(), (pose, consumer) ->
-                state.armBuf
-                    .rotateCenteredDegrees(state.yRot, Direction.Axis.Y)
-                    .rotateCentered(state.armAngle, Direction.EAST)
-                    .light(state.lightCoords)
-                    .renderInto(pose, consumer));
+            state.armBuf
+                .rotateCenteredDegrees(state.yRot, Direction.Axis.Y)
+                .rotateCentered(state.armAngle, Direction.EAST)
+                .light(state.lightCoords)
+                .submit(RenderTypes.cutoutMovingBlock(), matrices, queue);
         }
 
         if (state.showLamp) {
             if (state.lampBuf != null) {
-                queue.submitCustomGeometry(matrices, state.translucentType, (pose, consumer) ->
-                    state.lampBuf
-                        .rotateCenteredDegrees(state.yRot, Direction.Axis.Y)
-                        .translate(state.lampTx, state.lampTy, state.lampTz)
-                        .light(0xF000F0)
-                        .disableDiffuse()
-                        .renderInto(pose, consumer));
+                state.lampBuf
+                    .rotateCenteredDegrees(state.yRot, Direction.Axis.Y)
+                    .translate(state.lampTx, state.lampTy, state.lampTz)
+                    .light(0xF000F0)
+                    .disableDiffuse()
+                    .submit(state.translucentType, matrices, queue);
             }
 
             OrderedSubmitNodeCollector additiveQueue = queue.order(1);
 
             if (state.glowBuf != null) {
-                additiveQueue.submitCustomGeometry(matrices, state.additiveType, (pose, consumer) ->
-                    state.glowBuf
-                        .rotateCenteredDegrees(state.yRot, Direction.Axis.Y)
-                        .translate(state.lampTx, state.lampTy, state.lampTz)
-                        .light(0xF000F0)
-                        .disableDiffuse()
-                        .scale(1.5f, 2f, 2f)
-                        .renderInto(pose, consumer));
+                state.glowBuf
+                    .rotateCenteredDegrees(state.yRot, Direction.Axis.Y)
+                    .translate(state.lampTx, state.lampTy, state.lampTz)
+                    .light(0xF000F0)
+                    .disableDiffuse()
+                    .scale(1.5f, 2f, 2f)
+                    .submit(state.additiveType, matrices, additiveQueue);
             }
 
             if (state.lampColorBuf != null) {
-                additiveQueue.submitCustomGeometry(matrices, state.additiveType, (pose, consumer) ->
-                    state.lampColorBuf
-                        .rotateCenteredDegrees(state.yRot, Direction.Axis.Y)
-                        .translate(state.lampTx, state.lampTy, state.lampTz)
-                        .light(0xF000F0)
-                        .disableDiffuse()
-                        .scale(1 + 1 / 16f)
-                        .renderInto(pose, consumer));
+                state.lampColorBuf
+                    .rotateCenteredDegrees(state.yRot, Direction.Axis.Y)
+                    .translate(state.lampTx, state.lampTy, state.lampTz)
+                    .light(0xF000F0)
+                    .disableDiffuse()
+                    .scale(1 + 1 / 16f)
+                    .submit(state.additiveType, matrices, additiveQueue);
             }
         }
     }

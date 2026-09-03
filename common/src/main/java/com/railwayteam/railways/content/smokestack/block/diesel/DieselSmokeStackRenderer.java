@@ -51,7 +51,7 @@ public class DieselSmokeStackRenderer
                        CameraRenderState cameraState) {
         super.submit(state, matrices, queue, cameraState);
         if (state.fan != null)
-            queue.submitCustomGeometry(matrices, RenderTypes.cutoutMovingBlock(), state.fan);
+            state.fan.submit(RenderTypes.cutoutMovingBlock(), matrices, queue);
     }
 
     public static class DieselRenderState

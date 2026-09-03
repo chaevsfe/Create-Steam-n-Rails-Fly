@@ -55,8 +55,7 @@ public class ConductorFlagLayer extends RenderLayer<ConductorRenderState, Conduc
                 Blocks.AIR.defaultBlockState())
                 .translate(-0.78125, 0.15, -0.688)
                 .light(packedLight);
-        submitter.submitCustomGeometry(poseStack, CUTOUT_BLOCKS,
-                (pose, consumer) -> buf.renderInto(pose, consumer));
+        buf.submit(CUTOUT_BLOCKS, poseStack, submitter);
         poseStack.popPose();
     }
 }

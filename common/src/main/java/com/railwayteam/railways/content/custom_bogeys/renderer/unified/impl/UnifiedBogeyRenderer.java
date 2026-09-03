@@ -18,7 +18,6 @@
 
 package com.railwayteam.railways.content.custom_bogeys.renderer.unified.impl;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.railwayteam.railways.content.custom_bogeys.renderer.unified.BogeyDisplay;
 import com.railwayteam.railways.content.custom_bogeys.renderer.unified.BogeyDisplayHolder;
 import com.zurrtum.create.client.content.trains.bogey.BogeyBlockEntityRenderer.BogeyRenderState;
@@ -28,6 +27,7 @@ import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBuffer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.nbt.CompoundTag;
@@ -86,50 +86,47 @@ public class UnifiedBogeyRenderer implements BogeyRenderer, BogeyDisplayHolder {
     private record RenderState(Renderer renderer, List<Matrix4f> elementPoses, List<Float> scrollingOffsets,
                                @Nullable BogeyRenderState customState, int packedLight,
                                @Nullable CardinalLighting cardinalLighting)
-        implements BogeyRenderState, SubmitNodeCollector.CustomGeometryRenderer {
+        implements BogeyRenderState {
 
         @Override
         public void submit(PoseStack poseStack, SubmitNodeCollector queue) {
             poseStack.pushPose();
             poseStack.translate(0, -1.5 - 1 / 128f, 0);
-            queue.submitCustomGeometry(poseStack, RenderTypes.cutoutMovingBlock(), this);
-            poseStack.popPose();
 
-            if (customState != null)
-                customState.submit(poseStack, queue);
-        }
-
-        @Override
-        public void render(PoseStack.Pose matrices, VertexConsumer buffer) {
-            PoseStack ms = new PoseStack();
+            RenderType type = RenderTypes.cutoutMovingBlock();
             int poseIndex = 0;
 
             for (RenderedElement.Single element : renderer.singleElements) {
-                setPose(ms.last(), matrices, elementPoses.get(poseIndex++));
+                poseStack.pushPose();
+                applyPose(poseStack.last(), elementPoses.get(poseIndex++));
 
                 CachedBuffers.partial(element.model(), Blocks.AIR.defaultBlockState())
                     .cardinalLighting(cardinalLighting)
                     .light(packedLight)
                     .overlay(OverlayTexture.NO_OVERLAY)
-                    .renderInto(ms.last(), buffer);
+                    .submit(type, poseStack, queue);
+                poseStack.popPose();
             }
 
             for (RenderedElement.Multiple elements : renderer.multipleElements) {
                 SuperByteBuffer sbb = CachedBuffers.partial(elements.model(), Blocks.AIR.defaultBlockState());
 
                 for (RenderedElement element : elements.elements()) {
-                    setPose(ms.last(), matrices, elementPoses.get(poseIndex++));
+                    poseStack.pushPose();
+                    applyPose(poseStack.last(), elementPoses.get(poseIndex++));
 
                     sbb.cardinalLighting(cardinalLighting)
                         .light(packedLight)
                         .overlay(OverlayTexture.NO_OVERLAY)
-                        .renderInto(ms.last(), buffer);
+                        .submit(type, poseStack, queue);
+                    poseStack.popPose();
                 }
             }
 
             for (int i = 0; i < renderer.scrollingElements.size(); i++) {
                 RenderedElement.Scrolling element = renderer.scrollingElements.get(i);
-                setPose(ms.last(), matrices, elementPoses.get(poseIndex++));
+                poseStack.pushPose();
+                applyPose(poseStack.last(), elementPoses.get(poseIndex++));
                 float spriteSize = element.entry.getTarget().getV1() - element.entry.getTarget().getV0();
                 float shiftV = scrollingOffsets.get(i);
                 float scrollV = shiftV - Mth.floor(shiftV);
@@ -139,13 +136,19 @@ public class UnifiedBogeyRenderer implements BogeyRenderer, BogeyDisplayHolder {
                     .light(packedLight)
                     .overlay(OverlayTexture.NO_OVERLAY)
                     .shiftUVScrolling(element.entry, scrollV)
-                    .renderInto(ms.last(), buffer);
+                    .submit(type, poseStack, queue);
+                poseStack.popPose();
             }
+
+            poseStack.popPose();
+
+            if (customState != null)
+                customState.submit(poseStack, queue);
         }
 
-        private static void setPose(PoseStack.Pose target, PoseStack.Pose base, Matrix4f transform) {
-            target.pose().set(base.pose()).mul(transform);
-            target.normal().set(base.normal()).mul(new Matrix3f(transform));
+        private static void applyPose(PoseStack.Pose target, Matrix4f transform) {
+            target.pose().mul(transform);
+            target.normal().mul(new Matrix3f(transform));
         }
     }
 

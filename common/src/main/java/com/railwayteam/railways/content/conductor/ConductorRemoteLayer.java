@@ -72,7 +72,6 @@ public class ConductorRemoteLayer extends RenderLayer<ConductorRenderState, Cond
 
     @SuppressWarnings("unchecked")
     private static void renderPartial(SubmitNodeCollector submitter, PoseStack poseStack, SuperByteBuffer buf) {
-        submitter.submitCustomGeometry(poseStack, CUTOUT_BLOCKS,
-                (pose, consumer) -> buf.renderInto(pose, consumer));
+        buf.submit(CUTOUT_BLOCKS, poseStack, submitter);
     }
 }

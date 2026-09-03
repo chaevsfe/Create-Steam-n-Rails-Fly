@@ -61,10 +61,9 @@ public class ConductorWhistleFlagRenderer
 		super.submit(state, matrices, queue, cameraState);
 
 		if (state.flag != null) {
-			queue.submitCustomGeometry(matrices, RenderTypes.cutoutMovingBlock(),
-				(pose, consumer) -> state.flag
-					.light(state.lightCoords)
-					.renderInto(pose, consumer));
+			state.flag
+				.light(state.lightCoords)
+				.submit(RenderTypes.cutoutMovingBlock(), matrices, queue);
 		}
 	}
 
