@@ -22,7 +22,6 @@ import com.railwayteam.railways.registry.CRBlocks;
 import com.railwayteam.railways.registry.CRTrackMaterials;
 import com.zurrtum.create.AllDataComponents;
 import com.zurrtum.create.AllSoundEvents;
-import com.zurrtum.create.client.content.trains.track.TrackBlockOutline;
 import com.zurrtum.create.client.foundation.utility.CreateLang;
 import com.zurrtum.create.catnip.data.Pair;
 import com.zurrtum.create.content.trains.graph.EdgePointType;
@@ -32,8 +31,6 @@ import com.zurrtum.create.content.trains.track.TrackShape;
 import com.zurrtum.create.content.trains.track.TrackTargetingBlockItem;
 import com.zurrtum.create.foundation.block.IBE;
 import com.tterrag.registrate.util.nullness.NonNullBiFunction;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -175,18 +172,5 @@ public class TrackBufferBlockItem extends TrackTargetingBlockItem {
 		}
 
 		return InteractionResult.PASS;
-	}
-
-	@Environment(EnvType.CLIENT)
-	public boolean useOnCurve(TrackBlockOutline.BezierPointSelection selection, ItemStack stack) {
-		Player player = net.minecraft.client.Minecraft.getInstance().player;
-		Level level = net.minecraft.client.Minecraft.getInstance().level;
-
-		if (player != null) {
-			player.sendOverlayMessage(CreateLang.translateDirect("track_target.invalid")
-				.withStyle(ChatFormatting.RED));
-			AllSoundEvents.DENY.play(level, player, player.position(), .5f, 1);
-		}
-		return false;
 	}
 }

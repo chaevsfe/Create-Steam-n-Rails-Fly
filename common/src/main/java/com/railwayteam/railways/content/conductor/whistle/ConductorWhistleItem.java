@@ -48,7 +48,6 @@ import com.zurrtum.create.content.trains.station.GlobalStation;
 import com.zurrtum.create.content.trains.station.StationBlock;
 import com.zurrtum.create.content.trains.station.StationBlockEntity;
 import com.zurrtum.create.content.trains.track.ITrackBlock;
-import com.zurrtum.create.client.content.trains.track.TrackBlockOutline;
 import com.zurrtum.create.content.trains.track.TrackTargetingBlockItem;
 import com.zurrtum.create.foundation.block.IBE;
 import net.minecraft.ChatFormatting;
@@ -100,10 +99,6 @@ public class ConductorWhistleItem extends TrackTargetingBlockItem {
 
 	public ConductorWhistleItem(Block block, Item.Properties properties) {
 		super(block, properties, EdgePointType.STATION);
-	}
-
-	public boolean useOnCurve(TrackBlockOutline.BezierPointSelection selection, ItemStack stack) {
-		return false;
 	}
 
 	private static InteractionResult fail(Player player, String message) {
