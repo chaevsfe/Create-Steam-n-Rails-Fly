@@ -32,14 +32,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class PhantomSpriteManager {
     private static final Map<Identifier, WeakReference<SpriteContents>> map = new ConcurrentHashMap<>();
+    private static final AtomicInteger taggedStates = new AtomicInteger();
     private static boolean lastVisible = false;
     public static boolean firstRun = true;
     public static boolean hasChanged = false;
     private static boolean visible = false;
-    private static boolean reported = false;
 
     public static boolean isVisible() {
         return visible;
@@ -52,6 +53,19 @@ public abstract class PhantomSpriteManager {
             return true;
         }
         return false;
+    }
+
+    public static void countTaggedState() {
+        taggedStates.incrementAndGet();
+    }
+
+    public static void report() {
+        map.values().removeIf(ref -> ref.get() == null);
+        int sprites = map.size();
+        int tagged = taggedStates.getAndSet(0);
+        Railways.LOGGER.info("Phantom track sprites registered: {}, animation states tagged: {}", sprites, tagged);
+        if (sprites == 0 || tagged == 0)
+            Railways.LOGGER.warn("Phantom track invisibility is not wired up - phantom tracks will never turn invisible");
     }
 
     @MultiLoaderEvent
@@ -75,12 +89,6 @@ public abstract class PhantomSpriteManager {
     }
 
     public static void renderTick() {
-        if (!reported) {
-            reported = true;
-            Railways.LOGGER.info("Phantom track sprites registered: {}", map.size());
-            if (map.isEmpty())
-                Railways.LOGGER.warn("No phantom track sprites registered - phantom tracks will never turn invisible");
-        }
         if (hasChanged) {
             hasChanged = false;
             for (WeakReference<SpriteContents> ref : map.values()) {

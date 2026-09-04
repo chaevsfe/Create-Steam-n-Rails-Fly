@@ -19,6 +19,7 @@
 package com.railwayteam.railways.fabric_mixin.client;
 
 import com.railwayteam.railways.content.custom_tracks.phantom.PhantomSpriteManager;
+import net.minecraft.client.renderer.texture.SpriteLoader;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Final;
@@ -38,5 +39,11 @@ public abstract class MixinTextureAtlas {
     private void railways$cycleAnimationFrames(CallbackInfo ci) {
         if (TextureAtlas.LOCATION_BLOCKS.equals(this.location))
             PhantomSpriteManager.renderTick();
+    }
+
+    @Inject(method = "upload", at = @At("RETURN"))
+    private void railways$onAtlasUploaded(SpriteLoader.Preparations preparations, CallbackInfo ci) {
+        if (TextureAtlas.LOCATION_BLOCKS.equals(this.location))
+            PhantomSpriteManager.report();
     }
 }

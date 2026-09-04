@@ -49,8 +49,10 @@ public abstract class MixinSpriteContents implements IPotentiallyInvisibleSprite
         if (!railways$shouldDoInvisibility)
             return;
         SpriteContents.AnimationState state = cir.getReturnValue();
-        if (state != null)
+        if (state != null) {
             ((IPhantomAnimationState) state).railways$setPhantomOwner((SpriteContents) (Object) this);
+            PhantomSpriteManager.countTaggedState();
+        }
     }
 
     @Override
