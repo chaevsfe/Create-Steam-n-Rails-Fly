@@ -894,6 +894,21 @@ java {
     withSourcesJar()
 }
 
+tasks.named("compileJava") {
+    doFirst {
+        val buildInfo = file("common/src/main/java/com/railwayteam/railways/RailwaysBuildInfo.java")
+        val declared = Regex("VERSION\\s*=\\s*\"([^\"]+)\"").find(buildInfo.readText())?.groupValues?.get(1)
+        val expected = project.property("mod_version").toString()
+        if (declared != expected) {
+            throw GradleException(
+                "RailwaysBuildInfo.VERSION is $declared but mod_version is $expected. " +
+                    "ModVersionPacket compares this string, so a stale value silently disables the " +
+                    "client/server version mismatch warning.",
+            )
+        }
+    }
+}
+
 tasks.jar {
     from("LICENSE")
     from("NOTICE")
