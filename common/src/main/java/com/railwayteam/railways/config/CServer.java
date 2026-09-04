@@ -70,17 +70,40 @@ public class CServer extends ConfigBase {
         } else {
             if (localValues == null)
                 localValues = builder.object;
-            bind(synced);
+            try {
+                bind(synced);
+            } catch (RuntimeException e) {
+                bind(localValues);
+                throw e;
+            }
             builder.object = localValues;
         }
     }
 
     private void bind(JsonObject values) {
+        JsonObject previous = builder.object;
         builder.object = values;
         depth = 0;
-        super.registerAll(builder);
-        builder.pop(depth);
-        depth = 0;
+        try {
+            super.registerAll(builder);
+            builder.pop(depth);
+        } catch (RuntimeException e) {
+            unwind();
+            builder.object = previous;
+            throw e;
+        } finally {
+            depth = 0;
+        }
+    }
+
+    private void unwind() {
+        while (true) {
+            try {
+                builder.pop();
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+        }
     }
 
     private static class Comments {
