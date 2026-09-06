@@ -65,9 +65,11 @@ public final class CRDataFixers {
             Set<TypeReference> optimizedTypes = Set.of(
                 References.BLOCK_STATE,
                 References.ENTITY,
+                References.ENTITY_TREE,
                 References.STRUCTURE,
                 References.CHUNK,
                 References.ENTITY_CHUNK,
+                References.PLAYER,
                 CRReferences.SAVED_DATA_CREATE_TRACKS
             );
             result.optimize(optimizedTypes, Runnable::run).join();
@@ -95,10 +97,13 @@ public final class CRDataFixers {
                     );
                 if (!selfTest.unverifiedTypes().isEmpty())
                     Railways.LOGGER.warn(
-                        "[Railways DFU] Legacy contraption traversal is degraded, usually because another mod has "
-                            + "replaced vanilla's entity datafixer type in this JVM, so that data is left unchanged "
-                            + "and unmarked and will migrate on a later start without that mod; report this with "
-                            + "your mod list"
+                        "[Railways DFU] Legacy contraption traversal is degraded for {}, {}. That data is left "
+                            + "unchanged, and the Railways data version is withheld from every save this run so a "
+                            + "later start can still migrate it; report this with your mod list",
+                        selfTest.unverifiedTypes().stream().map(TypeReference::typeName).sorted().toList(),
+                        selfTest.entityRootDegraded()
+                            ? "usually because another mod has replaced vanilla's entity datafixer type in this JVM"
+                            : "which is Railways' own saved-data type rather than a vanilla one"
                     );
             }
         } catch (Throwable throwable) {
@@ -163,7 +168,11 @@ public final class CRDataFixers {
         List<String> failedProbes,
         Set<TypeReference> unverifiedTypes,
         boolean blockStateFailed
-    ) {}
+    ) {
+        boolean entityRootDegraded() {
+            return unverifiedTypes.contains(References.ENTITY_CHUNK) || unverifiedTypes.contains(References.PLAYER);
+        }
+    }
 
     private static SelfTest verifyFixer(DataFixer fixer) {
         List<String> failed = new ArrayList<>();
@@ -230,6 +239,13 @@ public final class CRDataFixers {
             "contraption_entity_chunk_traversal",
             References.ENTITY_CHUNK,
             () -> verifyContraptionEntityChunkTraversal(fixer)
+        );
+        traversalProbe(
+            failed,
+            unverified,
+            "contraption_player_root_vehicle_traversal",
+            References.PLAYER,
+            () -> verifyPlayerRootVehicleTraversal(fixer)
         );
         traversalProbe(
             failed,
@@ -327,6 +343,25 @@ public final class CRDataFixers {
         ).getValue();
         CompoundTag fixedState = contraptionPalette(
             fixed.getListOrEmpty("Entities").getCompoundOrEmpty(0)
+        );
+        requireName(fixedState, "railways:mono_bogey");
+        requireProperty(fixedState, "upside_down", "true");
+    }
+
+    private static void verifyPlayerRootVehicleTraversal(DataFixer fixer) {
+        CompoundTag rootVehicle = new CompoundTag();
+        rootVehicle.put("Entity", carriageContraptionEntity());
+        CompoundTag root = new CompoundTag();
+        root.put("RootVehicle", rootVehicle);
+
+        CompoundTag fixed = (CompoundTag) fixer.update(
+            References.PLAYER,
+            new Dynamic<>(NbtOps.INSTANCE, root),
+            0,
+            Railways.DATA_FIXER_VERSION
+        ).getValue();
+        CompoundTag fixedState = contraptionPalette(
+            fixed.getCompoundOrEmpty("RootVehicle").getCompoundOrEmpty("Entity")
         );
         requireName(fixedState, "railways:mono_bogey");
         requireProperty(fixedState, "upside_down", "true");

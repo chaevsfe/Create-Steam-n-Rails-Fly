@@ -109,7 +109,7 @@ public final class DataFixesInternalsImpl extends DataFixesInternals {
         }
     }
     public void addModDataVersions(@NotNull CompoundTag compound) {
-        if (dataFixer != null)
+        if (dataFixer != null && unverifiedTypes.isEmpty())
             compound.putInt("Railways_DataVersion", dataFixer.currentVersion());
     }
 }
