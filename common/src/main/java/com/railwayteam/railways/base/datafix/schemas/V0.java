@@ -72,7 +72,10 @@ public class V0 extends NamespacedSchema {
             CRReferences.CREATE_CARRIAGE,
             () -> DSL.optionalFields(
                 "Entity",
-                References.ENTITY.in(schema)
+                DSL.optionalFields(
+                    "Contraption",
+                    CRReferences.CREATE_CONTRAPTION.in(schema)
+                )
             )
         );
 

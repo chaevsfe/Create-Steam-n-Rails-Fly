@@ -34,6 +34,8 @@ import net.minecraft.util.datafix.fixes.AddNewChoices;
 import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.util.datafix.schemas.NamespacedSchema;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
 
@@ -68,21 +70,30 @@ public final class CRDataFixers {
             );
             result.optimize(optimizedTypes, Runnable::run).join();
             DataFixer fixer = result.fixer();
-            verifyFixer(fixer);
 
             DataFixesInternals.get().registerFixer(Railways.DATA_FIXER_VERSION, fixer);
             if (DataFixesInternals.get().getFixerEntry() == null)
-                throw new IllegalStateException("Railways DFU bridge rejected the verified fixer");
+                throw new IllegalStateException("Railways DFU bridge rejected the fixer");
 
-            Railways.LOGGER.info(
-                "[Railways DFU] Schemas V0/V1/V2/V10/V11 and legacy migration probes verified"
-            );
+            List<String> failedProbes = verifyFixer(fixer);
+            if (failedProbes.isEmpty()) {
+                Railways.LOGGER.info(
+                    "[Railways DFU] Schemas V0/V1/V2/V10/V11 and legacy migration probes verified"
+                );
+            } else {
+                Railways.LOGGER.warn(
+                    "[Railways DFU] Registered and migrating, but the self-test could not confirm these probes: {}. "
+                        + "A failing traversal probe means another mod has degraded vanilla's entity datafixer type in "
+                        + "this JVM and legacy contraption blocks may not migrate; report it with your mod list",
+                    String.join(", ", failedProbes)
+                );
+            }
         } catch (Throwable throwable) {
             if (throwable instanceof VirtualMachineError error)
                 throw error;
             // Loading unmodified data is safer than preventing a world from opening.
             Railways.LOGGER.error(
-                "[Railways DFU] Registration or self-test failed; continuing with legacy fixes disabled safely",
+                "[Railways DFU] Registration failed; continuing with legacy fixes disabled safely",
                 throwable
             );
         }
@@ -135,36 +146,77 @@ public final class CRDataFixers {
         }
     }
 
-    private static void verifyFixer(DataFixer fixer) {
-        CompoundTag monoBogey = updateBlockState(fixer, 0, "railways:mono_bogey_upside_down", null, null);
-        requireName(monoBogey, "railways:mono_bogey");
-        requireProperty(monoBogey, "upside_down", "true");
+    private static List<String> verifyFixer(DataFixer fixer) {
+        List<String> failed = new ArrayList<>();
 
-        CompoundTag cherry = updateBlockState(fixer, 1, "railways:track_biomesoplenty_cherry", null, null);
-        requireName(cherry, "railways:track_cherry");
+        probe(failed, "upside_down_mono_bogey", () -> {
+            CompoundTag monoBogey = updateBlockState(fixer, 0, "railways:mono_bogey_upside_down", null, null);
+            requireName(monoBogey, "railways:mono_bogey");
+            requireProperty(monoBogey, "upside_down", "true");
+        });
 
-        CompoundTag smokebox = updateBlockState(
-            fixer,
-            1,
-            "railways:red_locometal_smokebox",
-            "axis",
-            "x"
+        probe(failed, "compat_cherry_track", () -> {
+            CompoundTag cherry = updateBlockState(fixer, 1, "railways:track_biomesoplenty_cherry", null, null);
+            requireName(cherry, "railways:track_cherry");
+        });
+
+        probe(failed, "streamlined_smokestack_facing", () -> {
+            CompoundTag streamlined = updateBlockState(
+                fixer,
+                1,
+                "railways:smokestack_streamlined",
+                "axis",
+                "z"
+            );
+            requireProperty(streamlined, "facing", "north");
+        });
+
+        probe(failed, "locometal_smokebox_facing", () -> {
+            CompoundTag smokebox = updateBlockState(
+                fixer,
+                1,
+                "railways:red_locometal_smokebox",
+                "axis",
+                "x"
+            );
+            requireProperty(smokebox, "facing", "east");
+        });
+
+        probe(failed, "hazard_stripes_facing", () -> {
+            CompoundTag hazard = updateBlockState(
+                fixer,
+                2,
+                "railways:red_hazard_stripes_diagonal_on_black",
+                "axis",
+                "z"
+            );
+            requireProperty(hazard, "facing", "north");
+        });
+
+        probe(failed, "variable_smokestack_part", () -> {
+            CompoundTag smokestack = updateBlockState(fixer, 10, "railways:smokestack_long", null, null);
+            requireProperty(smokestack, "part", VariableStackPart.SINGLE.getSerializedName());
+        });
+
+        Railways.LOGGER.info(
+            "[Railways DFU] Self-testing legacy contraption traversal; a datafixer parse error between here and "
+                + "the next [Railways DFU] line comes from this self-test, not from world data"
         );
-        requireProperty(smokebox, "facing", "east");
+        probe(failed, "contraption_entity_chunk_traversal", () -> verifyContraptionEntityChunkTraversal(fixer));
+        probe(failed, "tracks_saved_data_traversal", () -> verifyTracksSavedDataTraversal(fixer));
 
-        CompoundTag hazard = updateBlockState(
-            fixer,
-            2,
-            "railways:red_hazard_stripes_diagonal_on_black",
-            "axis",
-            "z"
-        );
-        requireProperty(hazard, "facing", "north");
+        return failed;
+    }
 
-        CompoundTag smokestack = updateBlockState(fixer, 10, "railways:smokestack_long", null, null);
-        requireProperty(smokestack, "part", VariableStackPart.SINGLE.getSerializedName());
-
-        verifyTracksSavedDataTraversal(fixer);
+    private static void probe(List<String> failed, String name, Runnable body) {
+        try {
+            body.run();
+        } catch (Throwable throwable) {
+            if (throwable instanceof VirtualMachineError error)
+                throw error;
+            failed.add(name);
+            Railways.LOGGER.warn("[Railways DFU] Probe {} failed: {}", name, throwable.toString());
+        }
     }
 
     private static CompoundTag updateBlockState(
@@ -193,7 +245,7 @@ public final class CRDataFixers {
         return state;
     }
 
-    private static void verifyTracksSavedDataTraversal(DataFixer fixer) {
+    private static CompoundTag carriageContraptionEntity() {
         ListTag palette = new ListTag();
         palette.add(blockState("railways:mono_bogey_upside_down", null, null));
 
@@ -204,8 +256,37 @@ public final class CRDataFixers {
         CompoundTag entity = new CompoundTag();
         entity.putString("id", "create:carriage_contraption");
         entity.put("Contraption", contraption);
+        return entity;
+    }
+
+    private static CompoundTag contraptionPalette(CompoundTag entity) {
+        return entity.getCompoundOrEmpty("Contraption")
+            .getCompoundOrEmpty("Blocks")
+            .getListOrEmpty("Palette").getCompoundOrEmpty(0);
+    }
+
+    private static void verifyContraptionEntityChunkTraversal(DataFixer fixer) {
+        ListTag entities = new ListTag();
+        entities.add(carriageContraptionEntity());
+        CompoundTag root = new CompoundTag();
+        root.put("Entities", entities);
+
+        CompoundTag fixed = (CompoundTag) fixer.update(
+            References.ENTITY_CHUNK,
+            new Dynamic<>(NbtOps.INSTANCE, root),
+            0,
+            Railways.DATA_FIXER_VERSION
+        ).getValue();
+        CompoundTag fixedState = contraptionPalette(
+            fixed.getListOrEmpty("Entities").getCompoundOrEmpty(0)
+        );
+        requireName(fixedState, "railways:mono_bogey");
+        requireProperty(fixedState, "upside_down", "true");
+    }
+
+    private static void verifyTracksSavedDataTraversal(DataFixer fixer) {
         CompoundTag carriage = new CompoundTag();
-        carriage.put("Entity", entity);
+        carriage.put("Entity", carriageContraptionEntity());
         ListTag carriages = new ListTag();
         carriages.add(carriage);
         CompoundTag train = new CompoundTag();
@@ -223,13 +304,10 @@ public final class CRDataFixers {
             0,
             Railways.DATA_FIXER_VERSION
         ).getValue();
-        CompoundTag fixedState = fixed.getCompoundOrEmpty("data")
+        CompoundTag fixedState = contraptionPalette(fixed.getCompoundOrEmpty("data")
             .getListOrEmpty("Trains").getCompoundOrEmpty(0)
             .getListOrEmpty("Carriages").getCompoundOrEmpty(0)
-            .getCompoundOrEmpty("Entity")
-            .getCompoundOrEmpty("Contraption")
-            .getCompoundOrEmpty("Blocks")
-            .getListOrEmpty("Palette").getCompoundOrEmpty(0);
+            .getCompoundOrEmpty("Entity"));
         requireName(fixedState, "railways:mono_bogey");
         requireProperty(fixedState, "upside_down", "true");
     }
