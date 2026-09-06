@@ -10,6 +10,7 @@
 
 package com.railwayteam.railways.registry;
 
+import com.mojang.datafixers.DSL.TypeReference;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.DataFixerBuilder;
 import com.mojang.datafixers.schemas.Schema;
@@ -35,6 +36,7 @@ import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.util.datafix.schemas.NamespacedSchema;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -60,7 +62,7 @@ public final class CRDataFixers {
 
             // A direct executor makes bootstrap deterministic and leaves no worker thread behind.
             DataFixerBuilder.Result result = builder.build();
-            Set<com.mojang.datafixers.DSL.TypeReference> optimizedTypes = Set.of(
+            Set<TypeReference> optimizedTypes = Set.of(
                 References.BLOCK_STATE,
                 References.ENTITY,
                 References.STRUCTURE,
@@ -75,18 +77,29 @@ public final class CRDataFixers {
             if (DataFixesInternals.get().getFixerEntry() == null)
                 throw new IllegalStateException("Railways DFU bridge rejected the fixer");
 
-            List<String> failedProbes = verifyFixer(fixer);
-            if (failedProbes.isEmpty()) {
+            SelfTest selfTest = verifyFixer(fixer);
+            DataFixesInternals.get().markUnverifiedTypes(selfTest.unverifiedTypes());
+            if (selfTest.failedProbes().isEmpty()) {
                 Railways.LOGGER.info(
                     "[Railways DFU] Schemas V0/V1/V2/V10/V11 and legacy migration probes verified"
                 );
             } else {
                 Railways.LOGGER.warn(
-                    "[Railways DFU] Registered and migrating, but the self-test could not confirm these probes: {}. "
-                        + "A failing traversal probe means another mod has degraded vanilla's entity datafixer type in "
-                        + "this JVM and legacy contraption blocks may not migrate; report it with your mod list",
-                    String.join(", ", failedProbes)
+                    "[Railways DFU] Registered and migrating, but the self-test could not confirm these probes: {}",
+                    String.join(", ", selfTest.failedProbes())
                 );
+                if (selfTest.blockStateFailed())
+                    Railways.LOGGER.warn(
+                        "[Railways DFU] A legacy blockstate migration did not produce its expected result, so some "
+                            + "pre-26.2 Railways blocks may load with an outdated state; report this with your mod list"
+                    );
+                if (!selfTest.unverifiedTypes().isEmpty())
+                    Railways.LOGGER.warn(
+                        "[Railways DFU] Legacy contraption traversal is degraded, usually because another mod has "
+                            + "replaced vanilla's entity datafixer type in this JVM, so that data is left unchanged "
+                            + "and unmarked and will migrate on a later start without that mod; report this with "
+                            + "your mod list"
+                    );
             }
         } catch (Throwable throwable) {
             if (throwable instanceof VirtualMachineError error)
@@ -146,8 +159,15 @@ public final class CRDataFixers {
         }
     }
 
-    private static List<String> verifyFixer(DataFixer fixer) {
+    private record SelfTest(
+        List<String> failedProbes,
+        Set<TypeReference> unverifiedTypes,
+        boolean blockStateFailed
+    ) {}
+
+    private static SelfTest verifyFixer(DataFixer fixer) {
         List<String> failed = new ArrayList<>();
+        Set<TypeReference> unverified = new HashSet<>();
 
         probe(failed, "upside_down_mono_bogey", () -> {
             CompoundTag monoBogey = updateBlockState(fixer, 0, "railways:mono_bogey_upside_down", null, null);
@@ -198,14 +218,42 @@ public final class CRDataFixers {
             requireProperty(smokestack, "part", VariableStackPart.SINGLE.getSerializedName());
         });
 
-        Railways.LOGGER.info(
-            "[Railways DFU] Self-testing legacy contraption traversal; a datafixer parse error between here and "
-                + "the next [Railways DFU] line comes from this self-test, not from world data"
-        );
-        probe(failed, "contraption_entity_chunk_traversal", () -> verifyContraptionEntityChunkTraversal(fixer));
-        probe(failed, "tracks_saved_data_traversal", () -> verifyTracksSavedDataTraversal(fixer));
+        boolean blockStateFailed = !failed.isEmpty();
 
-        return failed;
+        Railways.LOGGER.info(
+            "[Railways DFU] Contraption traversal self-test start; every datafixer parse error logged before the "
+                + "matching end line comes from synthetic probe data, not from world data"
+        );
+        traversalProbe(
+            failed,
+            unverified,
+            "contraption_entity_chunk_traversal",
+            References.ENTITY_CHUNK,
+            () -> verifyContraptionEntityChunkTraversal(fixer)
+        );
+        traversalProbe(
+            failed,
+            unverified,
+            "tracks_saved_data_traversal",
+            CRReferences.SAVED_DATA_CREATE_TRACKS,
+            () -> verifyTracksSavedDataTraversal(fixer)
+        );
+        Railways.LOGGER.info("[Railways DFU] Contraption traversal self-test end");
+
+        return new SelfTest(failed, unverified, blockStateFailed);
+    }
+
+    private static void traversalProbe(
+        List<String> failed,
+        Set<TypeReference> unverified,
+        String name,
+        TypeReference rootType,
+        Runnable body
+    ) {
+        int failures = failed.size();
+        probe(failed, name, body);
+        if (failed.size() != failures)
+            unverified.add(rootType);
     }
 
     private static void probe(List<String> failed, String name, Runnable body) {

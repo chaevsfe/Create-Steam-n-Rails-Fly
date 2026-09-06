@@ -894,11 +894,12 @@ java {
     withSourcesJar()
 }
 
-tasks.named("compileJava") {
-    doFirst {
-        val buildInfo = file("common/src/main/java/com/railwayteam/railways/RailwaysBuildInfo.java")
+val verifyBuildInfoVersion = tasks.register("verifyBuildInfoVersion") {
+    val buildInfo = file("common/src/main/java/com/railwayteam/railways/RailwaysBuildInfo.java")
+    val expected = project.property("mod_version").toString()
+    outputs.upToDateWhen { false }
+    doLast {
         val declared = Regex("VERSION\\s*=\\s*\"([^\"]+)\"").find(buildInfo.readText())?.groupValues?.get(1)
-        val expected = project.property("mod_version").toString()
         if (declared != expected) {
             throw GradleException(
                 "RailwaysBuildInfo.VERSION is $declared but mod_version is $expected. " +
@@ -907,6 +908,10 @@ tasks.named("compileJava") {
             )
         }
     }
+}
+
+tasks.named("compileJava") {
+    dependsOn(verifyBuildInfoVersion)
 }
 
 tasks.jar {

@@ -29,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -37,6 +38,7 @@ public final class DataFixesInternalsImpl extends DataFixesInternals {
     private final @NotNull Schema latestVanillaSchema;
 
     private DataFixerEntry dataFixer;
+    private volatile Set<TypeReference> unverifiedTypes = Set.of();
     private final AtomicBoolean updateFailureLogged = new AtomicBoolean();
     private final AtomicBoolean newerVersionLogged = new AtomicBoolean();
 
@@ -53,6 +55,9 @@ public final class DataFixesInternalsImpl extends DataFixesInternals {
 
         this.dataFixer = new DataFixerEntry(dataFixer, currentVersion);
     }
+    public void markUnverifiedTypes(@NotNull Set<TypeReference> rootTypes) {
+        this.unverifiedTypes = Set.copyOf(rootTypes);
+    }
     public @Nullable DataFixerEntry getFixerEntry() {
         return dataFixer;
     }
@@ -66,6 +71,8 @@ public final class DataFixesInternalsImpl extends DataFixesInternals {
     }
     public @NotNull <T> Dynamic<T> updateWithAllFixers(@NotNull TypeReference rootType, @NotNull Dynamic<T> dynamic) {
         if (dataFixer == null)
+            return dynamic;
+        if (unverifiedTypes.contains(rootType))
             return dynamic;
 
         int modDataVersion = DataFixesInternals.getModDataVersion(dynamic);

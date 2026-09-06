@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
+import java.util.Set;
 import java.util.function.BiFunction;
 
 public class NoOpDataFixesInternals extends DataFixesInternals {
@@ -36,6 +37,7 @@ public class NoOpDataFixesInternals extends DataFixesInternals {
         schema = new EmptySchema(0);
     }
     public void registerFixer(@Range(from = 0, to = Integer.MAX_VALUE) int currentVersion, @NotNull DataFixer dataFixer) {}
+    public void markUnverifiedTypes(@NotNull Set<TypeReference> rootTypes) {}
     public @Nullable DataFixerEntry getFixerEntry() {
         return null;
     }

@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
+import java.util.Set;
 import java.util.function.BiFunction;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -98,6 +99,8 @@ public abstract class DataFixesInternals {
 
     public abstract void registerFixer(@Range(from = 0, to = Integer.MAX_VALUE) int currentVersion,
                                        @NotNull DataFixer dataFixer);
+
+    public abstract void markUnverifiedTypes(@NotNull Set<TypeReference> rootTypes);
 
     public abstract @Nullable DataFixerEntry getFixerEntry();
 
