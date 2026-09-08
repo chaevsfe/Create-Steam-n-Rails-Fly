@@ -254,7 +254,7 @@ public class BogeyMenuScreen extends AbstractSimiScreen {
 		int previewY = Mth.floor(y + 86 - previewSize / 2);
 		int previewId = 31 * renderStyle.id.hashCode() + renderSize.id().hashCode();
 		guiGraphics.guiRenderState.addPicturesInPictureState(EntityBlockRenderState.create(
-			previewId, guiGraphics, minecraft.level, BlockPos.ZERO, bogeyBE, bogeyState,
+			previewId, guiGraphics, null, BlockPos.ZERO, bogeyBE, bogeyState,
 			LightCoordsUtil.FULL_BRIGHT, previewX, previewY, modelScale, padding, 20, 45, 0
 		));
 	}
