@@ -54,6 +54,8 @@ public class StationLimitPacket implements C2SPacket {
     public void handle(ServerPlayer sender) {
         Level level = sender.level();
 
+        if (sender.isSpectator() || !sender.mayBuild())
+            return;
         if (!level.isLoaded(pos))
             return;
         if (!pos.closerThan(sender.blockPosition(), 64))
