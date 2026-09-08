@@ -3,7 +3,6 @@ package com.railwayteam.railways.content.custom_tracks.casing;
 import com.railwayteam.railways.mixin_interfaces.IHasTrackCasing;
 import com.railwayteam.railways.multiloader.C2SPacket;
 import com.railwayteam.railways.registry.CRTrackMaterials;
-import com.railwayteam.railways.util.AdventureUtils;
 import com.railwayteam.railways.util.EntityUtils;
 import com.zurrtum.create.content.trains.track.BezierConnection;
 import com.zurrtum.create.content.trains.track.TrackBlockEntity;
@@ -42,18 +41,20 @@ public class SlabUseOnCurvePacket implements C2SPacket {
     }
 
     public void handle(ServerPlayer player) {
-        if (AdventureUtils.isAdventure(player))
+        if (player.isSpectator() || !player.mayBuild())
             return;
         if (!player.level().isLoaded(pos) || !player.level().isLoaded(targetPos))
             return;
-        double reach = EntityUtils.getReachDistance(player) + 1;
-        if (player.distanceToSqr(Vec3.atCenterOf(soundSource)) > reach * reach)
-            return;
         if (!(player.level().getBlockEntity(pos) instanceof TrackBlockEntity trackBE))
             return;
-
         BezierConnection connection = trackBE.getConnections().get(targetPos);
         if (connection == null)
+            return;
+        Vec3 anchor = Vec3.atCenterOf(soundSource);
+        if (!liesOnCurve(connection, anchor))
+            return;
+        double reach = EntityUtils.getReachDistance(player) + 1;
+        if (player.distanceToSqr(anchor) > reach * reach)
             return;
         if (CRTrackMaterials.getType(connection.getMaterial()) == CRTrackMaterials.CRTrackType.MONORAIL)
             return;
@@ -104,6 +105,15 @@ public class SlabUseOnCurvePacket implements C2SPacket {
                 targetBE.notifyUpdate();
             }
         }
+    }
+
+    private static boolean liesOnCurve(BezierConnection connection, Vec3 point) {
+        int segments = Math.max(1, connection.getSegmentCount());
+        for (int i = 0; i <= segments; i++) {
+            if (connection.getPosition((double) i / segments).distanceToSqr(point) <= 4.0)
+                return true;
+        }
+        return false;
     }
 
     private static void setConnectionCasing(BezierConnection connection, @Nullable Block casing, boolean alternate) {
