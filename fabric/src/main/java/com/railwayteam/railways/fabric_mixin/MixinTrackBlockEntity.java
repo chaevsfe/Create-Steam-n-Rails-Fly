@@ -91,6 +91,16 @@ public abstract class MixinTrackBlockEntity extends SmartBlockEntity implements 
 
     @Inject(method = "write", at = @At("RETURN"))
     private void writeCasing(ValueOutput tag, boolean clientPacket, CallbackInfo ci) {
+        railways$storeCasing(tag);
+    }
+
+    @Inject(method = "writeSafe", at = @At("RETURN"))
+    private void railways$writeCasingSafe(ValueOutput tag, CallbackInfo ci) {
+        railways$storeCasing(tag);
+    }
+
+    @Unique
+    private void railways$storeCasing(ValueOutput tag) {
         Block casing = railways$getTrackCasing();
         if (casing != null)
             tag.putString("TrackCasing", BuiltInRegistries.BLOCK.getKey(casing).toString());
