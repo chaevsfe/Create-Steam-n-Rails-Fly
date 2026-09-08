@@ -218,6 +218,8 @@ public abstract class PacketSet {
 			Component error = Component.literal("Steam n' Rails on the client uses a different network format than the server.")
 					.append(" You should use the same version of the mod on both sides.");
 			Railways.LOGGER.error(error.getString());
+			if (mc.getConnection() != null)
+				mc.getConnection().getConnection().disconnect(error);
 		}
 	}
 
