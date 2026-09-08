@@ -23,6 +23,7 @@
     "client.MixinRollingModeScrollBehaviour",
     "client.MixinSegmentAngles",
     "client.MixinSlidingDoorRenderer",
+    "client.MixinSlidingDoorVisual",
     "client.MixinSmokeStackBlockEntityGoggles",
     "client.MixinSpriteContents",
     "client.MixinSpriteContentsAnimationState",

@@ -527,6 +527,11 @@ public class CRBlockPartials {
     public static final PartialModel DIESEL_STACK_FAN = block("smokestack/block_diesel_fan");
     public static final PartialModel CONDUCTOR_ANTENNA = block("conductor_antenna");
 
+    public static final PalettesColorList<Couple<PartialModel>> SLIDING_DOORS = new PalettesColorList<>(
+        color -> Couple.createWithContext(windowed ->
+            block("palettes/" + color.getSerializedName() + "/sliding_door/block" + (windowed ? "_windowed" : "")))
+    );
+
     public static final PalettesColorList<Couple<Couple<PartialModel>>> FOLDING_DOORS = new PalettesColorList<>(
         color -> Couple.createWithContext(windowed -> Couple.createWithContext(left -> {
             String side = left ? "left" : "right";

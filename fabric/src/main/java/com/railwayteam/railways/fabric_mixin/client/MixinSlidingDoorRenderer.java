@@ -22,9 +22,11 @@ public class MixinSlidingDoorRenderer {
     private Object getPalettesPartials(@SuppressWarnings("rawtypes") Map instance, Object key, Operation<Object> original,
                                        @Local SlidingDoorBlock block,
                                        @Local(argsOnly = true) SlidingDoorBlockEntity blockEntity) {
-        if (block instanceof PalettesSlidingDoorBlock paletteBlock && paletteBlock.isFoldingDoor()) {
-            return CRBlockPartials.FOLDING_DOORS.get(paletteBlock.color)
-                .get(blockEntity.getBlockState().getValue(PalettesSlidingDoorBlock.WINDOWED));
+        if (block instanceof PalettesSlidingDoorBlock paletteBlock) {
+            boolean windowed = blockEntity.getBlockState().getValue(PalettesSlidingDoorBlock.WINDOWED);
+            if (paletteBlock.isFoldingDoor())
+                return CRBlockPartials.FOLDING_DOORS.get(paletteBlock.color).get(windowed);
+            return CRBlockPartials.SLIDING_DOORS.get(paletteBlock.color).get(windowed);
         }
         return original.call(instance, key);
     }
