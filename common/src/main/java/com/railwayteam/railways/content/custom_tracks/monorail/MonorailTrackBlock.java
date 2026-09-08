@@ -177,7 +177,7 @@ public class MonorailTrackBlock extends TrackBlock {
     @Override
     protected InteractionResult useItemOn(ItemStack heldItem, BlockState state, Level world, BlockPos pos, Player player,
                                           InteractionHand hand, BlockHitResult hit) {
-        InteractionResult result = InteractionResult.PASS;
+        InteractionResult result = super.useItemOn(heldItem, state, world, pos, player, hand, hit);
         if (result.consumesAction())
             return result;
 
