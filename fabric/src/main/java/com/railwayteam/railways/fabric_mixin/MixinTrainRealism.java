@@ -82,7 +82,7 @@ public abstract class MixinTrainRealism implements ITrueMaxSpeedTrain {
         Operation<Float> original,
         @Local(name = "actualTarget") double actualTarget
     ) {
-        if (Math.abs(actualTarget) > speed && railways$realismLimited())
+        if (Math.abs(actualTarget) > Math.abs(speed) && railways$realismLimited())
             return original.call(instance) / 20;
         return original.call(instance);
     }
