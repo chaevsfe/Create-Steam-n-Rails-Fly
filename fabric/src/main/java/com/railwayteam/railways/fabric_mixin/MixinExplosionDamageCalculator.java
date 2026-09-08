@@ -20,7 +20,7 @@ package com.railwayteam.railways.fabric_mixin;
 
 import com.railwayteam.railways.config.CRConfigs;
 import com.railwayteam.railways.util.MixinVariables;
-import com.zurrtum.create.AllTags;
+import com.railwayteam.railways.shim.create.AllTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.level.BlockGetter;

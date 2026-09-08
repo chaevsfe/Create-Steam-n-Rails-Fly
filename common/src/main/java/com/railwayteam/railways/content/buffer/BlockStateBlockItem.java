@@ -18,9 +18,9 @@
 
 package com.railwayteam.railways.content.buffer;
 
-import com.tterrag.registrate.util.nullness.NonNullBiFunction;
-import com.tterrag.registrate.util.nullness.NonNullFunction;
-import com.tterrag.registrate.util.nullness.NonNullSupplier;
+import com.railwayteam.railways.shim.registrate.util.nullness.NonNullBiFunction;
+import com.railwayteam.railways.shim.registrate.util.nullness.NonNullFunction;
+import com.railwayteam.railways.shim.registrate.util.nullness.NonNullSupplier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;

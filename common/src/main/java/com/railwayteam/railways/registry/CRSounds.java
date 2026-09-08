@@ -19,7 +19,7 @@
 package com.railwayteam.railways.registry;
 
 import com.railwayteam.railways.Railways;
-import com.tterrag.registrate.util.entry.RegistryEntry;
+import com.railwayteam.railways.shim.registrate.util.entry.RegistryEntry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvent;

@@ -20,11 +20,11 @@ package com.railwayteam.railways.base.data.recipe.processing;
 
 import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.base.data.recipe.RailwaysRecipeProvider;
-import com.zurrtum.create.content.processing.recipe.ProcessingRecipe;
-import com.zurrtum.create.content.processing.recipe.ProcessingRecipeBuilder;
+import com.railwayteam.railways.shim.create.content.processing.recipe.ProcessingRecipe;
+import com.railwayteam.railways.shim.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.zurrtum.create.content.processing.recipe.ProcessingRecipeSerializer;
 import com.zurrtum.create.foundation.recipe.IRecipeTypeInfo;
-import com.zurrtum.create.catnip.platform.CatnipServices;
+import com.railwayteam.railways.shim.create.catnip.platform.CatnipServices;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;

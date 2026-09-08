@@ -6,7 +6,7 @@ import com.railwayteam.railways.content.distant_signals.SignalDisplaySource;
 import com.railwayteam.railways.content.switches.SwitchDisplaySource;
 import com.zurrtum.create.api.behaviour.display.DisplaySource;
 import com.zurrtum.create.api.registry.CreateRegistries;
-import com.tterrag.registrate.util.entry.RegistryEntry;
+import com.railwayteam.railways.shim.registrate.util.entry.RegistryEntry;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 

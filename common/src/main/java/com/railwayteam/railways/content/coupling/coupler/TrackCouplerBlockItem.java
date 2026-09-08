@@ -21,7 +21,7 @@ package com.railwayteam.railways.content.coupling.coupler;
 
 import com.zurrtum.create.content.trains.graph.EdgePointType;
 import com.zurrtum.create.content.trains.track.TrackTargetingBlockItem;
-import com.tterrag.registrate.util.nullness.NonNullBiFunction;
+import com.railwayteam.railways.shim.registrate.util.nullness.NonNullBiFunction;
 import net.minecraft.world.level.block.Block;
 
 public class TrackCouplerBlockItem extends TrackTargetingBlockItem {

@@ -35,17 +35,17 @@ import com.railwayteam.railways.content.switches.TrackSwitchBlock;
 import com.railwayteam.railways.registry.CRPalettes.WindowType;
 import com.railwayteam.railways.registry.CRPalettes.Wrapping;
 import com.railwayteam.railways.registry.CRTags;
-import com.tterrag.registrate.builders.BlockBuilder;
-import com.tterrag.registrate.builders.ItemBuilder;
-import com.tterrag.registrate.providers.DataGenContext;
-import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
-import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
-import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
-import com.zurrtum.create.AllTags;
+import com.railwayteam.railways.shim.registrate.builders.BlockBuilder;
+import com.railwayteam.railways.shim.registrate.builders.ItemBuilder;
+import com.railwayteam.railways.shim.registrate.providers.DataGenContext;
+import com.railwayteam.railways.shim.registrate.providers.RegistrateBlockstateProvider;
+import com.railwayteam.railways.shim.registrate.util.nullness.NonNullBiConsumer;
+import com.railwayteam.railways.shim.registrate.util.nullness.NonNullUnaryOperator;
+import com.railwayteam.railways.shim.create.AllTags;
 import com.zurrtum.create.content.decoration.MetalLadderBlock;
 import com.zurrtum.create.content.kinetics.flywheel.FlywheelBlock;
-import com.zurrtum.create.foundation.data.SharedProperties;
-import net.minecraft.client.renderer.RenderType;
+import com.railwayteam.railways.shim.create.foundation.data.SharedProperties;
+import com.railwayteam.railways.shim.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
@@ -65,8 +65,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
-import static com.zurrtum.create.foundation.data.TagGen.axeOrPickaxe;
-import static com.zurrtum.create.foundation.data.TagGen.pickaxeOnly;
+import static com.railwayteam.railways.shim.create.foundation.data.TagGen.axeOrPickaxe;
+import static com.railwayteam.railways.shim.create.foundation.data.TagGen.pickaxeOnly;
 
 public class BuilderTransformersImpl {
     public static <B extends MonoBogeyBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> monobogey() {

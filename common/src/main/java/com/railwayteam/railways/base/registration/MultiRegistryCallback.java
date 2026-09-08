@@ -10,7 +10,7 @@
 
 package com.railwayteam.railways.base.registration;
 
-import com.tterrag.registrate.AbstractRegistrate;
+import com.railwayteam.railways.shim.registrate.AbstractRegistrate;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;

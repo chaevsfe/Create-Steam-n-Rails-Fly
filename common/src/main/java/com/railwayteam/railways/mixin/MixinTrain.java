@@ -51,7 +51,7 @@ import com.zurrtum.create.content.trains.signal.SignalBoundary;
 import com.zurrtum.create.content.trains.signal.SignalEdgeGroup;
 import com.zurrtum.create.content.trains.signal.TrackEdgePoint;
 import com.zurrtum.create.content.trains.station.GlobalStation;
-import com.zurrtum.create.foundation.advancement.AllAdvancements;
+import com.railwayteam.railways.shim.create.foundation.advancement.AllAdvancements;
 import com.zurrtum.create.infrastructure.config.AllConfigs;
 import com.zurrtum.create.catnip.data.Couple;
 import com.zurrtum.create.catnip.data.Pair;

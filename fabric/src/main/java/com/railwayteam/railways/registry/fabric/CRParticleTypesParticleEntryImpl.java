@@ -1,8 +1,8 @@
 package com.railwayteam.railways.registry.fabric;
 
 import com.railwayteam.railways.Railways;
-import com.zurrtum.create.foundation.particle.ICustomParticleData;
-import com.zurrtum.create.foundation.particle.ICustomParticleDataWithSprite;
+import com.railwayteam.railways.shim.create.foundation.particle.ICustomParticleData;
+import com.railwayteam.railways.shim.create.foundation.particle.ICustomParticleDataWithSprite;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

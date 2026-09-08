@@ -20,7 +20,7 @@ package com.railwayteam.railways.registry.advancement;
 
 import com.google.common.collect.Maps;
 import com.railwayteam.railways.Railways;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.railwayteam.railways.shim.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.advancements.criterion.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.criterion.ContextAwarePredicate;

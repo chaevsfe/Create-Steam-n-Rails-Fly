@@ -8,8 +8,8 @@ import com.railwayteam.railways.registry.CRCreativeModeTabs.RegistrateDisplayIte
 import com.railwayteam.railways.registry.CRCreativeModeTabs.TabInfo;
 import com.railwayteam.railways.registry.CRCreativeModeTabs.Tabs;
 import com.railwayteam.railways.registry.CRPalettes;
-import com.tterrag.registrate.util.entry.RegistryEntry;
-import com.zurrtum.create.foundation.data.CreateRegistrate;
+import com.railwayteam.railways.shim.registrate.util.entry.RegistryEntry;
+import com.railwayteam.railways.shim.create.foundation.data.CreateRegistrate;
 import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;

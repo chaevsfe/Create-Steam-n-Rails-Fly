@@ -22,7 +22,7 @@ import com.railwayteam.railways.registry.CRBlockSetTypes;
 import com.railwayteam.railways.util.EntityUtils;
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.railwayteam.railways.shim.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.Direction;

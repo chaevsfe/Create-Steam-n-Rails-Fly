@@ -22,7 +22,7 @@ import com.railwayteam.railways.content.custom_bogeys.blocks.base.CRBogeyBlock;
 import com.railwayteam.railways.registry.CRBogeyStyles;
 import com.railwayteam.railways.registry.CRShapes;
 import com.zurrtum.create.content.trains.bogey.AllBogeySizes;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.railwayteam.railways.shim.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.RenderShape;

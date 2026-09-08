@@ -23,7 +23,7 @@ import com.railwayteam.railways.content.custom_tracks.gen_template.TextureKey;
 import com.railwayteam.railways.content.custom_tracks.gen_template.TrackGenTemplate;
 import com.zurrtum.create.content.trains.track.TrackBlock;
 import com.zurrtum.create.content.trains.track.TrackShape;
-import com.zurrtum.create.foundation.data.SpecialBlockStateGen;
+import com.railwayteam.railways.shim.create.foundation.data.SpecialBlockStateGen;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Map;

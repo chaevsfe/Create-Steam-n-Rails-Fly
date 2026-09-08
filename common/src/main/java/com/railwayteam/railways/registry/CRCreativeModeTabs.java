@@ -165,7 +165,7 @@ public class CRCreativeModeTabs {
         }
     }
 
-    private static boolean isInCreativeTab(com.tterrag.registrate.util.entry.RegistryEntry<?> entry, ResourceKey<CreativeModeTab> tab) {
+    private static boolean isInCreativeTab(com.railwayteam.railways.shim.registrate.util.entry.RegistryEntry<?> entry, ResourceKey<CreativeModeTab> tab) {
         return com.railwayteam.railways.registry.fabric.CRCreativeModeTabsImpl.isInCreativeTab(entry, tab);
     }
 

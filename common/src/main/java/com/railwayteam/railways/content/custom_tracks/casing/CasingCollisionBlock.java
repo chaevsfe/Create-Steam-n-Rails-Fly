@@ -21,7 +21,7 @@ package com.railwayteam.railways.content.custom_tracks.casing;
 import com.railwayteam.railways.registry.CRBlockEntities;
 import com.railwayteam.railways.registry.CRShapes;
 import com.zurrtum.create.foundation.block.ProperWaterloggedBlock;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.railwayteam.railways.shim.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.LevelReader;

@@ -24,7 +24,7 @@ import com.railwayteam.railways.registry.CRPalettes.Styles;
 import com.railwayteam.railways.registry.CRPalettes.WindowType;
 import com.railwayteam.railways.registry.CRPalettes.Wrapping;
 import com.railwayteam.railways.registry.CRSpriteShifts;
-import com.tterrag.registrate.util.entry.BlockEntry;
+import com.railwayteam.railways.shim.registrate.util.entry.BlockEntry;
 import com.zurrtum.create.client.AllModels;
 import com.zurrtum.create.client.foundation.block.connected.CTSpriteShiftEntry;
 import com.zurrtum.create.client.foundation.block.connected.ConnectedTextureBehaviour;

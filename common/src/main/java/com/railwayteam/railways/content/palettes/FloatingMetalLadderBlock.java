@@ -19,7 +19,7 @@
 package com.railwayteam.railways.content.palettes;
 
 import com.zurrtum.create.content.decoration.MetalLadderBlock;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.railwayteam.railways.shim.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;

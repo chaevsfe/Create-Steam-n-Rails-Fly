@@ -21,7 +21,7 @@ package com.railwayteam.railways.content.custom_tracks.casing;
 import com.railwayteam.railways.Railways;
 import com.zurrtum.create.foundation.model.BakedQuadHelper;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
+import com.railwayteam.railways.shim.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;

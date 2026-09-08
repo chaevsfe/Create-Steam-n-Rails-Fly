@@ -23,7 +23,7 @@ import com.railwayteam.railways.mixin.AccessorIngredient$TagValue;
 import com.railwayteam.railways.registry.CRItems;
 import com.railwayteam.railways.registry.CRTrackMaterials;
 import com.zurrtum.create.AllItems;
-import com.zurrtum.create.AllTags;
+import com.railwayteam.railways.shim.create.AllTags;
 import com.zurrtum.create.content.kinetics.deployer.DeployerApplicationRecipe;
 import com.zurrtum.create.content.kinetics.press.PressingRecipe;
 import com.zurrtum.create.content.kinetics.saw.CuttingRecipe;

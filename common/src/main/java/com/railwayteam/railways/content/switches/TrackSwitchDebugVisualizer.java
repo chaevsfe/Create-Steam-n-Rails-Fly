@@ -20,7 +20,7 @@ package com.railwayteam.railways.content.switches;
 
 import com.railwayteam.railways.registry.CREdgePointTypes;
 import com.railwayteam.railways.util.EntityUtils;
-import com.zurrtum.create.client.CreateClient;
+import com.railwayteam.railways.shim.create.client.CreateClient;
 import com.zurrtum.create.client.catnip.outliner.Outliner;
 import com.zurrtum.create.content.trains.graph.TrackEdge;
 import com.zurrtum.create.content.trains.graph.TrackGraph;

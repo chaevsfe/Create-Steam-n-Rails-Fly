@@ -18,7 +18,6 @@ import com.railwayteam.railways.registry.CRBlockPartials;
 import com.railwayteam.railways.registry.CRTrackMaterials;
 import com.zurrtum.create.catnip.data.Iterate;
 import com.zurrtum.create.catnip.data.Pair;
-import com.zurrtum.create.client.content.trains.track.RailwaysTrackVisualBridge;
 import com.zurrtum.create.client.content.trains.track.TrackRenderer.SegmentAngles;
 import com.zurrtum.create.client.content.trains.track.TrackVisual;
 import com.zurrtum.create.client.flywheel.api.visual.BlockEntityVisual;
@@ -199,7 +198,7 @@ public abstract class MixinTrackVisual extends AbstractVisual implements BlockEn
             return;
         }
 
-        SegmentAngles segments = bc.getBakedSegments(RailwaysTrackVisualBridge::segmentAngles);
+        SegmentAngles segments = bc.getBakedSegments(InvokerSegmentAngles::railways$newSegmentAngles);
         for (int i = 1; i < segments.length; i++) {
             if (i % 2 == 0)
                 continue;

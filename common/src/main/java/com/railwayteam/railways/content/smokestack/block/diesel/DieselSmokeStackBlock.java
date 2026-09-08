@@ -21,7 +21,7 @@ package com.railwayteam.railways.content.smokestack.block.diesel;
 import com.railwayteam.railways.content.smokestack.block.AbstractSmokeStackBlock;
 import com.railwayteam.railways.registry.CRBlockEntities;
 import com.railwayteam.railways.util.ShapeWrapper;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.railwayteam.railways.shim.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;

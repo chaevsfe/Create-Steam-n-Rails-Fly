@@ -6,6 +6,7 @@
   "client": [
     "client.AccessorTrainRelocatorClient",
     "client.BlockElementDeserializerMixin",
+    "client.InvokerSegmentAngles",
     "client.MixinAllBlockEntityBehaviours",
     "client.MixinAllHandleShadowTrain",
     "client.MixinBogeyBlockEntityRenderState",

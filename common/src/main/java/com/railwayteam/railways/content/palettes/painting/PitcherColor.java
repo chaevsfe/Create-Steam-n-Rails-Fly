@@ -20,7 +20,7 @@ package com.railwayteam.railways.content.palettes.painting;
 
 import com.railwayteam.railways.content.palettes.PalettesColor;
 import com.railwayteam.railways.registry.CRItems;
-import com.tterrag.registrate.util.entry.ItemEntry;
+import com.railwayteam.railways.shim.registrate.util.entry.ItemEntry;
 import org.jetbrains.annotations.Nullable;
 
 public record PitcherColor(@Nullable PalettesColor color) {

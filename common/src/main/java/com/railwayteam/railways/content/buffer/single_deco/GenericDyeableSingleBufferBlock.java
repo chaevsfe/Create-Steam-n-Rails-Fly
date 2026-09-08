@@ -18,9 +18,9 @@
 
 package com.railwayteam.railways.content.buffer.single_deco;
 
-import com.tterrag.registrate.util.nullness.NonNullFunction;
+import com.railwayteam.railways.shim.registrate.util.nullness.NonNullFunction;
 import com.zurrtum.create.catnip.math.VoxelShaper;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.railwayteam.railways.shim.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;

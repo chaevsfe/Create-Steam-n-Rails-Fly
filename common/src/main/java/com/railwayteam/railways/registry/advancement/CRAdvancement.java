@@ -21,7 +21,7 @@ package com.railwayteam.railways.registry.advancement;
 import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.registry.CRAdvancements;
 import com.railwayteam.railways.registry.CRTriggers;
-import com.tterrag.registrate.util.entry.ItemProviderEntry;
+import com.railwayteam.railways.shim.registrate.util.entry.ItemProviderEntry;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.DisplayInfo;

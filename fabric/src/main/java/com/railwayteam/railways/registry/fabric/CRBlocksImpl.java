@@ -16,10 +16,10 @@ import com.railwayteam.railways.content.fuel.tank.FuelTankBlock;
 import com.railwayteam.railways.content.fuel.tank.FuelTankItem;
 import com.railwayteam.railways.content.fuel.tank.FuelTankMovementBehavior;
 import com.railwayteam.railways.util.CreateBehaviourCompat;
-import com.tterrag.registrate.util.entry.BlockEntry;
+import com.railwayteam.railways.shim.registrate.util.entry.BlockEntry;
 import com.zurrtum.create.content.contraptions.actors.psi.PortableStorageInterfaceMovement;
-import com.zurrtum.create.foundation.data.CreateRegistrate;
-import com.zurrtum.create.foundation.data.SharedProperties;
+import com.railwayteam.railways.shim.create.foundation.data.CreateRegistrate;
+import com.railwayteam.railways.shim.create.foundation.data.SharedProperties;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 

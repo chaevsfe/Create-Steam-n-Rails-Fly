@@ -22,7 +22,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.util.FluidUtils;
-import com.zurrtum.create.content.processing.recipe.ProcessingRecipe;
+import com.railwayteam.railways.shim.create.content.processing.recipe.ProcessingRecipe;
 import com.zurrtum.create.content.processing.recipe.ProcessingRecipeSerializer;
 import com.zurrtum.create.foundation.fluid.FluidIngredient;
 import net.minecraft.resources.Identifier;

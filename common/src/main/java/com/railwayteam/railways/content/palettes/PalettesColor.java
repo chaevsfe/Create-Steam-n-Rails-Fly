@@ -20,7 +20,7 @@ package com.railwayteam.railways.content.palettes;
 
 import com.railwayteam.railways.content.palettes.painting.PaintFluid;
 import com.railwayteam.railways.util.Utils;
-import com.zurrtum.create.content.decoration.palettes.AllPaletteStoneTypes;
+import com.railwayteam.railways.shim.create.content.decoration.palettes.AllPaletteStoneTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.ByIdMap;

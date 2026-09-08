@@ -27,7 +27,7 @@ import com.railwayteam.railways.content.minecarts.MinecartJukebox;
 import com.railwayteam.railways.mixin.AccessorCarriageContraptionEntity;
 import com.railwayteam.railways.mixin.AccessorTrain;
 import com.railwayteam.railways.mixin_interfaces.IUpdateCount;
-import com.zurrtum.create.client.CreateClient;
+import com.railwayteam.railways.shim.create.client.CreateClient;
 import com.zurrtum.create.content.trains.entity.CarriageContraptionEntity;
 import com.zurrtum.create.content.trains.entity.Train;
 import com.zurrtum.create.content.trains.signal.SignalBlockEntity;

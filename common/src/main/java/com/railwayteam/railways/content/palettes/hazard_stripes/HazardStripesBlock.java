@@ -20,7 +20,7 @@ package com.railwayteam.railways.content.palettes.hazard_stripes;
 
 import com.railwayteam.railways.content.palettes.PalettesColor;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
-import com.tterrag.registrate.util.nullness.NonNullFunction;
+import com.railwayteam.railways.shim.registrate.util.nullness.NonNullFunction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 

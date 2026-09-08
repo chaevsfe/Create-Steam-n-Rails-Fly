@@ -19,7 +19,7 @@
 package com.railwayteam.railways.content.palettes;
 
 import com.zurrtum.create.content.kinetics.flywheel.FlywheelBlock;
-import com.tterrag.registrate.util.nullness.NonNullFunction;
+import com.railwayteam.railways.shim.registrate.util.nullness.NonNullFunction;
 
 public class PalettesFlywheelBlock extends FlywheelBlock {
     protected final PalettesColor color;

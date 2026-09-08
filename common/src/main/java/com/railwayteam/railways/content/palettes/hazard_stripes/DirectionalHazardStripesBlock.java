@@ -19,7 +19,7 @@
 package com.railwayteam.railways.content.palettes.hazard_stripes;
 
 import com.railwayteam.railways.content.palettes.PalettesColor;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.railwayteam.railways.shim.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;

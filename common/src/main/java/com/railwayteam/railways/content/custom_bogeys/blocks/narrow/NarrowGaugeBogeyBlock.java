@@ -25,7 +25,7 @@ import com.zurrtum.create.content.trains.bogey.AllBogeySizes;
 import com.zurrtum.create.content.trains.bogey.BogeySize;
 import com.zurrtum.create.content.trains.bogey.BogeyStyle;
 import net.minecraft.resources.Identifier;
-import com.tterrag.registrate.util.nullness.NonNullFunction;
+import com.railwayteam.railways.shim.registrate.util.nullness.NonNullFunction;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Supplier;

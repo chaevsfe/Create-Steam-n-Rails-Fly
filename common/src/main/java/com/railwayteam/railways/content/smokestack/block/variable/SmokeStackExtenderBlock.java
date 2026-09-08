@@ -25,7 +25,7 @@ import com.railwayteam.railways.util.ShapeWrapper;
 import com.zurrtum.create.api.equipment.goggles.IProxyHoveringInformation;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import com.zurrtum.create.foundation.block.ProperWaterloggedBlock;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.railwayteam.railways.shim.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.util.RandomSource;

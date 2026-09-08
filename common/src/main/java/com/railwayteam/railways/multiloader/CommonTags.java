@@ -18,7 +18,7 @@
 
 package com.railwayteam.railways.multiloader;
 
-import net.minecraft.Util;
+import com.railwayteam.railways.shim.minecraft.Util;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;

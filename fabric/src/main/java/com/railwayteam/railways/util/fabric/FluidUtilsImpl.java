@@ -2,8 +2,8 @@ package com.railwayteam.railways.util.fabric;
 
 import com.railwayteam.railways.content.fuel.tank.FuelTankBlockEntity;
 import com.railwayteam.railways.multiloader.fluid.MultiloaderFluidStack;
-import com.zurrtum.create.content.processing.recipe.ProcessingRecipe;
-import com.zurrtum.create.content.processing.recipe.ProcessingRecipeBuilder;
+import com.railwayteam.railways.shim.create.content.processing.recipe.ProcessingRecipe;
+import com.railwayteam.railways.shim.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.zurrtum.create.infrastructure.fluids.FluidStack;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.nbt.CompoundTag;

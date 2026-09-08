@@ -37,7 +37,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.zurrtum.create.content.trains.track.TrackMaterialFactory.make;
+import static com.railwayteam.railways.shim.create.content.trains.track.TrackMaterialFactory.make;
 
 public class CRTrackMaterials {
     private static final Map<TrackMaterial, Identifier> TYPES = new HashMap<>();

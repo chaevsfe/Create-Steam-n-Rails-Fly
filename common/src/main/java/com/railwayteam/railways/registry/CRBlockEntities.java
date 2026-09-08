@@ -36,8 +36,8 @@ import com.railwayteam.railways.content.semaphore.SemaphoreBlockEntity;
 import com.railwayteam.railways.content.smokestack.block.diesel.DieselSmokeStackBlockEntity;
 import com.railwayteam.railways.content.smokestack.block.be.SmokeStackBlockEntity;
 import com.railwayteam.railways.content.switches.TrackSwitchBlockEntity;
-import com.zurrtum.create.foundation.data.CreateRegistrate;
-import com.tterrag.registrate.util.entry.BlockEntityEntry;
+import com.railwayteam.railways.shim.create.foundation.data.CreateRegistrate;
+import com.railwayteam.railways.shim.registrate.util.entry.BlockEntityEntry;
 
 public class CRBlockEntities {
     private static final CreateRegistrate REGISTRATE = Railways.registrate();

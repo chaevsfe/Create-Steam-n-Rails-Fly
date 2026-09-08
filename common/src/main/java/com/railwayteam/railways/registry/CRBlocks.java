@@ -88,21 +88,21 @@ import com.railwayteam.railways.content.switches.TrackSwitchBlockItem;
 import com.railwayteam.railways.multiloader.CommonTags;
 import com.railwayteam.railways.util.FusedSupplier;
 import com.railwayteam.railways.util.ShapeWrapper;
-import com.zurrtum.create.AllTags;
+import com.railwayteam.railways.shim.create.AllTags;
 import com.zurrtum.create.api.contraption.BlockMovementChecks;
 import com.zurrtum.create.content.trains.track.TrackBlock;
 import com.zurrtum.create.content.trains.track.TrackBlockItem;
 import com.zurrtum.create.content.trains.track.TrackMaterial;
-import com.zurrtum.create.foundation.data.CreateRegistrate;
-import com.zurrtum.create.foundation.data.SharedProperties;
+import com.railwayteam.railways.shim.create.foundation.data.CreateRegistrate;
+import com.railwayteam.railways.shim.create.foundation.data.SharedProperties;
 import com.zurrtum.create.client.foundation.item.ItemDescription;
-import com.tterrag.registrate.providers.DataGenContext;
-import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
-import com.tterrag.registrate.util.entry.BlockEntry;
-import com.tterrag.registrate.util.entry.ItemEntry;
-import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
-import com.tterrag.registrate.util.nullness.NonNullConsumer;
-import com.tterrag.registrate.util.nullness.NonNullSupplier;
+import com.railwayteam.railways.shim.registrate.providers.DataGenContext;
+import com.railwayteam.railways.shim.registrate.providers.RegistrateBlockstateProvider;
+import com.railwayteam.railways.shim.registrate.util.entry.BlockEntry;
+import com.railwayteam.railways.shim.registrate.util.entry.ItemEntry;
+import com.railwayteam.railways.shim.registrate.util.nullness.NonNullBiConsumer;
+import com.railwayteam.railways.shim.registrate.util.nullness.NonNullConsumer;
+import com.railwayteam.railways.shim.registrate.util.nullness.NonNullSupplier;
 import com.zurrtum.create.catnip.data.Couple;
 import com.zurrtum.create.catnip.data.Pair;
 import com.zurrtum.create.catnip.math.VoxelShaper;
@@ -130,9 +130,9 @@ import java.util.function.Supplier;
 
 import static com.railwayteam.railways.util.CreateBehaviourCompat.interactionBehaviour;
 import static com.railwayteam.railways.util.CreateBehaviourCompat.movementBehaviour;
-import static com.zurrtum.create.foundation.data.BuilderTransformers.copycat;
-import static com.zurrtum.create.foundation.data.ModelGen.customItemModel;
-import static com.zurrtum.create.foundation.data.TagGen.*;
+import static com.railwayteam.railways.shim.create.foundation.data.BuilderTransformers.copycat;
+import static com.railwayteam.railways.shim.create.foundation.data.ModelGen.customItemModel;
+import static com.railwayteam.railways.shim.create.foundation.data.TagGen.*;
 
 @SuppressWarnings("unused")
 public class CRBlocks {

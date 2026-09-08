@@ -16,7 +16,7 @@ import com.railwayteam.railways.content.palettes.painting.PaintFluid;
 import com.railwayteam.railways.registry.CRFluids;
 import com.railwayteam.railways.registry.fabric.CRFluidsImpl;
 import com.railwayteam.railways.util.Utils;
-import com.zurrtum.create.content.fluids.VirtualFluid;
+import com.railwayteam.railways.shim.create.content.fluids.VirtualFluid;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderingRegistry;

@@ -21,7 +21,7 @@ package com.railwayteam.railways.content.switches;
 import com.railwayteam.railways.content.conductor.ConductorEntity;
 import com.railwayteam.railways.registry.CRBlockEntities;
 import com.railwayteam.railways.registry.CRShapes;
-import com.zurrtum.create.AllTags;
+import com.railwayteam.railways.shim.create.AllTags;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import com.zurrtum.create.content.trains.entity.TravellingPoint;
 import com.zurrtum.create.foundation.block.IBE;

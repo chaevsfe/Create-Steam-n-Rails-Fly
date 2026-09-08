@@ -21,7 +21,7 @@ package com.railwayteam.railways.multiloader;
 import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.base.data.CRTagGen;
 import com.railwayteam.railways.base.data.CRTagGen.TagAppender;
-import com.tterrag.registrate.providers.RegistrateTagsProvider;
+import com.railwayteam.railways.shim.registrate.providers.RegistrateTagsProvider;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;

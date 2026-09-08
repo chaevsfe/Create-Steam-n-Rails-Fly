@@ -21,7 +21,7 @@ package com.railwayteam.railways.registry;
 import com.railwayteam.railways.content.smokestack.particles.chimneypush.ChimneyPushParticleData;
 import com.railwayteam.railways.content.smokestack.particles.legacy.SmokeParticleData;
 import com.railwayteam.railways.content.smokestack.particles.puffs.PuffSmokeParticleData;
-import com.zurrtum.create.foundation.particle.ICustomParticleData;
+import com.railwayteam.railways.shim.create.foundation.particle.ICustomParticleData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;

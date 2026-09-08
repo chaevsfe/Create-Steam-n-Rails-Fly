@@ -24,7 +24,7 @@ import com.railwayteam.railways.registry.CRFluids;
 import com.railwayteam.railways.registry.CRItems;
 import com.zurrtum.create.compat.emi.recipes.SpoutEmiRecipe;
 import com.zurrtum.create.content.fluids.transfer.FillingRecipe;
-import com.zurrtum.create.content.processing.recipe.ProcessingRecipeBuilder;
+import com.railwayteam.railways.shim.create.content.processing.recipe.ProcessingRecipeBuilder;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.stack.Comparison;

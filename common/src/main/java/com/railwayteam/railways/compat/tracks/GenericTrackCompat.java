@@ -31,7 +31,7 @@ import com.railwayteam.railways.util.Utils;
 import com.zurrtum.create.content.processing.sequenced.SequencedAssemblyItem;
 import com.zurrtum.create.content.trains.track.TrackBlock;
 import com.zurrtum.create.content.trains.track.TrackMaterial;
-import com.tterrag.registrate.util.nullness.NonNullSupplier;
+import com.railwayteam.railways.shim.registrate.util.nullness.NonNullSupplier;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -47,7 +47,7 @@ import static com.railwayteam.railways.Railways.registrate;
 import static com.railwayteam.railways.compat.tracks.TrackCompatUtils.buildCompatModels;
 import static com.railwayteam.railways.compat.tracks.TrackCompatUtils.makeTrack;
 import static com.railwayteam.railways.registry.CRItems.ITEM_INCOMPLETE_TRACK;
-import static com.zurrtum.create.content.trains.track.TrackMaterialFactory.make;
+import static com.railwayteam.railways.shim.create.content.trains.track.TrackMaterialFactory.make;
 
 public class GenericTrackCompat {
     private static final Map<String, GenericTrackCompat> ALL = new HashMap<>();

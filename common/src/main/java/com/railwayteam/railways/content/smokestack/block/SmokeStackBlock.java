@@ -25,7 +25,7 @@ import com.railwayteam.railways.registry.CRBlockEntities;
 import com.railwayteam.railways.util.ShapeWrapper;
 import com.zurrtum.create.foundation.block.IBE;
 import com.zurrtum.create.AllItemTags;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.railwayteam.railways.shim.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.ItemTags;

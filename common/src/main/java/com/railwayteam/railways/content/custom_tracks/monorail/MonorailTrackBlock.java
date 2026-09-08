@@ -36,7 +36,7 @@ import com.zurrtum.create.content.trains.track.TrackBlock;
 import com.zurrtum.create.content.trains.track.TrackMaterial;
 import com.zurrtum.create.content.trains.track.TrackPropagator;
 import com.zurrtum.create.content.trains.track.TrackShape;
-import com.tterrag.registrate.util.entry.BlockEntry;
+import com.railwayteam.railways.shim.registrate.util.entry.BlockEntry;
 import com.zurrtum.create.client.flywheel.lib.model.baked.PartialModel;
 import com.zurrtum.create.client.flywheel.lib.transform.TransformStack;
 import com.zurrtum.create.catnip.data.Couple;

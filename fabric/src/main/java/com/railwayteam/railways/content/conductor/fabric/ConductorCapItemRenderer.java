@@ -23,7 +23,7 @@ import com.railwayteam.railways.content.conductor.ConductorCapLayer;
 import com.railwayteam.railways.content.conductor.ConductorCapItem;
 import com.railwayteam.railways.content.conductor.ConductorCapModel;
 import com.railwayteam.railways.registry.CRItems;
-import com.tterrag.registrate.util.entry.ItemEntry;
+import com.railwayteam.railways.shim.registrate.util.entry.ItemEntry;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.Model;

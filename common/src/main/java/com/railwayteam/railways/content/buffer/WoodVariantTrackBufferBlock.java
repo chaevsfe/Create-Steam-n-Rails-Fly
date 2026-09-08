@@ -20,7 +20,7 @@ package com.railwayteam.railways.content.buffer;
 
 import com.railwayteam.railways.registry.CRBlockEntities;
 import com.railwayteam.railways.util.AdventureUtils;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.railwayteam.railways.shim.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.InteractionHand;

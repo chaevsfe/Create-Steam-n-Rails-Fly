@@ -18,8 +18,8 @@
 
 package com.railwayteam.railways.registry;
 
-import com.zurrtum.create.content.fluids.VirtualFluid;
-import com.tterrag.registrate.util.entry.FluidEntry;
+import com.railwayteam.railways.shim.create.content.fluids.VirtualFluid;
+import com.railwayteam.railways.shim.registrate.util.entry.FluidEntry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

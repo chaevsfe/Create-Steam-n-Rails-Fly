@@ -23,7 +23,7 @@ import com.railwayteam.railways.base.data.compat.emi.EmiRecipeDefaultsGen;
 import com.railwayteam.railways.base.data.recipe.EnumRecipeList.PalettesRecipeList;
 import com.railwayteam.railways.registry.CRPalettes.Styles;
 import com.zurrtum.create.api.data.recipe.MechanicalCraftingRecipeBuilder;
-import com.zurrtum.create.catnip.platform.CatnipServices;
+import com.railwayteam.railways.shim.create.catnip.platform.CatnipServices;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.Identifier;

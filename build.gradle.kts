@@ -2,6 +2,8 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import javax.imageio.ImageIO
 
+import java.util.zip.ZipFile
+
 plugins {
     id("net.fabricmc.fabric-loom") version "1.16-SNAPSHOT"
     `maven-publish`
@@ -925,6 +927,39 @@ tasks.jar {
 tasks.named<Jar>("sourcesJar") {
     from("LICENSE")
     from("NOTICE")
+}
+
+val ownNamespace = "com/railwayteam/railways/"
+
+val verifyOwnNamespace = tasks.register("verifyOwnNamespace") {
+    description = "Fails when a built archive carries code outside the mod's own package."
+    group = "verification"
+    val archives = listOf(tasks.jar.flatMap { it.archiveFile }, tasks.named<Jar>("sourcesJar").flatMap { it.archiveFile })
+    dependsOn(tasks.jar, tasks.named("sourcesJar"))
+    inputs.files(archives)
+    outputs.upToDateWhen { false }
+    doLast {
+        archives.map { it.get().asFile }.forEach { archive ->
+            val strays = ZipFile(archive).use { zip ->
+                zip.entries().asSequence()
+                    .map { it.name }
+                    .filter { (it.endsWith(".class") || it.endsWith(".java")) && !it.startsWith(ownNamespace) }
+                    .sorted()
+                    .toList()
+            }
+            if (strays.isNotEmpty()) {
+                throw GradleException(
+                    "${archive.name} carries ${strays.size} file(s) outside $ownNamespace. " +
+                        "Two mods shipping the same class name collide at bootstrap, so every shim " +
+                        "must live in the mod's own package:\n" + strays.joinToString("\n"),
+                )
+            }
+        }
+    }
+}
+
+tasks.named("check") {
+    dependsOn(verifyOwnNamespace)
 }
 
 publishing {

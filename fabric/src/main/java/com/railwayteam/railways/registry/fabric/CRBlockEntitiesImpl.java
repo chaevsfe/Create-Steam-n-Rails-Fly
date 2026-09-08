@@ -13,7 +13,7 @@ package com.railwayteam.railways.registry.fabric;
 import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.content.fuel.psi.PortableFuelInterfaceBlockEntity;
 import com.railwayteam.railways.content.fuel.tank.FuelTankBlockEntity;
-import com.tterrag.registrate.util.entry.BlockEntityEntry;
+import com.railwayteam.railways.shim.registrate.util.entry.BlockEntityEntry;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
 import com.zurrtum.create.foundation.blockEntity.SmartBlockEntity;
 import com.zurrtum.create.foundation.blockEntity.behaviour.CachedFluidInventoryBehaviour;

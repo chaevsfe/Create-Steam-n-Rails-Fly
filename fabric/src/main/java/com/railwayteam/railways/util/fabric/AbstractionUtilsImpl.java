@@ -3,7 +3,7 @@ package com.railwayteam.railways.util.fabric;
 import com.railwayteam.railways.content.fuel.tank.FuelTankBlockEntity;
 import com.railwayteam.railways.registry.fabric.CRBlocksImpl;
 import com.railwayteam.railways.registry.fabric.CRMountedStorageTypesImpl;
-import com.tterrag.registrate.util.entry.BlockEntry;
+import com.railwayteam.railways.shim.registrate.util.entry.BlockEntry;
 import com.zurrtum.create.api.contraption.storage.fluid.MountedFluidStorageType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;

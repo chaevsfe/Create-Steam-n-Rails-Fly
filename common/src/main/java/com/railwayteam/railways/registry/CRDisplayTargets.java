@@ -4,7 +4,7 @@ import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.content.distant_signals.SemaphoreDisplayTarget;
 import com.zurrtum.create.api.behaviour.display.DisplayTarget;
 import com.zurrtum.create.api.registry.CreateRegistries;
-import com.tterrag.registrate.util.entry.RegistryEntry;
+import com.railwayteam.railways.shim.registrate.util.entry.RegistryEntry;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 

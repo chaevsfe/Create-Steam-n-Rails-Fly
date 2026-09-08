@@ -30,7 +30,7 @@ import com.zurrtum.create.content.trains.track.TrackBlock;
 import com.zurrtum.create.content.trains.track.TrackShape;
 import com.zurrtum.create.content.trains.track.TrackTargetingBlockItem;
 import com.zurrtum.create.foundation.block.IBE;
-import com.tterrag.registrate.util.nullness.NonNullBiFunction;
+import com.railwayteam.railways.shim.registrate.util.nullness.NonNullBiFunction;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

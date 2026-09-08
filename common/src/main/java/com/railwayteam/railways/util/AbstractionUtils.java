@@ -19,7 +19,7 @@
 package com.railwayteam.railways.util;
 
 import com.zurrtum.create.api.contraption.storage.fluid.MountedFluidStorageType;
-import com.tterrag.registrate.util.entry.BlockEntry;
+import com.railwayteam.railways.shim.registrate.util.entry.BlockEntry;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 

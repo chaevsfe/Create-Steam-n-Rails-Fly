@@ -24,7 +24,7 @@ import com.railwayteam.railways.compat.Mods;
 import com.railwayteam.railways.content.animated_flywheel.FlywheelMovementBehaviour;
 import com.zurrtum.create.AllBlocks;
 import com.zurrtum.create.api.behaviour.movement.MovementBehaviour;
-import com.tterrag.registrate.builders.BlockBuilder;
+import com.railwayteam.railways.shim.registrate.builders.BlockBuilder;
 import net.minecraft.world.level.block.Block;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

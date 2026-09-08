@@ -19,7 +19,7 @@
 package com.railwayteam.railways.registry.advancement;
 
 import com.google.gson.JsonObject;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.railwayteam.railways.shim.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.criterion.ContextAwarePredicate;
 import net.minecraft.advancements.criterion.DeserializationContext;
 import net.minecraft.resources.Identifier;
