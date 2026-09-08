@@ -1,6 +1,13 @@
 {
   "sources": [
     {
+      "type": "minecraft:filter",
+      "pattern": {
+        "namespace": "^railways$",
+        "path": "_connected$"
+      }
+    },
+    {
       "type": "directory",
       "source": "entity/caps",
       "prefix": "entity/caps/"
@@ -13,21 +20,66 @@
       "type": "single",
       "resource": "railways:entity/conductor"
     },
-    { "type": "single", "resource": "railways:entity/dev_caps/bosbesballon" },
-    { "type": "single", "resource": "railways:entity/dev_caps/crown" },
-    { "type": "single", "resource": "railways:entity/dev_caps/demon" },
-    { "type": "single", "resource": "railways:entity/dev_caps/headphones" },
-    { "type": "single", "resource": "railways:entity/dev_caps/ithundxr" },
-    { "type": "single", "resource": "railways:entity/dev_caps/littlechasiu" },
-    { "type": "single", "resource": "railways:entity/dev_caps/neoncitydrifter" },
-    { "type": "single", "resource": "railways:entity/dev_caps/pride" },
-    { "type": "single", "resource": "railways:entity/dev_caps/rabbitminers" },
-    { "type": "single", "resource": "railways:entity/dev_caps/rileyhighline" },
-    { "type": "single", "resource": "railways:entity/dev_caps/stonks_hat" },
-    { "type": "single", "resource": "railways:entity/dev_caps/stonks_hat_blue" },
-    { "type": "single", "resource": "railways:entity/dev_caps/stonks_hat_red" },
-    { "type": "single", "resource": "railways:entity/dev_caps/tropheusjay" },
-    { "type": "single", "resource": "railways:entity/dev_caps/turtle" },
+    {
+      "type": "single",
+      "resource": "railways:entity/dev_caps/bosbesballon"
+    },
+    {
+      "type": "single",
+      "resource": "railways:entity/dev_caps/crown"
+    },
+    {
+      "type": "single",
+      "resource": "railways:entity/dev_caps/demon"
+    },
+    {
+      "type": "single",
+      "resource": "railways:entity/dev_caps/headphones"
+    },
+    {
+      "type": "single",
+      "resource": "railways:entity/dev_caps/ithundxr"
+    },
+    {
+      "type": "single",
+      "resource": "railways:entity/dev_caps/littlechasiu"
+    },
+    {
+      "type": "single",
+      "resource": "railways:entity/dev_caps/neoncitydrifter"
+    },
+    {
+      "type": "single",
+      "resource": "railways:entity/dev_caps/pride"
+    },
+    {
+      "type": "single",
+      "resource": "railways:entity/dev_caps/rabbitminers"
+    },
+    {
+      "type": "single",
+      "resource": "railways:entity/dev_caps/rileyhighline"
+    },
+    {
+      "type": "single",
+      "resource": "railways:entity/dev_caps/stonks_hat"
+    },
+    {
+      "type": "single",
+      "resource": "railways:entity/dev_caps/stonks_hat_blue"
+    },
+    {
+      "type": "single",
+      "resource": "railways:entity/dev_caps/stonks_hat_red"
+    },
+    {
+      "type": "single",
+      "resource": "railways:entity/dev_caps/tropheusjay"
+    },
+    {
+      "type": "single",
+      "resource": "railways:entity/dev_caps/turtle"
+    },
     {
       "type": "directory",
       "source": "block/buffer/big_buffer",
