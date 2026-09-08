@@ -34,7 +34,7 @@ jobs:
           cache-read-only: false
 
       - name: Build
-        run: ./gradlew clean build validateAccessWidener --no-daemon
+        run: ./gradlew clean build validateAccessWidener --no-build-cache --no-daemon
 
       - name: Upload distributable JAR
         uses: actions/upload-artifact@v4
@@ -42,5 +42,4 @@ jobs:
           name: steam-rails-fabric-26.2
           path: |
             build/libs/Steam_Rails-*.jar
-            !build/libs/*-sources.jar
           if-no-files-found: error
