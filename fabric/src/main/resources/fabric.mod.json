@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "railways",
   "version": "${version}",
-  "name": "Create: Steam 'n' Rails",
+  "name": "Create Fly: Steam 'n' Rails",
   "description": "Create: Steam 'n' Rails port for Create Fly 26.2",
   "authors": [
     "The Railways Team",
