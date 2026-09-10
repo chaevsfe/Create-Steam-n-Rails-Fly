@@ -27,7 +27,12 @@ repositories {
     maven("https://api.modrinth.com/maven") {
         content { includeGroup("maven.modrinth") }
     }
+    flatDir {
+        dirs("libs", "../../create-rei/CreateReiViewer-Fly/build/libs")
+    }
 }
+
+val recipeViewer = ":CreateReiViewer:${property("createreiviewer_version")}+fabric-mc${property("minecraft_version")}"
 
 loom {
     accessWidenerPath.set(file("common/src/main/resources/railways.accesswidener"))
@@ -111,6 +116,7 @@ dependencies {
 
     annotationProcessor("io.github.llamalad7:mixinextras-common:${property("mixin_extras_version")}")
     implementation(include("io.github.llamalad7:mixinextras-fabric:${property("mixin_extras_version")}")!!)
+    include(recipeViewer)
 }
 
 val connectedTextureResourceRoots = listOf(
