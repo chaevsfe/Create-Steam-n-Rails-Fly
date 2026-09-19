@@ -54,7 +54,6 @@ import com.railwayteam.railways.shim.minecraft.client.renderer.RenderType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.BlockItemTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
@@ -617,7 +616,7 @@ public class CRPalettes {
     @SafeVarargs
     private static BlockEntry<?> locometalTrapdoor(TransformerProvider transformer, PalettesColor color, String colorString, String colorName, TagKey<Item>... tags) {
         TagKey<Item>[] trapdoorTags = Arrays.copyOf(tags, tags.length + 1);
-        trapdoorTags[trapdoorTags.length - 1] = BlockItemTags.TRAPDOORS.item();
+        trapdoorTags[trapdoorTags.length - 1] = ItemTags.TRAPDOORS;
         return REGISTRATE.block(joinUnderscore(colorString, "locometal_trapdoor"), PalettesTrapDoorBlock::new)
             .transform(transformer.get())
             .transform(BuilderTransformers.locometalTrapdoor(color))

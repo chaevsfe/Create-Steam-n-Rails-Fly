@@ -69,7 +69,7 @@ public class BlockStateUtils {
     }
 
     public static Block getWoolBlock(DyeColor color) {
-        return WOOL_MAP_REVERSE.getOrDefault(color, Blocks.WOOL.white());
+        return WOOL_MAP_REVERSE.getOrDefault(color, Blocks.WHITE_WOOL);
     }
 
     public static BlockState blockWithProperties(Block blockSource, BlockState propertySource) {

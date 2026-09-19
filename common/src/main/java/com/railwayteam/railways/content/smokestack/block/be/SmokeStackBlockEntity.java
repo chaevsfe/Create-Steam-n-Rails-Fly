@@ -94,7 +94,7 @@ public class SmokeStackBlockEntity extends SmartBlockEntity {
         if (color != null)
             return ColorUtils.getDyeColorDyeItem(color).getDefaultInstance();
 
-        return isSoul ? Items.SOUL_SOIL.getDefaultInstance() : Items.DYE.black().getDefaultInstance();
+        return isSoul ? Items.SOUL_SOIL.getDefaultInstance() : Items.BLACK_DYE.getDefaultInstance();
     }
 
     private void setHeight(int height) {

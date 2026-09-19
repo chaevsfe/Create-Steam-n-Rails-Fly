@@ -71,13 +71,12 @@ import com.railwayteam.railways.shim.registrate.providers.RegistrateBlockstatePr
 import com.railwayteam.railways.shim.registrate.util.nullness.NonNullBiConsumer;
 import com.railwayteam.railways.shim.registrate.util.nullness.NonNullUnaryOperator;
 import com.zurrtum.create.catnip.data.Couple;
-import net.minecraft.advancements.predicates.StatePropertiesPredicate;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import com.railwayteam.railways.shim.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.BlockItemTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
@@ -266,7 +265,7 @@ public class BuilderTransformers {
             .tag(blockTags)
             .loot((lr, block) -> lr.add(block, lr.createDoorTable(block)))
             .item()
-            .tag(BlockItemTags.DOORS.item())
+            .tag(ItemTags.DOORS)
             .tag(itemTags)
             .transform(locometalDoorItemModel(color, type))
             .build();

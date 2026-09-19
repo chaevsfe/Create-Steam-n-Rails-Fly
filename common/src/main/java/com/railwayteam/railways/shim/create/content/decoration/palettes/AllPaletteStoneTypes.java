@@ -16,11 +16,11 @@ public enum AllPaletteStoneTypes {
     DRIPSTONE(Blocks.DRIPSTONE_BLOCK),
     GRANITE(Blocks.GRANITE),
     LIMESTONE(Blocks.CALCITE),
-    OCHRUM(Blocks.DYED_TERRACOTTA.yellow()),
+    OCHRUM(Blocks.YELLOW_TERRACOTTA),
     SCORIA(Blocks.BLACKSTONE),
     SCORCHIA(Blocks.BASALT),
     TUFF(Blocks.TUFF),
-    VERIDIUM(Blocks.DYED_TERRACOTTA.green());
+    VERIDIUM(Blocks.GREEN_TERRACOTTA);
 
     private final VariantSet variants;
 

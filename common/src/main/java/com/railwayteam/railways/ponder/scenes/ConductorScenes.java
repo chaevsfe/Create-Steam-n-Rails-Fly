@@ -36,7 +36,6 @@ import net.minecraft.core.Rotations;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.WalkAnimationState;
@@ -58,7 +57,7 @@ public class ConductorScenes {
     playerHead.set(DataComponents.PROFILE, ResolvableProfile.createUnresolved(playerName));
 
     ElementLink<EntityElement> player = scene.world().createEntity(w -> {
-      ArmorStand entity = EntityTypes.ARMOR_STAND.create(w, EntitySpawnReason.COMMAND);
+      ArmorStand entity = EntityType.ARMOR_STAND.create(w, EntitySpawnReason.COMMAND);
       entity.setPos(pos.x, pos.y, pos.z);
       entity.xo = pos.x;
       entity.yo = pos.y;
