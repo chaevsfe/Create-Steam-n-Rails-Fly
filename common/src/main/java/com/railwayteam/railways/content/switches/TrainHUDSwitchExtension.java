@@ -45,7 +45,7 @@ public class TrainHUDSwitchExtension {
 
     public static void renderOverlay(GuiGraphicsExtractor graphics, float partialTicks, int width, int height) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.gui.hud.isHidden() || mc.gameMode.getPlayerMode() == GameType.SPECTATOR)
+        if (mc.options.hideGui || mc.gameMode.getPlayerMode() == GameType.SPECTATOR)
             return;
 
         float progress = switchProgress.getValue(partialTicks);

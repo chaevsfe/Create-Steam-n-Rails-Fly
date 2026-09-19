@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /** Prevents the stationary player's hands/items from being rendered through the conductor camera. */
 @Mixin(ItemInHandRenderer.class)
 public class MixinItemInHandRenderer {
-    @Inject(method = "submitHandsWithItems", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "renderHandsWithItems", at = @At("HEAD"), cancellable = true)
     private void railways$hidePlayerHandsWhilePossessing(CallbackInfo ci) {
         if (ClientHandler.isPlayerMountedOnCamera())
             ci.cancel();

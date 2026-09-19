@@ -25,8 +25,8 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SimpleAnimatedParticle;
 import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
@@ -99,7 +99,7 @@ public class SmokeParticle extends SimpleAnimatedParticle {
 	@Override
 	public int getLightCoords(float partialTick) {
 		BlockPos blockPos = BlockPos.containing(this.x, this.y, this.z);
-		return this.level.isLoaded(blockPos) ? LightCoordsUtil.getLightCoords(level, blockPos) : 0;
+		return this.level.isLoaded(blockPos) ? LevelRenderer.getLightCoords(level, blockPos) : 0;
 	}
 
 	public static class Factory implements ParticleProvider<SmokeParticleData> {

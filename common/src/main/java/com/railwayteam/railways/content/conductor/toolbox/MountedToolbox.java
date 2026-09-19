@@ -2,8 +2,8 @@ package com.railwayteam.railways.content.conductor.toolbox;
 
 import com.railwayteam.railways.content.conductor.ConductorEntity;
 import com.railwayteam.railways.util.packet.PacketSender;
-import com.zurrtum.create.AllBlocks;
 import com.zurrtum.create.AllDataComponents;
+import com.zurrtum.create.content.equipment.toolbox.ToolboxBlock;
 import com.zurrtum.create.content.equipment.toolbox.ToolboxBlockEntity;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -35,7 +35,7 @@ public class MountedToolbox extends ToolboxBlockEntity {
     private final Map<Player, Integer> trackedConnectedPlayers = new WeakHashMap<>();
 
     public MountedToolbox(ConductorEntity parent, DyeColor color) {
-        super(parent.blockPosition(), AllBlocks.TOOLBOX.pick(color).defaultBlockState());
+        super(parent.blockPosition(), ToolboxBlock.getColorBlock(color).defaultBlockState());
         this.parent = parent;
         setLevel(parent.level());
         setLazyTickRate(10);
@@ -79,7 +79,7 @@ public class MountedToolbox extends ToolboxBlockEntity {
     protected void read(ValueInput input, boolean clientPacket) {
         super.read(input, clientPacket);
         input.getInt("Color").ifPresent(colorId -> {
-            BlockState state = AllBlocks.TOOLBOX.pick(DyeColor.byId(colorId)).defaultBlockState();
+            BlockState state = ToolboxBlock.getColorBlock(DyeColor.byId(colorId)).defaultBlockState();
             setBlockState(state);
         });
     }
@@ -130,7 +130,7 @@ public class MountedToolbox extends ToolboxBlockEntity {
     }
 
     public ItemStack getDisplayStack() {
-        ItemStack stack = AllBlocks.TOOLBOX.pick(getColor()).asItem().getDefaultInstance();
+        ItemStack stack = ToolboxBlock.getColorBlock(getColor()).asItem().getDefaultInstance();
         if (hasCustomName())
             stack.set(DataComponents.CUSTOM_NAME, getCustomName());
         return stack;

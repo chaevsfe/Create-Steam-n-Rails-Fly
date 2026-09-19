@@ -83,6 +83,6 @@ public class ConductorToolboxLayer extends RenderLayer<ConductorRenderState, Con
 
     @SuppressWarnings("unchecked")
     private static void renderBuf(SubmitNodeCollector submitter, PoseStack poseStack, SuperByteBuffer buf) {
-        buf.submit(CUTOUT_BLOCKS, poseStack, submitter);
+        buf.extractRenderState().submit(CUTOUT_BLOCKS, poseStack, submitter);
     }
 }

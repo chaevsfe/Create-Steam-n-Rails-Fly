@@ -104,6 +104,7 @@ public class UnifiedBogeyRenderer implements BogeyRenderer, BogeyDisplayHolder {
                     .cardinalLighting(cardinalLighting)
                     .light(packedLight)
                     .overlay(OverlayTexture.NO_OVERLAY)
+                    .extractRenderState()
                     .submit(type, poseStack, queue);
                 poseStack.popPose();
             }
@@ -118,6 +119,7 @@ public class UnifiedBogeyRenderer implements BogeyRenderer, BogeyDisplayHolder {
                     sbb.cardinalLighting(cardinalLighting)
                         .light(packedLight)
                         .overlay(OverlayTexture.NO_OVERLAY)
+                        .extractRenderState()
                         .submit(type, poseStack, queue);
                     poseStack.popPose();
                 }
@@ -136,6 +138,7 @@ public class UnifiedBogeyRenderer implements BogeyRenderer, BogeyDisplayHolder {
                     .light(packedLight)
                     .overlay(OverlayTexture.NO_OVERLAY)
                     .shiftUVScrolling(element.entry, scrollV)
+                    .extractRenderState()
                     .submit(type, poseStack, queue);
                 poseStack.popPose();
             }

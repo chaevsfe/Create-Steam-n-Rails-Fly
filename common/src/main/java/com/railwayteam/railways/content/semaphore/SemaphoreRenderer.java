@@ -143,6 +143,7 @@ public class SemaphoreRenderer extends SmartBlockEntityRenderer<SemaphoreBlockEn
                 .rotateCenteredDegrees(state.yRot, Direction.Axis.Y)
                 .rotateCentered(state.armAngle, Direction.EAST)
                 .light(state.lightCoords)
+                .extractRenderState()
                 .submit(RenderTypes.cutoutMovingBlock(), matrices, queue);
         }
 
@@ -153,6 +154,7 @@ public class SemaphoreRenderer extends SmartBlockEntityRenderer<SemaphoreBlockEn
                     .translate(state.lampTx, state.lampTy, state.lampTz)
                     .light(0xF000F0)
                     .disableDiffuse()
+                    .extractRenderState()
                     .submit(state.translucentType, matrices, queue);
             }
 
@@ -165,6 +167,7 @@ public class SemaphoreRenderer extends SmartBlockEntityRenderer<SemaphoreBlockEn
                     .light(0xF000F0)
                     .disableDiffuse()
                     .scale(1.5f, 2f, 2f)
+                    .extractRenderState()
                     .submit(state.additiveType, matrices, additiveQueue);
             }
 
@@ -175,6 +178,7 @@ public class SemaphoreRenderer extends SmartBlockEntityRenderer<SemaphoreBlockEn
                     .light(0xF000F0)
                     .disableDiffuse()
                     .scale(1 + 1 / 16f)
+                    .extractRenderState()
                     .submit(state.additiveType, matrices, additiveQueue);
             }
         }

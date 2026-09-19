@@ -61,7 +61,11 @@ public class CopycatHeadstockBarsModel extends WrapperBlockStateModel {
     ) {
         BlockStateModel materialModel = Minecraft.getInstance().getModelManager().getBlockStateModelSet().get(material);
         List<BlockStateModelPart> materialParts = new ArrayList<>();
-        WrapperBlockStateModel.addPartsWithInfo(materialModel, world, pos, material, random, materialParts);
+        if (materialModel instanceof WrapperBlockStateModel wrapper) {
+            wrapper.addPartsWithInfo(world, pos, material, random, materialParts);
+        } else {
+            materialModel.collectParts(random, materialParts);
+        }
 
         addRetexturedParts(materialModel, materialParts, random, shouldUncull, output);
     }

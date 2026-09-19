@@ -3,10 +3,12 @@ package com.railwayteam.railways.registry;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.railwayteam.railways.Railways;
+import com.zurrtum.create.catnip.theme.Color;
 import com.zurrtum.create.client.foundation.gui.AllIcons;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import org.joml.Matrix4f;
@@ -44,24 +46,31 @@ public class CRIcons extends AllIcons {
     }
 
     @Override
-    public void submit(PoseStack poseStack, SubmitNodeCollector collector, int color) {
-        collector.submitCustomGeometry(poseStack, RenderTypes.text(ICON_ATLAS), new IconRenderState(crIconX, crIconY, color));
+    public RenderType bind() {
+        return RenderTypes.text(ICON_ATLAS);
     }
 
-    private record IconRenderState(int iconX, int iconY, int color) implements SubmitNodeCollector.CustomGeometryRenderer {
-        @Override
-        public void render(PoseStack.Pose pose, VertexConsumer consumer) {
-            Matrix4f matrix = pose.pose();
-            int light = 15728880;
-            float u0 = iconX / 256f;
-            float u1 = (iconX + 16) / 256f;
-            float v0 = iconY / 256f;
-            float v1 = (iconY + 16) / 256f;
-            consumer.addVertex(matrix, 0, 1, 0).setColor(color).setUv(u0, v1).setLight(light);
-            consumer.addVertex(matrix, 1, 1, 0).setColor(color).setUv(u1, v1).setLight(light);
-            consumer.addVertex(matrix, 1, 0, 0).setColor(color).setUv(u1, v0).setLight(light);
-            consumer.addVertex(matrix, 0, 0, 0).setColor(color).setUv(u0, v0).setLight(light);
-        }
+    @Override
+    public void render(PoseStack poseStack, MultiBufferSource bufferSource, int color) {
+        VertexConsumer consumer = bufferSource.getBuffer(RenderTypes.text(ICON_ATLAS));
+        Matrix4f matrix = poseStack.last().pose();
+        Color rgb = new Color(color);
+        int light = 15728880;
+        float u0 = crIconX / 256f;
+        float u1 = (crIconX + 16) / 256f;
+        float v0 = crIconY / 256f;
+        float v1 = (crIconY + 16) / 256f;
+        vertex(consumer, matrix, 0, 0, rgb, u0, v0, light);
+        vertex(consumer, matrix, 0, 1, rgb, u0, v1, light);
+        vertex(consumer, matrix, 1, 1, rgb, u1, v1, light);
+        vertex(consumer, matrix, 1, 0, rgb, u1, v0, light);
+    }
+
+    private static void vertex(VertexConsumer consumer, Matrix4f matrix, float x, float y, Color color, float u, float v, int light) {
+        consumer.addVertex(matrix, x, y, 0)
+            .setColor(color.getRed(), color.getGreen(), color.getBlue(), 255)
+            .setUv(u, v)
+            .setLight(light);
     }
 
     private static CRIcons next() {

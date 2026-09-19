@@ -19,6 +19,7 @@
 package com.railwayteam.railways.util;
 
 import com.zurrtum.create.content.trains.track.TrackBlock;
+import com.railwayteam.railways.shim.minecraft.ColorCollections;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeColor;
@@ -58,7 +59,7 @@ public class BlockStateUtils {
     private static final Map<DyeColor, Block> WOOL_MAP_REVERSE = new HashMap<>();
     static {
         for (DyeColor color : DyeColor.values()) {
-            Block wool = Blocks.WOOL.pick(color);
+            Block wool = ColorCollections.woolBlock(color);
             WOOL_MAP.put(wool, color);
             WOOL_MAP_REVERSE.put(color, wool);
         }

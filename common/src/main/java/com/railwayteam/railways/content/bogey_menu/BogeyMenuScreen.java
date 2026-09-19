@@ -54,7 +54,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -255,7 +254,7 @@ public class BogeyMenuScreen extends AbstractSimiScreen {
 		int previewId = 31 * renderStyle.id.hashCode() + renderSize.id().hashCode();
 		guiGraphics.guiRenderState.addPicturesInPictureState(EntityBlockRenderState.create(
 			previewId, guiGraphics, null, BlockPos.ZERO, bogeyBE, bogeyState,
-			LightCoordsUtil.FULL_BRIGHT, previewX, previewY, modelScale, padding, 20, 45, 0
+			previewX, previewY, modelScale, padding, 20, 45, 0
 		));
 	}
 

@@ -18,9 +18,9 @@
 
 package com.railwayteam.railways.util;
 
+import com.railwayteam.railways.shim.minecraft.ColorCollections;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -58,6 +58,6 @@ public class ColorUtils {
     }
 
     public static Item getDyeColorDyeItem(DyeColor color) {
-        return Items.DYE.pick(color);
+        return ColorCollections.dyeItem(color);
     }
 }

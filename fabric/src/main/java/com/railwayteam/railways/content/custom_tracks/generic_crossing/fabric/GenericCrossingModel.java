@@ -66,7 +66,11 @@ public class GenericCrossingModel extends WrapperBlockStateModel {
         TrackBlock track = piece.getFirst().getBlock();
         BlockState trackState = track.defaultBlockState().setValue(TrackBlock.SHAPE, piece.getSecond());
         BlockStateModel trackModel = IGenericCrossingTrackBE.getModel(piece);
-        WrapperBlockStateModel.addPartsWithInfo(trackModel, world, pos, trackState, random, parts);
+        if (trackModel instanceof WrapperBlockStateModel wrapper) {
+            wrapper.addPartsWithInfo(world, pos, trackState, random, parts);
+        } else {
+            trackModel.collectParts(random, parts);
+        }
     }
 
     @Override

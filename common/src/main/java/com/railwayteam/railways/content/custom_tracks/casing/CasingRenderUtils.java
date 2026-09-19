@@ -36,6 +36,7 @@ import com.zurrtum.create.client.flywheel.lib.model.baked.PartialModel;
 import com.zurrtum.create.content.trains.track.BezierConnection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.builders.UVPair;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
@@ -48,7 +49,6 @@ import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
@@ -79,12 +79,7 @@ public abstract class CasingRenderUtils {
 
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level != null && minecraft.levelRenderer != null) {
-            minecraft.levelRenderer.invalidateCompiledGeometry(
-                minecraft.level,
-                minecraft.options,
-                minecraft.gameRenderer.mainCamera(),
-                minecraft.getBlockColors()
-            );
+            minecraft.levelRenderer.allChanged();
         }
     }
 
@@ -123,7 +118,7 @@ public abstract class CasingRenderUtils {
 
         if (heightDiff / connection.getLength() <= 4 / 30d) {
             for (Vec3 position : casingPositions(connection)) {
-                int light = LightCoordsUtil.getLightCoords(
+                int light = LevelRenderer.getLightCoords(
                     level,
                     BlockPos.containing(position).offset(blockEntityPos)
                 );
@@ -141,7 +136,7 @@ public abstract class CasingRenderUtils {
         CasingSegmentAngles segments = new CasingSegmentAngles(connection);
         Identifier trackType = CRTrackMaterials.getType(connection.getMaterial());
         for (int i = 1; i < segments.length; i += 2) {
-            int light = LightCoordsUtil.getLightCoords(level, segments.lightPosition[i].offset(blockEntityPos));
+            int light = LevelRenderer.getLightCoords(level, segments.lightPosition[i].offset(blockEntityPos));
             float zFightOffset = (i % 4) * 0.001f;
 
             Pose tie = segments.tieTransform[i].copy();

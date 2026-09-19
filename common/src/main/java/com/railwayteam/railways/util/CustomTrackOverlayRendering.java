@@ -22,11 +22,11 @@ import com.zurrtum.create.content.trains.track.TrackBlockEntity;
 import com.zurrtum.create.content.trains.track.TrackShape;
 import com.zurrtum.create.content.trains.track.TrackTargetingBehaviour;
 import com.zurrtum.create.infrastructure.component.BezierTrackPointLocation;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -87,7 +87,7 @@ public class CustomTrackOverlayRendering {
             .translate(.5, 0, .5)
             .scale(scale)
             .translate(offsetToSide ? .5 : -.5, 0, -.5)
-            .light(LightCoordsUtil.getLightCoords(level, pos))
+            .light(LevelRenderer.getLightCoords(level, pos))
             .extractRenderState();
         geometry.submit(ms, queue);
         ms.popPose();

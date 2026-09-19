@@ -13,6 +13,7 @@ package com.railwayteam.railways.fabric_mixin.client;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.railwayteam.railways.content.custom_tracks.monorail.CustomTrackBlockOutline;
 import com.railwayteam.railways.registry.CRTrackMaterials;
 import com.zurrtum.create.AllItemTags;
@@ -22,11 +23,13 @@ import com.zurrtum.create.content.trains.track.TrackBlock;
 import com.zurrtum.create.content.trains.track.TrackBlockEntity;
 import com.zurrtum.create.content.trains.track.TrackShape;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -65,7 +68,7 @@ public class MixinTrackBlockOutline {
         method = "drawCurveSelection",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/zurrtum/create/client/content/trains/track/TrackBlockOutline;submitShape(Lnet/minecraft/world/phys/shapes/VoxelShape;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;IF)V"
+            target = "Lcom/zurrtum/create/client/content/trains/track/TrackBlockOutline;renderShape(Lnet/minecraft/world/phys/shapes/VoxelShape;Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Ljava/lang/Boolean;)V"
         ),
         index = 0
     )
@@ -93,8 +96,8 @@ public class MixinTrackBlockOutline {
     private static void railways$drawMaterialBlockShape(
         Minecraft minecraft,
         BlockPos pos,
-        float partialTicks,
-        SubmitNodeCollector queue,
+        MultiBufferSource bufferSource,
+        Vec3 cameraPos,
         PoseStack poseStack,
         CallbackInfoReturnable<Boolean> cir
     ) {
@@ -121,19 +124,23 @@ public class MixinTrackBlockOutline {
             return;
         }
 
-        int color = TrackBlockOutline.BLACK_COLOR;
+        Boolean color = null;
         if (minecraft.player.getMainHandItem().is(AllItemTags.TRACKS)) {
-            color = TrackBlockOutline.RED_COLOR;
+            color = Boolean.FALSE;
             if (!trackShape.isJunction()) {
                 BlockEntity blockEntity = minecraft.level.getBlockEntity(pos);
                 if (!(blockEntity instanceof TrackBlockEntity trackBlockEntity) || !trackBlockEntity.isTilted())
-                    color = TrackBlockOutline.WHITE_COLOR;
+                    color = Boolean.TRUE;
             }
         }
 
         VoxelShape blockShape = state.getShape(minecraft.level, pos);
         VoxelShape materialShape = CustomTrackBlockOutline.convert(blockShape, trackBlock.getMaterial());
-        TrackBlockOutline.submitShape(materialShape, poseStack, queue, color, partialTicks);
+        VertexConsumer consumer = bufferSource.getBuffer(RenderTypes.lines());
+        poseStack.pushPose();
+        poseStack.translate(pos.getX() - cameraPos.x, pos.getY() - cameraPos.y, pos.getZ() - cameraPos.z);
+        TrackBlockOutline.renderShape(materialShape, poseStack, consumer, color);
+        poseStack.popPose();
         cir.setReturnValue(true);
     }
 }

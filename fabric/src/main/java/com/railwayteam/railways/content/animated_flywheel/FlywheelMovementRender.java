@@ -37,10 +37,10 @@ import com.zurrtum.create.client.foundation.render.AllInstanceTypes;
 import com.zurrtum.create.client.foundation.virtualWorld.VirtualRenderWorld;
 import com.zurrtum.create.content.contraptions.behaviour.MovementContext;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -100,7 +100,7 @@ public final class FlywheelMovementRender implements MovementRenderBehaviour {
         BlockState blockState = context.state;
         Direction.Axis axis = blockState.getValue(BlockStateProperties.AXIS);
         Direction direction = axis.getPositive();
-        int light = LightCoordsUtil.getLightCoords(renderWorld, pos);
+        int light = LevelRenderer.getLightCoords(renderWorld, pos);
 
         float shaftAngle = Mth.DEG_TO_RAD * KineticBlockEntityVisual.rotationOffset(blockState, axis, pos);
         SuperByteBuffer shaftBuffer = CachedBuffers.block(KINETIC_BLOCK, shaft(axis))

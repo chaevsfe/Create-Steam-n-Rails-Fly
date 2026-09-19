@@ -79,10 +79,10 @@ public class ClientEvents {
 
     @MultiLoaderEvent
     public static void onKeyInput(int key, boolean pressed) {
-        if (Minecraft.getInstance().gui.screen() != null)
+        if (Minecraft.getInstance().screen != null)
             return;
         BogeyMenuEventsHandler.onKeyInput(key, pressed);
-        if (Minecraft.getInstance().gui.screen() != null)
+        if (Minecraft.getInstance().screen != null)
             return;
         TagCycleHandlerClient.onKeyInput(key, pressed);
     }

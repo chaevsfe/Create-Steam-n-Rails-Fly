@@ -35,6 +35,7 @@ import com.railwayteam.railways.shim.create.AllTags;
 import com.zurrtum.create.content.processing.sequenced.SequencedAssemblyItem;
 import com.zurrtum.create.content.trains.track.TrackMaterial;
 import com.railwayteam.railways.shim.create.foundation.data.CreateRegistrate;
+import com.railwayteam.railways.shim.minecraft.ColorCollections;
 import com.railwayteam.railways.shim.registrate.builders.ItemBuilder;
 import com.railwayteam.railways.shim.registrate.util.entry.ItemEntry;
 import net.minecraft.core.registries.Registries;
@@ -44,7 +45,6 @@ import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.MinecartItem;
 
 import java.util.EnumMap;
@@ -70,7 +70,7 @@ public class CRItems {
     }
 
     public static Item woolByColor(DyeColor color) {
-        return Items.WOOL.pick(color);
+        return ColorCollections.woolItem(color);
     }
 
     public static final ItemEntry<? extends Item> ITEM_BENCHCART = makeMinecart("benchcart", CREntities.CART_BLOCK)

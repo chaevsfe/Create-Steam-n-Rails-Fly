@@ -63,6 +63,7 @@ public class ConductorWhistleFlagRenderer
 		if (state.flag != null) {
 			state.flag
 				.light(state.lightCoords)
+				.extractRenderState()
 				.submit(RenderTypes.cutoutMovingBlock(), matrices, queue);
 		}
 	}

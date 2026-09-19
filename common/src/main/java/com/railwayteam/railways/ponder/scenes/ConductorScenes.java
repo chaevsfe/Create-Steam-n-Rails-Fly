@@ -21,7 +21,7 @@ package com.railwayteam.railways.ponder.scenes;
 import com.railwayteam.railways.content.conductor.ConductorEntity;
 import com.railwayteam.railways.registry.CREntities;
 import com.railwayteam.railways.registry.CRItems;
-import com.zurrtum.create.AllBlocks;
+import com.zurrtum.create.content.equipment.toolbox.ToolboxBlock;
 import com.zurrtum.create.client.foundation.ponder.CreateSceneBuilder;
 import com.zurrtum.create.catnip.math.Pointing;
 import com.zurrtum.create.client.ponder.api.PonderPalette;
@@ -376,7 +376,7 @@ public class ConductorScenes {
 
     scene.idle(45);
 
-    ItemStack toolboxStack = new ItemStack(AllBlocks.TOOLBOX.pick(DyeColor.LIME));
+    ItemStack toolboxStack = new ItemStack(ToolboxBlock.getColorBlock(DyeColor.LIME));
 
     scene.overlay().showControls(util.vector().topOf(conductorPos), Pointing.DOWN, 40)
             .rightClick()
