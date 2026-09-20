@@ -38,6 +38,7 @@ import com.zurrtum.create.client.content.redstone.displayLink.source.SingleLineD
 import com.zurrtum.create.client.content.trains.bogey.BogeyBlockEntityRenderer;
 import com.zurrtum.create.client.content.trains.bogey.BogeyBlockEntityVisual;
 import com.railwayteam.railways.content.custom_tracks.casing.CasingRenderUtils;
+import com.railwayteam.railways.content.smokestack.block.diesel.DieselSmokeStackRenderer;
 import com.railwayteam.railways.ponder.CRPonderPlugin;
 import com.railwayteam.railways.registry.CRBlockPartials;
 import com.railwayteam.railways.registry.CRBlockEntities;
@@ -144,6 +145,7 @@ public class RailwaysClient {
     AllBlockEntityRenders.render(CRBlockEntities.TRACK_COUPLER.get(), TrackCouplerRenderer::new);
     AllBlockEntityRenders.render(CRBlockEntities.ANDESITE_SWITCH.get(), TrackSwitchRenderer::new);
     AllBlockEntityRenders.render(CRBlockEntities.BRASS_SWITCH.get(), TrackSwitchRenderer::new);
+    AllBlockEntityRenders.render(CRBlockEntities.DIESEL_SMOKE_STACK.get(), DieselSmokeStackRenderer::new);
   }
 
   /**
