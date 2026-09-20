@@ -38,7 +38,7 @@ jobs:
       - name: Upload distributable JAR
         uses: actions/upload-artifact@v4
         with:
-          name: steam-rails-fabric-26.2-release
+          name: steam-rails-fabric-26.1.2-release
           path: |
             build/libs/Steam_Rails-*.jar
           if-no-files-found: error
