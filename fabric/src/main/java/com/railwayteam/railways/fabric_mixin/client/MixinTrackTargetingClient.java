@@ -10,7 +10,7 @@ import com.zurrtum.create.content.trains.graph.TrackGraphLocation;
 import com.zurrtum.create.content.trains.track.TrackTargetingBlockItem;
 import com.zurrtum.create.infrastructure.component.BezierTrackPointLocation;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.SubmitNodeStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
@@ -46,7 +46,7 @@ public abstract class MixinTrackTargetingClient {
     }
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    private static void railways$renderCustomOverlay(Minecraft mc, PoseStack ms, SubmitNodeCollector queue,
+    private static void railways$renderCustomOverlay(Minecraft mc, PoseStack ms, SubmitNodeStorage queue,
                                                      Vec3 camera, CallbackInfo ci) {
         if (lastLocation == null || lastResult == null || lastResult.feedback != null)
             return;
