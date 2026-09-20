@@ -103,17 +103,15 @@ public class MixinToolboxHandlerClient {
         return slot;
     }
 
-    @ModifyVariable(
+    @ModifyArg(
         method = "renderOverlay",
-        require = 0,
         remap = false,
+        index = 1,
         at = @At(
-            value = "INVOKE_ASSIGN",
-            target = "Lnet/minecraft/nbt/NbtUtils;readBlockPos(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/core/BlockPos;",
-            remap = true
+            value = "INVOKE",
+            target = "Lcom/zurrtum/create/content/equipment/toolbox/ToolboxHandler;distance(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/core/BlockPos;)D"
         )
     )
-    @SuppressWarnings("InvalidInjectorMethodSignature")
     private static BlockPos railways$useConductorToolboxForBackground(BlockPos pos) {
         ConductorEntity conductor = railways$getConductorForSlot(railways$currentRenderedSlot);
         return conductor == null ? pos : conductor.blockPosition();
