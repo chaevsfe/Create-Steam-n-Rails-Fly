@@ -24,6 +24,7 @@ import com.railwayteam.railways.content.custom_tracks.monorail.MonorailTrackBloc
 import com.railwayteam.railways.content.custom_tracks.narrow_gauge.NarrowGaugeTrackBlock;
 import com.railwayteam.railways.content.custom_tracks.phantom.PhantomTrackBlock;
 import com.railwayteam.railways.content.custom_tracks.wide_gauge.WideGaugeTrackBlock;
+import com.railwayteam.railways.shim.create.content.trains.track.TrackMaterialFactory.TrackBlockFactory;
 import com.zurrtum.create.AllTrackMaterials;
 import com.zurrtum.create.content.trains.track.TrackBlock;
 import com.zurrtum.create.content.trains.track.TrackMaterial;
@@ -43,6 +44,14 @@ public class CRTrackMaterials {
     private static final Map<TrackMaterial, Identifier> TYPES = new HashMap<>();
     private static final Map<TrackMaterial, Identifier> PARTICLES = new HashMap<>();
     private static final Map<TrackMaterial, String> LANG_NAMES = new HashMap<>();
+    private static final Map<TrackMaterial, TrackBlockFactory> BLOCK_FACTORIES = new HashMap<>();
+    private static final Map<Identifier, TrackBlockFactory> TYPE_BLOCK_FACTORIES = new HashMap<>();
+
+    static {
+        TYPE_BLOCK_FACTORIES.put(CRTrackType.MONORAIL, MonorailTrackBlock::new);
+        TYPE_BLOCK_FACTORIES.put(CRTrackType.WIDE_GAUGE, WideGaugeTrackBlock::new);
+        TYPE_BLOCK_FACTORIES.put(CRTrackType.NARROW_GAUGE, NarrowGaugeTrackBlock::new);
+    }
 
     public static final TrackMaterial
         ACACIA = make(Railways.asResource("acacia"))
@@ -297,6 +306,17 @@ public class CRTrackMaterials {
         TYPES.put(material, type);
         PARTICLES.put(material, particle);
         LANG_NAMES.put(material, langName);
+    }
+
+    public static void registerBlockFactory(TrackMaterial material, TrackBlockFactory blockFactory) {
+        BLOCK_FACTORIES.put(material, blockFactory);
+    }
+
+    public static TrackBlockFactory getBlockFactory(TrackMaterial material) {
+        TrackBlockFactory blockFactory = BLOCK_FACTORIES.get(material);
+        if (blockFactory != null)
+            return blockFactory;
+        return TYPE_BLOCK_FACTORIES.getOrDefault(getType(material), TrackBlock::new);
     }
 
     public static class CRTrackType {
