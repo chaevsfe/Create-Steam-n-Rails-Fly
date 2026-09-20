@@ -67,6 +67,8 @@ import com.railwayteam.railways.content.custom_tracks.gen_template.TextureMaps;
 import com.railwayteam.railways.content.custom_tracks.gen_template.TrackGenTemplate;
 import com.railwayteam.railways.content.custom_tracks.generic_crossing.GenericCrossingBlock;
 import com.railwayteam.railways.content.custom_tracks.monorail.MonorailTrackBlock;
+import com.railwayteam.railways.content.custom_tracks.narrow_gauge.NarrowGaugeTrackBlock;
+import com.railwayteam.railways.content.custom_tracks.wide_gauge.WideGaugeTrackBlock;
 import com.railwayteam.railways.content.handcar.HandcarBlock;
 import com.railwayteam.railways.content.handcar.HandcarControlsInteractionBehaviour;
 import com.railwayteam.railways.content.handcar.HandcarItem;
@@ -169,6 +171,12 @@ public class CRBlocks {
 
     private static BlockEntry<TrackBlock> makeTrack(TrackMaterial material, NonNullBiConsumer<DataGenContext<Block, TrackBlock>, RegistrateBlockstateProvider> blockstateGen, NonNullConsumer<? super TrackBlock> onRegister, Function<BlockBehaviour.Properties, BlockBehaviour.Properties> collectProperties) {
         return makeTrack(material, blockstateGen, onRegister, collectProperties, TrackBlock::new);
+    }
+
+    private static BlockEntry<TrackBlock> makeTrack(TrackMaterial material, BiFunction<BlockBehaviour.Properties, TrackMaterial, TrackBlock> blockFactory) {
+        return makeTrack(material, (c, p) -> {
+        }, (t) -> {
+        }, (p) -> p, blockFactory);
     }
 
     private static BlockEntry<TrackBlock> makeTrack(TrackMaterial material, NonNullBiConsumer<DataGenContext<Block, TrackBlock>, RegistrateBlockstateProvider> blockstateGen, NonNullConsumer<? super TrackBlock> onRegister, Function<BlockBehaviour.Properties, BlockBehaviour.Properties> collectProperties, BiFunction<BlockBehaviour.Properties, TrackMaterial, TrackBlock> blockFactory) {
@@ -419,15 +427,13 @@ public class CRBlocks {
         List<TrackMaterial> wideMaterials = new ArrayList<>(CRTrackMaterials.WIDE_GAUGE.values());
         wideMaterials.sort(java.util.Comparator.comparing(TrackMaterial::getId));
         for (TrackMaterial wideMaterial : wideMaterials) {
-            WIDE_GAUGE_TRACKS.put(wideMaterial, makeTrack(wideMaterial, (c, p) -> {
-            }));
+            WIDE_GAUGE_TRACKS.put(wideMaterial, makeTrack(wideMaterial, WideGaugeTrackBlock::new));
         }
 
         List<TrackMaterial> narrowMaterials = new ArrayList<>(CRTrackMaterials.NARROW_GAUGE.values());
         narrowMaterials.sort(java.util.Comparator.comparing(TrackMaterial::getId));
         for (TrackMaterial narrowMaterial : narrowMaterials) {
-            NARROW_GAUGE_TRACKS.put(narrowMaterial, makeTrack(narrowMaterial, (c, p) -> {
-            }));
+            NARROW_GAUGE_TRACKS.put(narrowMaterial, makeTrack(narrowMaterial, NarrowGaugeTrackBlock::new));
         }
     }
 
