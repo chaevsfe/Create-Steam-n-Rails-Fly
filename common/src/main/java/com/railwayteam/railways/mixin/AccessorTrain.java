@@ -29,27 +29,4 @@ public interface AccessorTrain {
 
     @Accessor(value = "stress", remap = false)
     void railways$setStress(double[] stress);
-
-    @Mixin(value = Train.Penalties.class, remap = false)
-    interface AccessorPenalties {
-        @Accessor("RED_SIGNAL")
-        static int railways$getRedSignal() {
-            throw new AssertionError();
-        }
-
-        @Accessor("REDSTONE_RED_SIGNAL")
-        static int railways$getRedstoneRedSignal() {
-            throw new AssertionError();
-        }
-
-        @Accessor("STATION_WITH_TRAIN")
-        static int railways$getStationWithTrain() {
-            throw new AssertionError();
-        }
-
-        @Accessor("STATION")
-        static int railways$getStation() {
-            throw new AssertionError();
-        }
-    }
 }
