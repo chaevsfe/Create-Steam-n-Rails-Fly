@@ -32,6 +32,7 @@ public class WideGaugeTrackBlock extends TrackBlock {
     public WideGaugeTrackBlock(Properties properties, TrackMaterial material) {
         super(properties, material);
     }
+    @Override
     public VoxelShape getCollisionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         if (CRTrackMaterials.getBaseFromWide(getMaterial()).getBlock() instanceof NoCollisionCustomTrackBlock noCollisionBlock) {
             return noCollisionBlock.getCollisionShape(pState, pLevel, pPos, pContext);

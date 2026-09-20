@@ -124,7 +124,7 @@ public abstract class TrackCompatUtils {
         if (CRTrackMaterials.getType(material) != CRTrackMaterials.CRTrackType.MONORAIL)
             addOptionalTag(Railways.asResource(name), AllTags.AllBlockTags.GIRDABLE_TRACKS.tag);
 
-        return REGISTRATE.block(name, p -> new TrackBlock(p, material))
+        return REGISTRATE.block(name, p -> CRTrackMaterials.getBlockFactory(material).create(p, material))
             .initialProperties(SharedProperties::stone)
             .properties(p -> collectProperties.apply(p)
                 .mapColor(MapColor.METAL)

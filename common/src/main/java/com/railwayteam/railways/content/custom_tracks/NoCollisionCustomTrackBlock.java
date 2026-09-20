@@ -34,6 +34,7 @@ public class NoCollisionCustomTrackBlock extends TrackBlock {
     public NoCollisionCustomTrackBlock(Properties properties, TrackMaterial material) {
         super(properties, material);
     }
+    @Override
     public VoxelShape getCollisionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         if (pLevel.getBlockEntity(pPos) instanceof TrackBlockEntity tbe) {
             if (CasingCollisionUtils.shouldMakeCollision(tbe, pState)) {

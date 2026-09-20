@@ -9,13 +9,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
 public class TrackMaterialFactory {
     private final Identifier id;
     private Supplier<? extends TrackBlock> block;
-    private TrackBlockFactory blockFactory = TrackBlock::new;
+    private @Nullable TrackBlockFactory blockFactory;
     private Identifier particle;
     private String langName;
     private Identifier trackType = CRTrackMaterials.CRTrackType.STANDARD;
@@ -87,9 +88,11 @@ public class TrackMaterialFactory {
         final TrackMaterial[] material = new TrackMaterial[1];
         Supplier<TrackBlock> blockSupplier = () -> block != null
             ? block.get()
-            : blockFactory.create(BlockBehaviour.Properties.of(), material[0]);
+            : CRTrackMaterials.getBlockFactory(material[0]).create(BlockBehaviour.Properties.of(), material[0]);
         material[0] = new TrackMaterial(id, blockSupplier);
         CRTrackMaterials.registerMeta(material[0], trackType, particle, langName);
+        if (blockFactory != null)
+            CRTrackMaterials.registerBlockFactory(material[0], blockFactory);
         return material[0];
     }
 
