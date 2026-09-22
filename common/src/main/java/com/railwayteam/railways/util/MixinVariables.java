@@ -38,7 +38,4 @@ public class MixinVariables {
 
     @ApiStatus.Internal
     public static int navigationCallDepth = 0;
-
-    @ApiStatus.Internal
-    public static boolean largeGhastFireballExplosion = false;
 }
