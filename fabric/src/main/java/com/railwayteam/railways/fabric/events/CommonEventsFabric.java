@@ -19,7 +19,6 @@
 package com.railwayteam.railways.fabric.events;
 
 import com.railwayteam.railways.content.fuel.LiquidFuelManager;
-import com.railwayteam.railways.content.switches.fabric.TrackSwitchUseOverride;
 import com.railwayteam.railways.events.CommonEvents;
 import com.railwayteam.railways.Railways;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -35,7 +34,6 @@ import org.jetbrains.annotations.NotNull;
 public class CommonEventsFabric {
 	public static void init() {
 		ServerTickEvents.START_LEVEL_TICK.register(CommonEvents::onWorldTickStart);
-		TrackSwitchUseOverride.register();
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> CommonEvents.onPlayerJoin(handler.player));
 		ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(((server, resourceManager, success) -> {
 			CommonEvents.onTagsUpdated();
