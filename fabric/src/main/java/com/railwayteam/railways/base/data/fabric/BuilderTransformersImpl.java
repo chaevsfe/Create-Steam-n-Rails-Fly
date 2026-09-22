@@ -139,9 +139,7 @@ public class BuilderTransformersImpl {
         return b -> b.transform(locoMetalBase(color, null))
             .initialProperties(() -> Blocks.LADDER)
             .addLayer(() -> RenderType::cutout)
-            // This port's lightweight BlockBuilder resets earlier property transforms when
-            // initialProperties() is called, so restore the palette color after copying LADDER.
-            .properties(p -> p.mapColor(color.getMapColor()).sound(SoundType.COPPER))
+            .properties(p -> p.sound(SoundType.COPPER))
             .tag(BlockTags.CLIMBABLE)
             .item()
             .tag(tags)
