@@ -9,6 +9,7 @@
     "client.InvokerSegmentAngles",
     "client.MixinAllBlockEntityBehaviours",
     "client.MixinAllHandleShadowTrain",
+    "client.MixinBlockColors",
     "client.MixinBogeyBlockEntityRenderState",
     "client.MixinBogeyBlockEntityRendererVirtualCoupling",
     "client.MixinBogeyBlockEntityVisual",
