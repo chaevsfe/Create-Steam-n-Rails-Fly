@@ -39,11 +39,15 @@ public class MixinCarriageAudioBehaviour {
     @Unique
     private boolean railways$isHandcar;
 
-    @Inject(method = "tick", at = @At("HEAD"))
+    @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     private void railways$checkBogeys(CallbackInfo ci) {
         Carriage carriage = ((CarriageAudioBehaviour) (Object) this).entity.getCarriage();
         railways$isHandcar = carriage != null
             && carriage.bogeys.both(b -> b == null || b.getStyle() == CRBogeyStyles.HANDCAR);
+        if (carriage != null && carriage.bogeys.both(b -> b == null
+            || b.getStyle() == CRBogeyStyles.INVISIBLE
+            || b.getStyle() == CRBogeyStyles.INVISIBLE_MONOBOGEY))
+            ci.cancel();
     }
 
     @WrapOperation(
