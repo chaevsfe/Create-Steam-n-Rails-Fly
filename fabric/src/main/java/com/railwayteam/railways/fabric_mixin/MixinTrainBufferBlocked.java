@@ -19,6 +19,7 @@
 package com.railwayteam.railways.fabric_mixin;
 
 import com.railwayteam.railways.mixin_interfaces.IBufferBlockedTrain;
+import com.zurrtum.create.content.trains.entity.Carriage;
 import com.zurrtum.create.content.trains.entity.Train;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
@@ -29,10 +30,18 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.List;
+
 @Mixin(value = Train.class, remap = false)
 public abstract class MixinTrainBufferBlocked implements IBufferBlockedTrain {
     @Shadow
     public double speed;
+
+    @Shadow
+    public List<Carriage> carriages;
+
+    @Shadow
+    public boolean invalid;
 
     @Unique
     private int railways$controlBlockedTicks = -1;
@@ -58,6 +67,9 @@ public abstract class MixinTrainBufferBlocked implements IBufferBlockedTrain {
 
     @Inject(method = "earlyTick", at = @At("HEAD"))
     private void railways$tickControlBlock(Level level, CallbackInfo ci) {
+        if (carriages.isEmpty())
+            invalid = true;
+
         if (railways$controlBlockedTicks > 0)
             railways$controlBlockedTicks--;
     }
