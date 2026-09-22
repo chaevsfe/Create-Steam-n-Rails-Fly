@@ -53,6 +53,7 @@
     "MixinAbstractContainerMenu",
     "MixinAllHandleRelocationRange",
     "MixinBezierConnection",
+    "MixinBlockBehaviourTrackCasingDrops",
     "MixinBlockEntityType",
     "MixinCarriage",
     "MixinCarriageBufferDistance",
