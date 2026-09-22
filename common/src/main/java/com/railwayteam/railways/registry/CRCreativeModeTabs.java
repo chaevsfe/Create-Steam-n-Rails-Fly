@@ -2,6 +2,8 @@ package com.railwayteam.railways.registry;
 
 import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.content.conductor.ConductorCapItem;
+import com.railwayteam.railways.content.palettes.painting.PaintPitcherItem;
+import com.railwayteam.railways.shim.registrate.util.entry.ItemEntry;
 import com.zurrtum.create.content.processing.sequenced.SequencedAssemblyItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -13,8 +15,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -63,6 +67,7 @@ public class CRCreativeModeTabs {
             Predicate<Item> exclusionPredicate = makeExclusionPredicate();
             List<ItemOrdering> orderings = makeOrderings();
             Function<Item, ItemStack> stackFunc = makeStackFunc();
+            Function<Item, CreativeModeTab.TabVisibility> visibilityFunc = makeVisibilityFunc();
             ResourceKey<CreativeModeTab> tab = this.tab.getKey();
 
             List<Item> items = new LinkedList<>();
@@ -72,7 +77,7 @@ public class CRCreativeModeTabs {
 
             addPlatformParityItems(tab, items);
             applyOrderings(items, orderings);
-            outputAll(output, items, stackFunc);
+            outputAll(output, items, stackFunc, visibilityFunc);
         }
 
         private static Predicate<Item> makeExclusionPredicate() {
@@ -88,12 +93,29 @@ public class CRCreativeModeTabs {
             orderings.add(ItemOrdering.after(CRItems.ITEM_BENCHCART.asItem(), CRItems.EMPTY_PAINT_PITCHER.asItem()));
             orderings.add(ItemOrdering.after(CRItems.ITEM_JUKEBOXCART.asItem(), CRItems.ITEM_BENCHCART.asItem()));
             orderings.add(ItemOrdering.after(CRBlocks.CONDUCTOR_VENT.asItem(), CRItems.ITEM_JUKEBOXCART.asItem()));
+            orderings.add(ItemOrdering.after(CRBlocks.MANGROVE_TRACK.asItem(), CRBlocks.SPRUCE_TRACK.asItem()));
+            orderings.add(ItemOrdering.after(CRBlocks.CRIMSON_TRACK.asItem(), CRBlocks.WARPED_TRACK.asItem()));
 
             return orderings;
         }
 
         private static Function<Item, ItemStack> makeStackFunc() {
             return ItemStack::new;
+        }
+
+        private static Function<Item, CreativeModeTab.TabVisibility> makeVisibilityFunc() {
+            Map<Item, CreativeModeTab.TabVisibility> visibilities = new HashMap<>();
+
+            for (ItemEntry<ConductorCapItem> entry : CRItems.ITEM_CONDUCTOR_CAP.values()) {
+                ConductorCapItem item = entry.get();
+                if (item.color != DyeColor.RED)
+                    visibilities.put(item, CreativeModeTab.TabVisibility.SEARCH_TAB_ONLY);
+            }
+
+            for (ItemEntry<? extends PaintPitcherItem> entry : CRItems.PAINT_PITCHERS)
+                visibilities.put(entry.get(), CreativeModeTab.TabVisibility.SEARCH_TAB_ONLY);
+
+            return item -> visibilities.getOrDefault(item, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         }
 
         private List<Item> collectItems(ResourceKey<CreativeModeTab> tab, Predicate<Item> classifier, boolean expected,
@@ -148,9 +170,10 @@ public class CRCreativeModeTabs {
             }
         }
 
-        private static void outputAll(CreativeModeTab.Output output, List<Item> items, Function<Item, ItemStack> stackFunc) {
+        private static void outputAll(CreativeModeTab.Output output, List<Item> items, Function<Item, ItemStack> stackFunc,
+                                      Function<Item, CreativeModeTab.TabVisibility> visibilityFunc) {
             for (Item item : items) {
-                output.accept(stackFunc.apply(item));
+                output.accept(stackFunc.apply(item), visibilityFunc.apply(item));
             }
         }
 
