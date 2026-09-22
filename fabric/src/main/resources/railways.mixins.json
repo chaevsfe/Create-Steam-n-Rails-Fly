@@ -64,6 +64,7 @@
     "MixinDimensionalCarriageEntityShadow",
     "MixinDoorMovingInteraction",
     "MixinEdgeData",
+    "MixinEdgePointCoexist",
     "MixinExplosionDamageCalculator",
     "MixinFluidNetworkFuelInterface",
     "MixinGlobalRailwayManagerShadow",
