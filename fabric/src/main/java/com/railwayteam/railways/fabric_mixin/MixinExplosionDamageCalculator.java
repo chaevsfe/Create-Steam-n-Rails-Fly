@@ -19,10 +19,12 @@
 package com.railwayteam.railways.fabric_mixin;
 
 import com.railwayteam.railways.config.CRConfigs;
-import com.railwayteam.railways.util.MixinVariables;
 import com.railwayteam.railways.shim.create.AllTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Ghast;
+import net.minecraft.world.entity.projectile.hurtingprojectile.LargeFireball;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.EntityBasedExplosionDamageCalculator;
 import net.minecraft.world.level.Explosion;
@@ -40,10 +42,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinExplosionDamageCalculator {
     @Inject(method = "shouldBlockExplode", at = @At("HEAD"), cancellable = true)
     private void railways$creepersDontBreakTracks(Explosion explosion, BlockGetter reader, BlockPos pos, BlockState state, float power, CallbackInfoReturnable<Boolean> cir) {
-        if (explosion.getDirectSourceEntity() instanceof Creeper || MixinVariables.largeGhastFireballExplosion) {
-            if (state.is(AllTags.AllBlockTags.TRACKS.tag) && !CRConfigs.server().explosiveTrackDamage.get()) {
-                cir.setReturnValue(false);
-            }
-        }
+        if (!state.is(AllTags.AllBlockTags.TRACKS.tag))
+            return;
+        Entity source = explosion.getDirectSourceEntity();
+        if (!(source instanceof Creeper || source instanceof LargeFireball fireball && fireball.getOwner() instanceof Ghast))
+            return;
+        if (!CRConfigs.server().explosiveTrackDamage.get())
+            cir.setReturnValue(false);
     }
 }
