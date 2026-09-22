@@ -12,6 +12,7 @@ import com.zurrtum.create.content.trains.bogey.AbstractBogeyBlock;
 import com.zurrtum.create.content.trains.bogey.AllBogeySizes;
 import com.zurrtum.create.content.trains.bogey.BogeySize;
 import com.zurrtum.create.content.trains.bogey.BogeyStyle;
+import com.zurrtum.create.infrastructure.particle.CubeParticleData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
@@ -91,9 +92,9 @@ public class CRBogeyStyles {
 		HEAVYWEIGHT = create("heavyweight", TRIPLEAXLE_CYCLE_GROUP).size(AllBogeySizes.SMALL, CRBlocks.TRIPLEAXLE_BOGEY.get()).build();
 		RADIAL = create("radial", TRIPLEAXLE_CYCLE_GROUP).size(AllBogeySizes.SMALL, CRBlocks.TRIPLEAXLE_BOGEY.get()).build();
 		HANDCAR = create("handcar", "handcar_cycle_group").size(AllBogeySizes.SMALL, CRBlocks.HANDCAR.get()).soundEvent(AllSoundEvents.COGS::getMainEvent).build();
-		INVISIBLE = create("invisible", AllBogeyStyles.STANDARD_CYCLE_GROUP).size(AllBogeySizes.SMALL, CRBlocks.INVISIBLE_BOGEY.get()).build();
+		INVISIBLE = create("invisible", AllBogeyStyles.STANDARD_CYCLE_GROUP).size(AllBogeySizes.SMALL, CRBlocks.INVISIBLE_BOGEY.get()).contactParticle(new CubeParticleData(0, 0, 0, 0, 0, false)).build();
 		MONOBOGEY = create("monobogey", "monobogey").size(AllBogeySizes.SMALL, CRBlocks.MONO_BOGEY.get()).build();
-		INVISIBLE_MONOBOGEY = create("invisible_monobogey", "monobogey").size(AllBogeySizes.SMALL, CRBlocks.INVISIBLE_MONO_BOGEY.get()).build();
+		INVISIBLE_MONOBOGEY = create("invisible_monobogey", "monobogey").size(AllBogeySizes.SMALL, CRBlocks.INVISIBLE_MONO_BOGEY.get()).contactParticle(new CubeParticleData(0, 0, 0, 0, 0, false)).build();
 
 		WIDE_DEFAULT = create("wide_default", AllBogeyStyles.STANDARD_CYCLE_GROUP)
 			.size(AllBogeySizes.SMALL, CRBlocks.WIDE_DOUBLEAXLE_BOGEY.get())
