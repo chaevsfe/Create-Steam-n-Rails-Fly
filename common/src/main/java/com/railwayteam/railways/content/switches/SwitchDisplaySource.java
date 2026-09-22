@@ -37,4 +37,9 @@ public class SwitchDisplaySource extends SingleLineDisplaySource {
     public int getPassiveRefreshTicks() {
         return 40;
     }
+
+    @Override
+    protected String getTranslationKey() {
+        return "track_switch_andesite_source";
+    }
 }
