@@ -22,6 +22,7 @@ import java.util.function.Supplier;
 
 public class BlockBuilder<T extends Block, P> extends AbstractBuilder<T, P, BlockBuilder<T, P>> {
     private final Function<BlockBehaviour.Properties, T> factory;
+    private Supplier<BlockBehaviour.Properties> initialProperties = BlockBehaviour.Properties::of;
     private Function<BlockBehaviour.Properties, BlockBehaviour.Properties> properties = Function.identity();
     private boolean callbacksRun = false;
     private boolean itemCallbacksRun = false;
@@ -36,7 +37,7 @@ public class BlockBuilder<T extends Block, P> extends AbstractBuilder<T, P, Bloc
     }
 
     public BlockBuilder<T, P> initialProperties(Supplier<?> supplier) {
-        this.properties = ignored -> copyInitialProperties(supplier.get());
+        this.initialProperties = () -> copyInitialProperties(supplier.get());
         return this;
     }
 
@@ -93,7 +94,7 @@ public class BlockBuilder<T extends Block, P> extends AbstractBuilder<T, P, Bloc
         if (existing != null)
             return existing;
         ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, owner.id(name));
-        T block = factory.apply(properties.apply(BlockBehaviour.Properties.of()).setId(key));
+        T block = factory.apply(properties.apply(initialProperties.get()).setId(key));
         owner.registerVanilla(BuiltInRegistries.BLOCK, name, block);
         return block;
     }
