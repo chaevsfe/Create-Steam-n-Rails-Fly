@@ -19,7 +19,6 @@
 package com.railwayteam.railways.compat.tracks;
 
 import com.google.common.collect.ImmutableSet;
-import com.zurrtum.create.client.flywheel.lib.model.baked.PartialModel;
 import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.compat.Mods;
 import com.railwayteam.railways.config.CRConfigs;
@@ -45,8 +44,11 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -139,7 +141,22 @@ public abstract class TrackCompatUtils {
             .register();
     }
 
+    private static final Map<TrackMaterial, String> COMPAT_MODEL_BASES = new HashMap<>();
+
+    public static @Nullable String getCompatModelBase(TrackMaterial material) {
+        return COMPAT_MODEL_BASES.get(material);
+    }
+
     public static TrackMaterial buildCompatModels(GenericTrackCompat trackCompat, TrackMaterialFactory factory) {
-        return factory.build();
+        String namespace = factory.getId().getNamespace();
+        String path = factory.getId().getPath();
+
+        String customLang = trackCompat.getLang(path);
+        if (!path.equals(customLang))
+            factory.lang(customLang);
+
+        TrackMaterial material = factory.build();
+        COMPAT_MODEL_BASES.put(material, "block/track/compat/" + namespace + "/" + path + "/");
+        return material;
     }
 }

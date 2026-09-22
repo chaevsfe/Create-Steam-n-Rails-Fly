@@ -21,6 +21,7 @@ package com.railwayteam.railways;
 import com.mojang.brigadier.CommandDispatcher;
 import com.railwayteam.railways.content.palettes.ct.PaletteConnectedTextures;
 import com.railwayteam.railways.base.reload.ClientResourceReloadCallback;
+import com.railwayteam.railways.compat.tracks.TrackCompatUtils;
 import com.railwayteam.railways.content.buffer.BufferModelUtils;
 import com.railwayteam.railways.content.conductor.ConductorCapModel;
 import com.railwayteam.railways.content.conductor.ConductorEntityModel;
@@ -148,17 +149,12 @@ public class RailwaysClient {
     AllBlockEntityRenders.render(CRBlockEntities.DIESEL_SMOKE_STACK.get(), DieselSmokeStackRenderer::new);
   }
 
-  /**
-   * Create only assigns a render {@link AllTrackMaterialModels.TrackModelHolder} to its own track
-   * materials, so addon tracks have a null model holder and render no curves or placement preview.
-   * Register a holder for every Railways track material from its partial models. Standard, wide,
-   * narrow, phantom, ender, and tieless tracks use {@code block/track/<material>/...}. Monorail
-   * uses its custom middle/top/bottom partials, with {@code MixinSegmentAngles} adjusting the curve
-   * transforms so Create Fly renders them as one monorail beam instead of two standard rails.
-   */
   private static void registerTrackModels() {
     for (TrackMaterial material : TrackMaterial.ALL.values()) {
-      if (!Railways.MOD_ID.equals(material.getId().getNamespace()))
+      String base = Railways.MOD_ID.equals(material.getId().getNamespace())
+        ? "block/track/" + material.getId().getPath() + "/"
+        : TrackCompatUtils.getCompatModelBase(material);
+      if (base == null)
         continue;
       AllTrackRenders.register(material.getBlock(), StandardTrackBlockRenderer::new);
       if (material.modelHolder != null)
@@ -171,7 +167,6 @@ public class RailwaysClient {
         ));
         continue;
       }
-      String base = "block/track/" + material.getId().getPath() + "/";
       AllTrackMaterialModels.register(material, new AllTrackMaterialModels.TrackModelHolder(
         PartialModel.of(Railways.asResource(base + "tie")),
         PartialModel.of(Railways.asResource(base + "segment_left")),
