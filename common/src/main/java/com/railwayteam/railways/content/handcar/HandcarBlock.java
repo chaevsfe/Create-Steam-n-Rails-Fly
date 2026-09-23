@@ -37,7 +37,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class HandcarBlock extends CRBogeyBlock {
     public HandcarBlock(Properties props) {
-        super(props, CRBogeyStyles.HANDCAR, AllBogeySizes.SMALL);
+        super(props, () -> CRBogeyStyles.HANDCAR, AllBogeySizes.SMALL);
     }
     public Vec3 getConnectorAnchorOffset() {
         return new Vec3(0, 7 / 32f, 8 / 32f);
