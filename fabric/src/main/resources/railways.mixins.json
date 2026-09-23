@@ -38,6 +38,8 @@
     "client.MixinTrackBlockOutline",
     "client.MixinTrackCouplerBlockEntityGoggles",
     "client.MixinTrackPlacementClient",
+    "client.MixinTrackRenderState",
+    "client.MixinTrackRenderer",
     "client.MixinTrackSwitchBlockEntityGoggles",
     "client.MixinTrackTargetingClient",
     "client.MixinTrackVisual",
