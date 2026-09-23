@@ -24,12 +24,14 @@ import com.zurrtum.create.content.trains.bogey.BogeySize;
 import com.zurrtum.create.content.trains.bogey.BogeyStyle;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.function.Supplier;
+
 public class WideGaugeComicallyLargeBogeyBlock extends WideGaugeBogeyBlock {
     public WideGaugeComicallyLargeBogeyBlock(Properties props) {
-        this(props, CRBogeyStyles.WIDE_COMICALLY_LARGE, AllBogeySizes.LARGE);
+        this(props, () -> CRBogeyStyles.WIDE_COMICALLY_LARGE, AllBogeySizes.LARGE);
     }
 
-    protected WideGaugeComicallyLargeBogeyBlock(Properties props, BogeyStyle style, BogeySize size) {
+    protected WideGaugeComicallyLargeBogeyBlock(Properties props, Supplier<BogeyStyle> style, BogeySize size) {
         super(props, style, size);
     }
     public Vec3 getConnectorAnchorOffset() {

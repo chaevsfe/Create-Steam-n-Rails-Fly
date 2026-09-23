@@ -39,7 +39,7 @@ public class NarrowGaugeBogeyBlock extends CRBogeyBlock {
     }
 
     public NarrowGaugeBogeyBlock(Properties props, NarrowGaugeStandardStyle style) {
-        super(props, style.style.get(), style.size.get());
+        super(props, style.style, style.size.get());
         this.style = style;
     }
     public Identifier getTrackType(BogeyStyle style) {

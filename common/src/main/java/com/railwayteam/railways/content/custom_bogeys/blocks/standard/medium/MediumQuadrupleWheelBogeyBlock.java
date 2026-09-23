@@ -25,7 +25,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class MediumQuadrupleWheelBogeyBlock extends CRBogeyBlock {
     public MediumQuadrupleWheelBogeyBlock(Properties props) {
-        super(props, CRBogeyStyles.MEDIUM_QUADRUPLE_WHEEL, AllBogeySizes.SMALL);
+        super(props, () -> CRBogeyStyles.MEDIUM_QUADRUPLE_WHEEL, AllBogeySizes.SMALL);
     }
     public Vec3 getConnectorAnchorOffset() {
         return new Vec3(0, 7 / 32f, 72 / 32f);

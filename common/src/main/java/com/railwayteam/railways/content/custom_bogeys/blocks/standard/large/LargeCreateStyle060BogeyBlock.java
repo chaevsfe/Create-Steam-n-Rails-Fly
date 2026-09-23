@@ -25,7 +25,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class LargeCreateStyle060BogeyBlock extends LargeBogeyBlock {
     public LargeCreateStyle060BogeyBlock(Properties props) {
-        super(props, CRBogeyStyles.LARGE_CREATE_STYLED_0_6_0, AllBogeySizes.LARGE);
+        super(props, () -> CRBogeyStyles.LARGE_CREATE_STYLED_0_6_0, AllBogeySizes.LARGE);
     }
     public Vec3 getConnectorAnchorOffset() {
         return new Vec3(0, 7 / 32f, 86 / 32f);

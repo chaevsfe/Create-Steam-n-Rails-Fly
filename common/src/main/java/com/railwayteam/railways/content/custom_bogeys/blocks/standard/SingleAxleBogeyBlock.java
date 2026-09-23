@@ -25,7 +25,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class SingleAxleBogeyBlock extends CRBogeyBlock {
     public SingleAxleBogeyBlock(Properties props) {
-        super(props, CRBogeyStyles.SINGLEAXLE, AllBogeySizes.SMALL);
+        super(props, () -> CRBogeyStyles.SINGLEAXLE, AllBogeySizes.SMALL);
     }
     public Vec3 getConnectorAnchorOffset() {
         return new Vec3(0, 7 / 32f, 24 / 32f);

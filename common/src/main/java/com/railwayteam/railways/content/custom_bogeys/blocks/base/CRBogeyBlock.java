@@ -41,12 +41,14 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Supplier;
+
 public class CRBogeyBlock extends AbstractBogeyBlock<CRBogeyBlockEntity>
 	implements IBE<CRBogeyBlockEntity>, ProperWaterloggedBlock, SpecialBlockItemRequirement {
 
-	private final BogeyStyle defaultStyle;
+	private final Supplier<BogeyStyle> defaultStyle;
 
-	protected CRBogeyBlock(Properties props, BogeyStyle defaultStyle, BogeySize size) {
+	protected CRBogeyBlock(Properties props, Supplier<BogeyStyle> defaultStyle, BogeySize size) {
 		super(props, size);
 		this.defaultStyle = defaultStyle;
 		registerDefaultState(defaultBlockState().setValue(WATERLOGGED, false));
@@ -64,7 +66,7 @@ public class CRBogeyBlock extends AbstractBogeyBlock<CRBogeyBlockEntity>
 		return new Vec3(0, 7 / 32f, 1);
 	}
 	public BogeyStyle getDefaultStyle() {
-		return defaultStyle;
+		return defaultStyle.get();
 	}
 
 	@Override

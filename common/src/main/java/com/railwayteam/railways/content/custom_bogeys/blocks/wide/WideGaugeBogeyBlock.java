@@ -28,16 +28,18 @@ import net.minecraft.resources.Identifier;
 import com.railwayteam.railways.shim.registrate.util.nullness.NonNullFunction;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.function.Supplier;
+
 public class WideGaugeBogeyBlock extends CRBogeyBlock {
     public static NonNullFunction<Properties, WideGaugeBogeyBlock> create(boolean large) {
         return (props) -> new WideGaugeBogeyBlock(props, large ? AllBogeySizes.LARGE : AllBogeySizes.SMALL);
     }
 
     protected WideGaugeBogeyBlock(Properties props, BogeySize size) {
-        this(props, CRBogeyStyles.WIDE_DEFAULT, size);
+        this(props, () -> CRBogeyStyles.WIDE_DEFAULT, size);
     }
 
-    protected WideGaugeBogeyBlock(Properties props, BogeyStyle style, BogeySize size) {
+    protected WideGaugeBogeyBlock(Properties props, Supplier<BogeyStyle> style, BogeySize size) {
         super(props, style, size);
     }
     public Identifier getTrackType(BogeyStyle style) {

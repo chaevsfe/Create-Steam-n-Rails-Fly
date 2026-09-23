@@ -25,7 +25,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class MediumBogeyBlock extends CRBogeyBlock {
     public MediumBogeyBlock(Properties props) {
-        super(props, CRBogeyStyles.MEDIUM_STANDARD, AllBogeySizes.SMALL);
+        super(props, () -> CRBogeyStyles.MEDIUM_STANDARD, AllBogeySizes.SMALL);
     }
     public Vec3 getConnectorAnchorOffset() {
         return new Vec3(0, 7 / 32f, 32 / 32f);

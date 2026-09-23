@@ -23,8 +23,10 @@ import com.zurrtum.create.content.trains.bogey.AllBogeySizes;
 import com.zurrtum.create.content.trains.bogey.BogeySize;
 import com.zurrtum.create.content.trains.bogey.BogeyStyle;
 
+import java.util.function.Supplier;
+
 public class LargeBogeyBlock extends CRBogeyBlock {
-    protected LargeBogeyBlock(Properties props, BogeyStyle defaultStyle, BogeySize size) {
+    protected LargeBogeyBlock(Properties props, Supplier<BogeyStyle> defaultStyle, BogeySize size) {
         super(props, defaultStyle, size);
     }
     public double getWheelRadius() {
