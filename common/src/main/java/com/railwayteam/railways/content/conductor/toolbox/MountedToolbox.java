@@ -14,6 +14,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ColorCollection;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.level.storage.TagValueOutput;
@@ -35,10 +37,14 @@ public class MountedToolbox extends ToolboxBlockEntity {
     private final Map<Player, Integer> trackedConnectedPlayers = new WeakHashMap<>();
 
     public MountedToolbox(ConductorEntity parent, DyeColor color) {
-        super(parent.blockPosition(), AllBlocks.TOOLBOX.pick(color).defaultBlockState());
+        super(parent.blockPosition(), toolboxBlock(color).defaultBlockState());
         this.parent = parent;
         setLevel(parent.level());
         setLazyTickRate(10);
+    }
+
+    private static Block toolboxBlock(DyeColor color) {
+        return (Block) ((ColorCollection<?>) AllBlocks.TOOLBOX).pick(color);
     }
 
     public ConductorEntity getParent() {
@@ -79,7 +85,7 @@ public class MountedToolbox extends ToolboxBlockEntity {
     protected void read(ValueInput input, boolean clientPacket) {
         super.read(input, clientPacket);
         input.getInt("Color").ifPresent(colorId -> {
-            BlockState state = AllBlocks.TOOLBOX.pick(DyeColor.byId(colorId)).defaultBlockState();
+            BlockState state = toolboxBlock(DyeColor.byId(colorId)).defaultBlockState();
             setBlockState(state);
         });
     }
@@ -130,7 +136,7 @@ public class MountedToolbox extends ToolboxBlockEntity {
     }
 
     public ItemStack getDisplayStack() {
-        ItemStack stack = AllBlocks.TOOLBOX.pick(getColor()).asItem().getDefaultInstance();
+        ItemStack stack = toolboxBlock(getColor()).asItem().getDefaultInstance();
         if (hasCustomName())
             stack.set(DataComponents.CUSTOM_NAME, getCustomName());
         return stack;
