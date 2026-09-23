@@ -32,6 +32,14 @@ jobs:
           gradle-home-cache-cleanup: true
           cache-read-only: true
 
+      - name: Fetch the Create Fly Recipe Viewer jar nested into the build
+        env:
+          VIEWER_JAR_NAME: CreateReiViewer-1.0.0-fly.26.1.2-beta.2+fabric-mc26.1.2.jar
+          VIEWER_JAR_URL: https://github.com/chaevsfe/CreateReiViewer-Fly/releases/download/1.0.0-fly.26.1.2-beta.2/CreateReiViewer-1.0.0-fly.26.1.2-beta.2%2Bfabric-mc26.1.2.jar
+        run: |
+          mkdir -p libs
+          curl -fsSL -o "libs/$VIEWER_JAR_NAME" "$VIEWER_JAR_URL"
+
       - name: Build
         run: ./gradlew clean build validateAccessWidener --no-build-cache --no-daemon
 
