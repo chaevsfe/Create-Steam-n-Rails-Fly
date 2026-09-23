@@ -20,6 +20,7 @@
     "client.MixinCurvedTrackInteraction",
     "client.MixinFlywheelRenderer",
     "client.MixinFlywheelVisual",
+    "client.MixinGoggleOverlayRenderer",
     "client.MixinKeyboardHandler",
     "client.MixinObjGeometryModelMesh",
     "client.MixinRadialToolboxMenu",

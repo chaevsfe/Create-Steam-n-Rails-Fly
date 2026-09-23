@@ -27,6 +27,7 @@ import com.railwayteam.railways.content.conductor.fabric.ConductorCapItemRendere
 import com.railwayteam.railways.events.ClientEvents;
 import com.railwayteam.railways.registry.CRParticleTypes;
 import com.railwayteam.railways.registry.fabric.CRBlockEntitiesClientImpl;
+import com.railwayteam.railways.registry.fabric.client.CRTooltipBehaviours;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -57,6 +58,7 @@ public class RailwaysClientImpl implements ClientModInitializer {
 	public void onInitializeClient() {
 		CopycatHeadstockModelRegistration.register();
 		CRBlockEntitiesClientImpl.register();
+		CRTooltipBehaviours.register();
 		RailwaysClient.init();
 		if (FabricLoader.getInstance().isModLoaded("jei")) {
 			registerJeiCompat();
