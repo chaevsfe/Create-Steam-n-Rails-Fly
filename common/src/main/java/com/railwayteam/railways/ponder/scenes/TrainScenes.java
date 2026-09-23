@@ -272,7 +272,7 @@ public class TrainScenes {
                 .text("The bottom semaphore will now close if any of the available paths are blocked");
         scene.idle(70);
 
-        bb2 = new AABB(new BlockPos(semaphore1a)).inflate(-0.25,0,-0.25);
+        bb2 = new AABB(semaphore1a).inflate(-0.25,0,-0.25);
         scene.overlay().chaseBoundingBoxOutline(PonderPalette.OUTPUT, bb2, bb2, 30);
 
         bb = new AABB(m1, m1);
@@ -299,7 +299,7 @@ public class TrainScenes {
                 .text("The top semaphore will close if all paths are blocked");
         scene.idle(60);
 
-        bb2 = new AABB(new BlockPos(semaphore1b)).inflate(-0.25,0,-0.25);
+        bb2 = new AABB(semaphore1b).inflate(-0.25,0,-0.25);
         scene.overlay().chaseBoundingBoxOutline(PonderPalette.OUTPUT, bb2, bb2, 30);
 
         bb = new AABB(m1, m1);

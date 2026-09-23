@@ -4,14 +4,14 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.railwayteam.railways.Railways;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.glfw.GLFW;
+import net.minecraft.client.MouseHandler;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public enum CRKeys {
-    BOGEY_MENU("bogey_menu", GLFW.GLFW_KEY_LEFT_ALT),
-    CYCLE_MENU("cycle_menu", GLFW.GLFW_KEY_LEFT_ALT);
+    BOGEY_MENU("bogey_menu", InputConstants.KEY_LALT),
+    CYCLE_MENU("cycle_menu", InputConstants.KEY_LALT);
 
     public static final Set<KeyMapping> NON_CONFLICTING_KEYMAPPINGS = new HashSet<>();
     private static final KeyMapping.Category CATEGORY = KeyMapping.Category.register(Railways.asResource("railways"));
@@ -62,19 +62,25 @@ public enum CRKeys {
     }
 
     public static boolean isMouseButtonDown(int button) {
-        return GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow().handle(), button) == GLFW.GLFW_PRESS;
+        MouseHandler mouse = Minecraft.getInstance().mouseHandler;
+        return switch (button) {
+            case InputConstants.MOUSE_BUTTON_LEFT -> mouse.isLeftPressed();
+            case InputConstants.MOUSE_BUTTON_RIGHT -> mouse.isRightPressed();
+            case InputConstants.MOUSE_BUTTON_MIDDLE -> mouse.isMiddlePressed();
+            default -> false;
+        };
     }
 
     public static boolean ctrlDown() {
-        return isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL) || isKeyDown(GLFW.GLFW_KEY_RIGHT_CONTROL);
+        return isKeyDown(InputConstants.KEY_LCONTROL) || isKeyDown(InputConstants.KEY_RCONTROL);
     }
 
     public static boolean shiftDown() {
-        return isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT) || isKeyDown(GLFW.GLFW_KEY_RIGHT_SHIFT);
+        return isKeyDown(InputConstants.KEY_LSHIFT) || isKeyDown(InputConstants.KEY_RSHIFT);
     }
 
     public static boolean altDown() {
-        return isKeyDown(GLFW.GLFW_KEY_LEFT_ALT) || isKeyDown(GLFW.GLFW_KEY_RIGHT_ALT);
+        return isKeyDown(InputConstants.KEY_LALT) || isKeyDown(InputConstants.KEY_RALT);
     }
 
     private static void registerKeyBinding(KeyMapping keyMapping) {
