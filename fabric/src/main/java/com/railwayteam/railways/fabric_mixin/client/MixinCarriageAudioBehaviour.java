@@ -17,8 +17,10 @@ import com.railwayteam.railways.registry.CRBogeyStyles;
 import com.railwayteam.railways.registry.CRSounds;
 import com.zurrtum.create.AllSoundEvents;
 import com.zurrtum.create.catnip.animation.LerpedFloat;
+import com.zurrtum.create.catnip.data.Couple;
 import com.zurrtum.create.client.foundation.entity.behaviour.CarriageAudioBehaviour;
 import com.zurrtum.create.content.trains.entity.Carriage;
+import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
@@ -36,6 +38,12 @@ public class MixinCarriageAudioBehaviour {
     @Shadow
     LerpedFloat seatCrossfade;
 
+    @Shadow
+    Couple<SoundEvent> bogeySounds;
+
+    @Shadow
+    SoundEvent closestBogeySound;
+
     @Unique
     private boolean railways$isHandcar;
 
@@ -48,6 +56,19 @@ public class MixinCarriageAudioBehaviour {
             || b.getStyle() == CRBogeyStyles.INVISIBLE
             || b.getStyle() == CRBogeyStyles.INVISIBLE_MONOBOGEY))
             ci.cancel();
+    }
+
+    @Inject(method = "submitSharedSoundVolume", at = @At("HEAD"))
+    private void railways$initBogeySounds(Minecraft mc, Vec3 location, float volume, CallbackInfo ci) {
+        if (bogeySounds != null)
+            return;
+        Carriage carriage = ((CarriageAudioBehaviour) (Object) this).entity.getCarriage();
+        if (carriage == null)
+            return;
+        bogeySounds = carriage.bogeys.map(b -> b != null && b.getStyle() != null
+            ? b.getStyle().soundEvent.get()
+            : AllSoundEvents.TRAIN2.getMainEvent());
+        closestBogeySound = bogeySounds.getFirst();
     }
 
     @WrapOperation(
