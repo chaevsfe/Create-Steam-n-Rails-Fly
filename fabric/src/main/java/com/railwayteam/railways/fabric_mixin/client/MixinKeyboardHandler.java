@@ -1,5 +1,6 @@
 package com.railwayteam.railways.fabric_mixin.client;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.railwayteam.railways.events.ClientEvents;
 import net.minecraft.client.KeyboardHandler;
 import net.minecraft.client.input.KeyEvent;
@@ -12,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinKeyboardHandler {
     @Inject(method = "keyPress", at = @At("HEAD"))
     private void railways$onKeyInput(long window, int action, KeyEvent event, CallbackInfo ci) {
-        if (action == 0) return; // GLFW_RELEASE — only fire on press/repeat
+        if (action == InputConstants.RELEASE) return;
         ClientEvents.onKeyInput(event.key(), true);
     }
 }

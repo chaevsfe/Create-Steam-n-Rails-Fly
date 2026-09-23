@@ -11,6 +11,7 @@
 package com.railwayteam.railways.content.bogey_menu;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.railwayteam.railways.api.bogeymenu.v0.entry.BogeyEntry;
 import java.util.Optional;
 import com.railwayteam.railways.api.bogeymenu.v0.entry.CategoryEntry;
@@ -57,7 +58,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.Comparator;
 import java.util.List;
@@ -308,14 +308,14 @@ public class BogeyMenuScreen extends AbstractSimiScreen {
 
 	@Override
 	public boolean keyPressed(KeyEvent event) {
-		if (event.key() == GLFW.GLFW_KEY_ESCAPE) {
+		if (event.key() == InputConstants.KEY_ESCAPE) {
 			if (selectedBogey == null)
 				onClose();
 			else
 				onMenuClose();
 			return true;
 		}
-		if (event.key() == GLFW.GLFW_KEY_ENTER) {
+		if (event.key() == InputConstants.KEY_RETURN) {
 			onMenuClose();
 			return true;
 		}
@@ -324,7 +324,7 @@ public class BogeyMenuScreen extends AbstractSimiScreen {
 
 	@Override
 	public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-		if (event.button() == 0 && insideScrollbar(event.x(), event.y())) {
+		if (event.button() == InputConstants.MOUSE_BUTTON_LEFT && insideScrollbar(event.x(), event.y())) {
 			scrolling = canScroll();
 			return true;
 		}
@@ -333,7 +333,7 @@ public class BogeyMenuScreen extends AbstractSimiScreen {
 
 	@Override
 	public boolean mouseReleased(MouseButtonEvent event) {
-		if (event.button() == 0)
+		if (event.button() == InputConstants.MOUSE_BUTTON_LEFT)
 			scrolling = false;
 		return super.mouseReleased(event);
 	}

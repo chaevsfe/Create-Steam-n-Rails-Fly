@@ -138,7 +138,7 @@ public class RadialTagCycleMenu extends AbstractSimiScreen {
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         int selected = scrollMode ? scrollSlot : hoveredSlot;
-        if (event.button() == 0 && selected >= 0 && selected < cycle.size()) {
+        if (event.button() == InputConstants.MOUSE_BUTTON_LEFT && selected >= 0 && selected < cycle.size()) {
             TagCycleHandlerClient.select(cycle.get(selected));
             onClose();
             BogeyMenuEventsHandler.COOLDOWN = 2;
