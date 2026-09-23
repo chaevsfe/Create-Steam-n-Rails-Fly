@@ -60,6 +60,7 @@
     "MixinCarriageBufferDistance",
     "MixinCarriageContraptionEntity",
     "MixinContainerLevelAccess",
+    "MixinContraptionEdgePoints",
     "MixinCopycatBlockEntity",
     "MixinDataFixTypes",
     "MixinDetectorRailBlock",
