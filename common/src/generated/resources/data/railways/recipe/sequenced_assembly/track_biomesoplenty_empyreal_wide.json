@@ -1,0 +1,44 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "biomesoplenty"
+      ]
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "biomesoplenty"
+    }
+  ],
+  "ingredient": "railways:track_biomesoplenty_empyreal",
+  "loops": 1,
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "results": ["$result"],
+      "ingredient": "$ingredient",
+      "processing_time": 50
+    },
+    {
+      "type": "create:deploying",
+      "results": ["$result"],
+      "target": "$ingredient",
+      "ingredient": "biomesoplenty:empyreal_slab"
+    },
+    {
+      "type": "create:pressing",
+      "results": ["$result"],
+      "ingredient": "$ingredient"
+    }
+  ],
+  "transitional_item": {
+    "id": "railways:track_incomplete_biomesoplenty_empyreal_wide"
+  },
+  "result": {
+    "id": "railways:track_biomesoplenty_empyreal_wide"
+  }
+}
