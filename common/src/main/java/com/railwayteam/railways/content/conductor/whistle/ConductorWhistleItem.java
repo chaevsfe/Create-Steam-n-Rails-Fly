@@ -124,15 +124,27 @@ public class ConductorWhistleItem extends TrackTargetingBlockItem {
 			if (railways != null && railways.trains.containsKey(trainId))
 				trainName = railways.trains.get(trainId).name.getString();
 
-			tooltip.accept(Component.translatable("railways.whistle.tool.bound").withStyle(ChatFormatting.DARK_GREEN));
-			tooltip.accept(TextUtils.translateWithFormatting("railways.whistle.tool.conductor_id", conductorId.toString().substring(0, 5)));
-			tooltip.accept(TextUtils.translateWithFormatting("railways.whistle.tool.train_id", trainName, trainId.toString().substring(0, 5)));
-			tooltip.accept(Component.translatable("railways.whistle.tool.bound_usage"));
-			tooltip.accept(Component.translatable("railways.whistle.tool.bound_auto_usage"));
-			tooltip.accept(Component.translatable("railways.whistle.tool.bound_auto_clear"));
+			if (useModernTooltip()) {
+				tooltip.accept(TextUtils.translateWithFormatting("railways.whistle.tool.bound2", conductorId.toString().substring(0, 5), trainName, trainId.toString().substring(0, 5)));
+			} else {
+				tooltip.accept(Component.translatable("railways.whistle.tool.bound").withStyle(ChatFormatting.DARK_GREEN));
+				tooltip.accept(TextUtils.translateWithFormatting("railways.whistle.tool.conductor_id", conductorId.toString().substring(0, 5)));
+				tooltip.accept(TextUtils.translateWithFormatting("railways.whistle.tool.train_id", trainName, trainId.toString().substring(0, 5)));
+				tooltip.accept(Component.translatable("railways.whistle.tool.bound_usage"));
+				tooltip.accept(Component.translatable("railways.whistle.tool.bound_auto_usage"));
+				tooltip.accept(Component.translatable("railways.whistle.tool.bound_auto_clear"));
+			}
 		} else {
-			tooltip.accept(Component.translatable("railways.whistle.tool.not_bound").withStyle(ChatFormatting.DARK_RED));
+			if (useModernTooltip()) {
+				tooltip.accept(TextUtils.translateWithFormatting("railways.whistle.tool.not_bound2"));
+			} else {
+				tooltip.accept(Component.translatable("railways.whistle.tool.not_bound").withStyle(ChatFormatting.DARK_RED));
+			}
 		}
+	}
+
+	private static boolean useModernTooltip() {
+		return CRConfigs.client() == null || CRConfigs.client().modernWhistleTooltip.get();
 	}
 
 	@Override
