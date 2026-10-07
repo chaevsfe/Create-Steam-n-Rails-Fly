@@ -18,7 +18,6 @@
 
 package com.railwayteam.railways.content.custom_tracks.generic_crossing;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.railwayteam.railways.registry.CRBlockEntities;
 import com.railwayteam.railways.registry.CRTrackMaterials;
 import com.zurrtum.create.AllBlocks;
@@ -28,27 +27,20 @@ import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import com.zurrtum.create.content.schematics.requirement.ItemRequirement;
 import com.zurrtum.create.content.schematics.requirement.ItemRequirement.ItemUseType;
 import com.zurrtum.create.content.trains.graph.TrackNodeLocation;
-import com.zurrtum.create.infrastructure.component.BezierTrackPointLocation;
 import com.zurrtum.create.content.trains.track.ITrackBlock;
 import com.zurrtum.create.content.trains.track.TrackBlock;
 import com.zurrtum.create.content.trains.track.TrackMaterial;
 import com.zurrtum.create.content.trains.track.TrackPropagator;
 import com.zurrtum.create.content.trains.track.TrackShape;
-import com.zurrtum.create.content.trains.track.TrackTargetingBehaviour.RenderedTrackOverlayType;
 import com.zurrtum.create.foundation.block.IBE;
 import com.zurrtum.create.foundation.block.ProperWaterloggedBlock;
-import com.zurrtum.create.client.flywheel.lib.model.baked.PartialModel;
-import com.zurrtum.create.client.flywheel.lib.transform.Affine;
 import com.zurrtum.create.catnip.data.Iterate;
 import com.zurrtum.create.catnip.math.VecHelper;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import com.railwayteam.railways.shim.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
@@ -140,14 +132,6 @@ public class GenericCrossingBlock extends Block implements IBE<GenericCrossingBl
     @Override // just used by stations for assembly
     public boolean trackEquals(BlockState state1, BlockState state2) {
         return false;
-    }
-    @Environment(EnvType.CLIENT)
-    public <Self extends Affine<Self>> PartialModel prepareTrackOverlay(Affine<Self> affine, BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, BezierTrackPointLocation bezierTrackPointLocation, AxisDirection axisDirection, RenderedTrackOverlayType renderedTrackOverlayType) {
-        return null;
-    }
-    @Environment(EnvType.CLIENT)
-    public PartialModel prepareAssemblyOverlay(BlockGetter world, BlockPos pos, BlockState state, Direction direction, PoseStack ms) {
-        return null;
     }
     public TrackMaterial getMaterial() {
         return CRTrackMaterials.PHANTOM;
