@@ -14,7 +14,6 @@ import com.railwayteam.railways.content.conductor.ConductorEntity;
 import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.entity.EntityAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -41,18 +40,5 @@ public class ChunkMapMixin {
         if (entity instanceof ServerPlayer player && player.getCamera() instanceof ConductorEntity conductor)
             return SectionPos.of(conductor);
         return SectionPos.of(entity);
-    }
-
-    @Redirect(
-        method = "updateChunkTracking",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/server/level/ServerPlayer;chunkPosition()Lnet/minecraft/world/level/ChunkPos;"
-        )
-    )
-    private ChunkPos railways$useConductorChunkForTrackingView(ServerPlayer player) {
-        if (player.getCamera() instanceof ConductorEntity conductor)
-            return conductor.chunkPosition();
-        return player.chunkPosition();
     }
 }

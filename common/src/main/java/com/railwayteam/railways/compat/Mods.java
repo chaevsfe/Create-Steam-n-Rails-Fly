@@ -43,7 +43,8 @@ public enum Mods {
 	TFC("tfc"),
 	MALILIB("malilib"),
 	TWEAKEROO("tweakeroo"),
-	EXTENDEDFLYWHEELS("extendedflywheels")
+	EXTENDEDFLYWHEELS("extendedflywheels"),
+	VMP("vmp")
 	;
 
 	public final boolean isLoaded;
