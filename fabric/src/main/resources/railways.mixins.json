@@ -2,6 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.railwayteam.railways.fabric_mixin",
+  "plugin": "com.railwayteam.railways.mixin.CRMixinPlugin",
   "compatibilityLevel": "JAVA_25",
   "client": [
     "client.AccessorTrainRelocatorClient",
@@ -120,6 +121,7 @@
     "MixinTrainWaypoint",
     "MixinTravellingPoint",
     "conductor_possession.ChunkMapMixin",
+    "conductor_possession.ChunkMapTrackingViewMixin",
     "conductor_possession.MixinEntity",
     "conductor_possession.PlayerListMixin",
     "conductor_possession.ServerPlayerMixin",
