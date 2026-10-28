@@ -70,6 +70,9 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.Nullable;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -154,10 +157,39 @@ public class BufferModel extends WrapperBlockStateModel {
             quad.direction(),
             quad.materialInfo()
         );
-        BakedModelHelper.setNormals(rotated, new Vector3f[] {
-            new Vector3f(normal), new Vector3f(normal), new Vector3f(normal), new Vector3f(normal)
-        });
+        setNormals(rotated, normal);
         return rotated;
+    }
+
+    private static final MethodHandle SET_NORMAL = findSetNormals(Vector3f.class);
+    private static final MethodHandle SET_NORMALS = SET_NORMAL == null ? findSetNormals(Vector3f[].class) : null;
+
+    private static MethodHandle findSetNormals(Class<?> normalType) {
+        try {
+            return MethodHandles.publicLookup().findStatic(
+                BakedModelHelper.class,
+                "setNormals",
+                MethodType.methodType(void.class, BakedQuad.class, normalType)
+            );
+        } catch (ReflectiveOperationException e) {
+            return null;
+        }
+    }
+
+    private static void setNormals(BakedQuad quad, Vector3f normal) {
+        try {
+            if (SET_NORMAL != null) {
+                SET_NORMAL.invokeExact(quad, normal);
+            } else if (SET_NORMALS != null) {
+                SET_NORMALS.invokeExact(quad, new Vector3f[] {
+                    new Vector3f(normal), new Vector3f(normal), new Vector3f(normal), new Vector3f(normal)
+                });
+            }
+        } catch (RuntimeException | Error e) {
+            throw e;
+        } catch (Throwable t) {
+            throw new IllegalStateException(t);
+        }
     }
 
     private static Vector3f rotatePosition(Vector3fc position) {
