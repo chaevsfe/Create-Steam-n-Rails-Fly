@@ -8,6 +8,7 @@
     "client.AccessorTrainRelocatorClient",
     "client.BlockElementDeserializerMixin",
     "client.InvokerSegmentAngles",
+    "client.MixinAddTrainPacket",
     "client.MixinAllBlockEntityBehaviours",
     "client.MixinAllHandleShadowTrain",
     "client.MixinBlockColors",
