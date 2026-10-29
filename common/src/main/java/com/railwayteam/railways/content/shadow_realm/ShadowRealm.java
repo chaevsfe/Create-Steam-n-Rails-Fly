@@ -13,6 +13,7 @@ import com.zurrtum.create.Create;
 import com.zurrtum.create.content.trains.RailwaySavedData;
 import com.zurrtum.create.content.trains.entity.Carriage;
 import com.zurrtum.create.content.trains.entity.Carriage.DimensionalCarriageEntity;
+import com.zurrtum.create.content.trains.entity.CarriageContraptionEntity;
 import com.zurrtum.create.content.trains.entity.Train;
 import com.zurrtum.create.content.trains.entity.TrainRelocator;
 import com.zurrtum.create.infrastructure.config.AllConfigs;
@@ -85,6 +86,25 @@ public class ShadowRealm {
         train.derailed = true;
         train.graph = null;
         train.status.displayInformation("railways.shadow_realm.banished", true);
+    }
+
+    public static void dropRemovedEntities(Carriage carriage) {
+        for (DimensionalCarriageEntity dimensional : ((AccessorCarriage) carriage).railways$getEntities().values()) {
+            CarriageContraptionEntity entity = dimensional.entity.get();
+            if (entity != null && !entity.isAlive()) {
+                dimensional.entity.clear();
+            }
+        }
+    }
+
+    public static void discardEntities(Carriage carriage) {
+        for (DimensionalCarriageEntity dimensional : ((AccessorCarriage) carriage).railways$getEntities().values()) {
+            CarriageContraptionEntity entity = dimensional.entity.get();
+            if (entity != null) {
+                entity.discard();
+                dimensional.entity.clear();
+            }
+        }
     }
 
     public static void handleTrainRelocationPacket(ServerPlayer sender, UUID trainId, RestorationTarget target, CallbackInfo ci) {
