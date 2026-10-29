@@ -157,6 +157,15 @@ public class ShadowRealm {
         if (!shadowTrain.railways$isShadow()) {
             return true;
         }
+        for (Carriage carriage : train.carriages) {
+            dropRemovedEntities(carriage);
+            if (carriage.anyAvailableEntity() == null
+                && !((AccessorCarriage) carriage).railways$getSerialisedEntity().contains("id")) {
+                LOGGER.warn("Shadow train '{}' has no saved carriage entity and stays in the shadow realm",
+                    train.name.getString());
+                return false;
+            }
+        }
         if (!target.apply(train)) {
             return false;
         }
