@@ -36,4 +36,7 @@ public interface AccessorCarriage {
 
 	@Accessor("entities")
 	Map<ResourceKey<Level>, DimensionalCarriageEntity> railways$getEntities();
+
+	@Accessor("serialisedEntity")
+	CompoundTag railways$getSerialisedEntity();
 }
