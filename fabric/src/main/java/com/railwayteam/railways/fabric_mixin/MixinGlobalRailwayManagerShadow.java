@@ -12,6 +12,7 @@ package com.railwayteam.railways.fabric_mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.railwayteam.railways.content.shadow_realm.ShadowRealm;
 import com.railwayteam.railways.mixin_interfaces.IShadowTrain;
 import com.railwayteam.railways.mixin_interfaces.RailwaySavedDataDuck;
 import com.zurrtum.create.content.trains.GlobalRailwayManager;
@@ -53,7 +54,9 @@ public abstract class MixinGlobalRailwayManagerShadow {
         // manager drops the train's live entities and broadcasts RemoveTrainPacket.
         DimensionPalette dimensions = new DimensionPalette();
         for (Carriage carriage : train.carriages) {
+            ShadowRealm.dropRemovedEntities(carriage);
             Carriage.encode(carriage, NbtOps.INSTANCE, NbtOps.INSTANCE.empty(), dimensions).getOrThrow();
+            ShadowRealm.discardEntities(carriage);
         }
 
         RailwaySavedDataDuck shadowData = (RailwaySavedDataDuck) savedData;
