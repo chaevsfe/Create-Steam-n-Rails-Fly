@@ -20,14 +20,14 @@ package com.railwayteam.railways.fabric_mixin;
 
 import com.railwayteam.railways.registry.CRTags;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(EnderMan.class)
+@Mixin(Enderman.class)
 public class MixinEnderMan {
     @Inject(method = "isBeingStaredBy", at = @At("HEAD"), cancellable = true)
     private void railways$conductorCapsPreventAnger(Player player, CallbackInfoReturnable<Boolean> cir) {

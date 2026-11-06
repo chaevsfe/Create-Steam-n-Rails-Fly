@@ -18,7 +18,6 @@
 
 package com.railwayteam.railways.content.buffer;
 
-import com.mojang.serialization.MapCodec;
 import com.railwayteam.railways.registry.CRBlocks;
 import com.railwayteam.railways.util.AdventureUtils;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
@@ -56,10 +55,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public abstract class TrackBufferBlock<BE extends TrackBufferBlockEntity> extends HorizontalDirectionalBlock implements IBE<BE>, IWrenchable, ProperWaterloggedBlock {
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return (MapCodec) Block.CODEC;
-    }
 
 
 	public static final BooleanProperty DIAGONAL = BooleanProperty.create("diagonal");

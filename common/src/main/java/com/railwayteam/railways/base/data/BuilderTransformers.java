@@ -50,7 +50,6 @@ import com.railwayteam.railways.content.smokestack.RotationType;
 import com.railwayteam.railways.content.smokestack.SmokestackStyle;
 import com.railwayteam.railways.content.smokestack.block.SmokeStackBlock;
 import com.railwayteam.railways.content.smokestack.block.diesel.DieselSmokeStackBlock;
-import com.railwayteam.railways.content.smokestack.block.variable.VariableSmokeStackBlock;
 import com.railwayteam.railways.content.smokestack.block.variable.VariableStack;
 import com.railwayteam.railways.content.switches.TrackSwitchBlock;
 import com.railwayteam.railways.registry.CRPalettes.WindowType;
@@ -71,7 +70,6 @@ import com.railwayteam.railways.shim.registrate.providers.RegistrateBlockstatePr
 import com.railwayteam.railways.shim.registrate.util.nullness.NonNullBiConsumer;
 import com.railwayteam.railways.shim.registrate.util.nullness.NonNullUnaryOperator;
 import com.zurrtum.create.catnip.data.Couple;
-import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import com.railwayteam.railways.shim.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
@@ -92,11 +90,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -178,20 +171,6 @@ public class BuilderTransformers {
     public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> smokestackLoot(@NotNull FusedSupplier<BlockStateBlockItemGroup<SmokestackStyle.Context, SmokestackStyle>> cycleGroupSupplier) {
         return bb -> bb
             .loot((t, b) -> {
-                LootTable.Builder table = LootTable.lootTable();
-                for (SmokestackStyle style : SmokestackStyle.values()) {
-                    var pool = LootPool.lootPool()
-                        .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(b)
-                            .setProperties(StatePropertiesPredicate.Builder.properties()
-                                .hasProperty(VariableSmokeStackBlock.STYLE, style)
-                            )
-                        )
-                        .setRolls(ConstantValue.exactly(1.0F))
-                        .add(LootItem.lootTableItem(cycleGroupSupplier.get().get(style)));
-                    table.withPool(t.applyExplosionCondition(b, pool));
-                }
-
-                t.add(b, table);
             });
     }
 
@@ -258,7 +237,7 @@ public class BuilderTransformers {
         return b -> b
             .transform(BuilderTransformers.locoMetalBase(color, null))
             .properties(BlockBehaviour.Properties::noOcclusion)
-            .properties(p -> p.pushReaction(PushReaction.DESTROY))
+            .properties(p -> p.pushReaction(PushReaction.POPPED))
             .addLayer(() -> RenderType::cutoutMipped)
             .onRegister(interactionBehaviour(new DoorMovingInteraction()))
             .tag(BlockTags.DOORS)

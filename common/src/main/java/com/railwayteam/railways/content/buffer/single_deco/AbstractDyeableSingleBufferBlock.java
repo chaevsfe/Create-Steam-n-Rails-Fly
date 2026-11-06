@@ -18,7 +18,6 @@
 
 package com.railwayteam.railways.content.buffer.single_deco;
 
-import com.mojang.serialization.MapCodec;
 import com.railwayteam.railways.content.buffer.DyeableBlockEntity;
 import com.railwayteam.railways.registry.CRBlockEntities;
 import com.railwayteam.railways.util.AdventureUtils;
@@ -57,10 +56,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public abstract class AbstractDyeableSingleBufferBlock extends HorizontalDirectionalBlock implements IBE<DyeableBlockEntity>, IWrenchable, ProperWaterloggedBlock {
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return (MapCodec) Block.CODEC;
-    }
 
     public AbstractDyeableSingleBufferBlock(Properties properties) {
         super(properties);

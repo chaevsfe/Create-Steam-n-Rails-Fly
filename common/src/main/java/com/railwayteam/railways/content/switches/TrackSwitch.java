@@ -325,7 +325,9 @@ public class TrackSwitch extends SingleBlockEntityEdgePoint {
 		buffer.writeBoolean(hasPoint);
 		if (hasPoint) {
 			switchPoint.send(buffer, dimensions);
-			buffer.writeCollection(exits, (buf, e) -> e.send(buf, dimensions));
+			buffer.writeVarInt(exits.size());
+			for (TrackNodeLocation exit : exits)
+				exit.send(buffer, dimensions);
 		}
 	}
 
@@ -393,10 +395,12 @@ public class TrackSwitch extends SingleBlockEntityEdgePoint {
 		locked = buffer.readBoolean();
 		autoTrainsSwitch = buffer.readBoolean();
 		if (buffer.readBoolean()) {
-			updateExits(
-				TrackNodeLocation.receive(buffer, dimensions),
-				buffer.readList(buf -> TrackNodeLocation.receive(buf, dimensions))
-			);
+			TrackNodeLocation point = TrackNodeLocation.receive(buffer, dimensions);
+			int count = buffer.readVarInt();
+			List<TrackNodeLocation> received = new ArrayList<>(count);
+			for (int i = 0; i < count; i++)
+				received.add(TrackNodeLocation.receive(buffer, dimensions));
+			updateExits(point, received);
 		} else {
 			exits.clear();
 			sortExits();

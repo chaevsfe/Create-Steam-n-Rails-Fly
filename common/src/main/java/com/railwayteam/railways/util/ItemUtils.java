@@ -20,14 +20,14 @@ package com.railwayteam.railways.util;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Contract;
 
 public class ItemUtils {
 	@Contract // shut
-	public static boolean blocksEndermanView(ItemStack stack, Player wearer, EnderMan enderman) {
+	public static boolean blocksEndermanView(ItemStack stack, Player wearer, Enderman enderman) {
 		return com.railwayteam.railways.util.fabric.ItemUtilsImpl.blocksEndermanView(stack, wearer, enderman);
 	}
 

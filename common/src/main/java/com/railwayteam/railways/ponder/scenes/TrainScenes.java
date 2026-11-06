@@ -51,7 +51,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.ComparatorBlock;
-import net.minecraft.world.level.block.RedStoneWireBlock;
+import net.minecraft.world.level.block.RedstoneWireBlock;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -501,7 +501,7 @@ public class TrainScenes {
 
         scene.idle(20);
 
-        scene.world().modifyBlock(redstonePos, state -> state.setValue(RedStoneWireBlock.POWER, 1), false);
+        scene.world().modifyBlock(redstonePos, state -> state.setValue(RedstoneWireBlock.POWER, 1), false);
         scene.world().modifyBlockEntity(nixiePos, NixieTubeBlockEntity.class, n -> n.updateRedstoneStrength(1));
 
         scene.world().showSection(comparator, Direction.DOWN);
@@ -539,7 +539,7 @@ public class TrainScenes {
         scene.world().toggleRedstonePower(rightButton);
 
         setSwitchState(scene, switchPos, SwitchState.REVERSE_RIGHT);
-        scene.world().modifyBlock(redstonePos, state -> state.setValue(RedStoneWireBlock.POWER, 2), false);
+        scene.world().modifyBlock(redstonePos, state -> state.setValue(RedstoneWireBlock.POWER, 2), false);
         scene.world().modifyBlockEntity(nixiePos, NixieTubeBlockEntity.class, n -> {
             n.updateRedstoneStrength(2);
             n.updateDisplayedStrings();
@@ -553,7 +553,7 @@ public class TrainScenes {
         scene.world().toggleRedstonePower(straightButton);
 
         setSwitchState(scene, switchPos, SwitchState.NORMAL);
-        scene.world().modifyBlock(redstonePos, state -> state.setValue(RedStoneWireBlock.POWER, 0), false);
+        scene.world().modifyBlock(redstonePos, state -> state.setValue(RedstoneWireBlock.POWER, 0), false);
         scene.world().modifyBlockEntity(nixiePos, NixieTubeBlockEntity.class, n -> {
             n.updateRedstoneStrength(0);
             n.updateDisplayedStrings();
@@ -576,7 +576,7 @@ public class TrainScenes {
                         level.setBlockAndUpdate(comparatorPos, level.getBlockState(comparatorPos)
                                 .setValue(ComparatorBlock.POWERED, output != 0));
                         level.setBlockAndUpdate(redstonePos, level.getBlockState(redstonePos)
-                                .setValue(RedStoneWireBlock.POWER, output));
+                                .setValue(RedstoneWireBlock.POWER, output));
                         if (level.getBlockEntity(nixiePos) instanceof NixieTubeBlockEntity nixieBE) {
                             nixieBE.updateRedstoneStrength(output);
                             nixieBE.updateDisplayedStrings();
@@ -853,7 +853,7 @@ public class TrainScenes {
 
         // 'press' button
         scene.world().modifyBlock(buttonPos, s -> s.setValue(ButtonBlock.POWERED, true), false);
-        scene.world().modifyBlock(redstoneDustPos, s -> s.setValue(RedStoneWireBlock.POWER, 15), false);
+        scene.world().modifyBlock(redstoneDustPos, s -> s.setValue(RedstoneWireBlock.POWER, 15), false);
 
         // end coupler rendering
         decoupleTrain(scene, cargoBogeyPos);
@@ -862,7 +862,7 @@ public class TrainScenes {
 
         // 'unpress' button
         scene.world().modifyBlock(buttonPos, s -> s.setValue(ButtonBlock.POWERED, false), false);
-        scene.world().modifyBlock(redstoneDustPos, s -> s.setValue(RedStoneWireBlock.POWER, 0), false);
+        scene.world().modifyBlock(redstoneDustPos, s -> s.setValue(RedstoneWireBlock.POWER, 0), false);
 
         scene.idle(5);
 
@@ -970,7 +970,7 @@ public class TrainScenes {
 
         // 'press' button
         scene.world().modifyBlock(buttonPos, s -> s.setValue(ButtonBlock.POWERED, true), false);
-        scene.world().modifyBlock(redstoneDustPos, s -> s.setValue(RedStoneWireBlock.POWER, 15), false);
+        scene.world().modifyBlock(redstoneDustPos, s -> s.setValue(RedstoneWireBlock.POWER, 15), false);
 
         // end coupler rendering
         decoupleTrain(scene, cargoBogeyPos);
@@ -979,7 +979,7 @@ public class TrainScenes {
 
         // 'unpress' button
         scene.world().modifyBlock(buttonPos, s -> s.setValue(ButtonBlock.POWERED, false), false);
-        scene.world().modifyBlock(redstoneDustPos, s -> s.setValue(RedStoneWireBlock.POWER, 0), false);
+        scene.world().modifyBlock(redstoneDustPos, s -> s.setValue(RedstoneWireBlock.POWER, 0), false);
 
         scene.idle(5);
 

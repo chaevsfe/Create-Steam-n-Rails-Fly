@@ -30,7 +30,6 @@ import com.zurrtum.create.client.catnip.ghostblock.GhostBlocks;
 import com.zurrtum.create.catnip.placement.IPlacementHelper;
 import com.zurrtum.create.catnip.placement.PlacementHelpers;
 import com.zurrtum.create.catnip.placement.PlacementOffset;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -58,7 +57,6 @@ import java.util.function.Predicate;
 
 public class SemaphoreBlock extends HorizontalDirectionalBlock implements IBE<SemaphoreBlockEntity>, IWrenchable {
 
-    public static final MapCodec<SemaphoreBlock> CODEC = simpleCodec(SemaphoreBlock::new);
     public static final int placementHelperId = PlacementHelpers.register(new PlacementHelper());
     public static final int girderPlacementHelperId = PlacementHelpers.register(new GirderPlacementHelper());
     public static final BooleanProperty FLIPPED = BooleanProperty.create("flipped");
@@ -68,9 +66,6 @@ public class SemaphoreBlock extends HorizontalDirectionalBlock implements IBE<Se
     public SemaphoreBlock(Properties pProperties) {
         super(pProperties);
         registerDefaultState(defaultBlockState().setValue(FLIPPED,false).setValue(FULL,false).setValue(UPSIDE_DOWN, false));
-    }
-    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return CODEC;
     }
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         super.createBlockStateDefinition(pBuilder.add(FACING).add(FLIPPED).add(FULL).add(UPSIDE_DOWN));
