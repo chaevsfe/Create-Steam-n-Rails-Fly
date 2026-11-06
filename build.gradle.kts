@@ -246,8 +246,6 @@ fun decodePaintColorSequence(encoded: String, colors: List<String>): List<List<S
     }
 }
 
-// Minecraft 26.3 moved loot tables and advancement criteria to new keys. The checked-in
-// generated data keeps its old form, so these rules run on the processed output only.
 fun convertLootCondition(raw: Map<*, *>): Map<String, Any?> {
     val condition = LinkedHashMap<String, Any?>()
     raw.forEach { (key, value) -> condition[key as String] = value }
