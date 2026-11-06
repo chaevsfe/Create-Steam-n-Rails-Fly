@@ -14,7 +14,9 @@ import com.mojang.serialization.Dynamic;
 import com.railwayteam.railways.base.datafix.CRReferences;
 import com.railwayteam.railways.base.datafixerapi.DataFixesInternals;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.storage.SavedDataStorage;
 import org.jspecify.annotations.Nullable;
@@ -25,6 +27,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.nio.file.Path;
+import java.util.List;
 
 /**
  * Create 6 stores its railway network at {@code data/create/tracks.dat} with a null vanilla
@@ -46,11 +49,33 @@ public abstract class MixinSavedDataStorage {
         if (!railways$isCreateTracks(path) || cir.getReturnValue() == null)
             return;
 
+        railways$renameBlockStateKeys(cir.getReturnValue());
         CompoundTag fixed = (CompoundTag) DataFixesInternals.get().updateWithAllFixers(
             CRReferences.SAVED_DATA_CREATE_TRACKS,
             new Dynamic<>(NbtOps.INSTANCE, cir.getReturnValue())
         ).getValue();
         cir.setReturnValue(fixed);
+    }
+
+    @Unique
+    private static void railways$renameBlockStateKeys(Tag node) {
+        if (node instanceof CompoundTag tag) {
+            if (tag.keySet().size() <= 2 && tag.getString("Name").filter(name -> name.contains(":")).isPresent()
+                && (tag.keySet().size() == 1 || tag.contains("Properties"))) {
+                tag.putString("id", tag.getStringOr("Name", ""));
+                tag.remove("Name");
+                if (tag.contains("Properties")) {
+                    tag.put("properties", tag.getCompoundOrEmpty("Properties"));
+                    tag.remove("Properties");
+                }
+                return;
+            }
+            for (String key : List.copyOf(tag.keySet()))
+                railways$renameBlockStateKeys(tag.get(key));
+        } else if (node instanceof ListTag list) {
+            for (Tag child : list)
+                railways$renameBlockStateKeys(child);
+        }
     }
 
     @Unique
