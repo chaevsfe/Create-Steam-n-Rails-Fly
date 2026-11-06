@@ -246,6 +246,143 @@ fun decodePaintColorSequence(encoded: String, colors: List<String>): List<List<S
     }
 }
 
+// Minecraft 26.3 moved loot tables and advancement criteria to new keys. The checked-in
+// generated data keeps its old form, so these rules run on the processed output only.
+fun convertLootCondition(raw: Map<*, *>): Map<String, Any?> {
+    val condition = LinkedHashMap<String, Any?>()
+    raw.forEach { (key, value) -> condition[key as String] = value }
+    val type = (condition.remove("condition") as String?)?.let { if (':' in it) it else "minecraft:$it" }
+    when (type) {
+        "minecraft:block_state_property" -> {
+            val converted = linkedMapOf<String, Any?>("type" to "minecraft:match_block", "blocks" to condition.remove("block"))
+            if (condition.containsKey("properties")) converted["state"] = condition.remove("properties")
+            converted.putAll(condition)
+            @Suppress("UNCHECKED_CAST")
+            return convertLootNode(converted) as Map<String, Any?>
+        }
+        "minecraft:any_of", "minecraft:all_of" -> return linkedMapOf(
+            "type" to type,
+            "terms" to (condition["terms"] as List<*>).map { convertLootCondition(it as Map<*, *>) },
+        )
+        "minecraft:inverted" -> return linkedMapOf(
+            "type" to type,
+            "term" to convertLootCondition(condition["term"] as Map<*, *>),
+        )
+    }
+    val converted = linkedMapOf<String, Any?>("type" to type)
+    converted.putAll(condition)
+    @Suppress("UNCHECKED_CAST")
+    return convertLootNode(converted) as Map<String, Any?>
+}
+
+fun convertLootConditions(conditions: List<*>): Map<String, Any?> {
+    val converted = conditions.map { convertLootCondition(it as Map<*, *>) }
+    return converted.singleOrNull() ?: linkedMapOf("type" to "minecraft:all_of", "terms" to converted)
+}
+
+fun convertLootFunction(raw: Map<*, *>): Map<String, Any?> {
+    val type = (raw["function"] as String).let { if (':' in it) it else "minecraft:$it" }
+    val converted = linkedMapOf<String, Any?>("type" to type)
+    raw.forEach { (key, value) ->
+        when (key) {
+            "function" -> Unit
+            "conditions" -> converted["condition"] = convertLootConditions(value as List<*>)
+            else -> converted[key as String] = convertLootNode(value)
+        }
+    }
+    return converted
+}
+
+fun convertLootNode(node: Any?): Any? = when (node) {
+    is Map<*, *> -> {
+        val source = LinkedHashMap<String, Any?>()
+        node.forEach { (key, value) -> source[key as String] = value }
+        if ((source["type"] == "minecraft:tag" || source["type"] == "tag") && source.containsKey("name") && !source.containsKey("items")) {
+            source["items"] = "#" + (source.remove("name") as String).removePrefix("#")
+        }
+        if ((source["function"] == "minecraft:exploration_map" || source["function"] == "exploration_map") && !source.containsKey("destination")) {
+            source["destination"] = "#minecraft:on_treasure_maps"
+        }
+        val id = source["id"]
+        if (source.keys == setOf("id", "expected") && id is String && !id.startsWith("#")) {
+            source["id"] = "#$id"
+        }
+        val converted = linkedMapOf<String, Any?>()
+        source.forEach { (key, value) ->
+            when {
+                key == "conditions" && value is List<*> -> converted["condition"] = convertLootConditions(value)
+                key == "functions" && value is List<*> -> {
+                    val functions = value.map { convertLootFunction(it as Map<*, *>) }
+                    converted["modifier"] = functions.singleOrNull() ?: functions
+                }
+                else -> converted[key] = convertLootNode(value)
+            }
+        }
+        converted
+    }
+    is List<*> -> node.map { convertLootNode(it) }
+    else -> node
+}
+
+val advancementTriggerKeyRenames = mapOf(
+    "minecraft:recipe_unlocked" to mapOf("recipe" to "recipes"),
+    "minecraft:recipe_crafted" to mapOf("recipe_id" to "recipes"),
+    "minecraft:crafter_recipe_crafted" to mapOf("recipe_id" to "recipes"),
+    "minecraft:enter_block" to mapOf("block" to "blocks"),
+    "minecraft:slide_down_block" to mapOf("block" to "blocks"),
+    "minecraft:bee_nest_destroyed" to mapOf("block" to "blocks"),
+    "minecraft:player_generates_container_loot" to mapOf("loot_table" to "loot_tables"),
+)
+
+fun convertAdvancementPredicate(predicate: Any?): Any? =
+    if (predicate is List<*>) convertLootConditions(predicate) else convertLootNode(predicate)
+
+fun convertAdvancementCriterionConditions(trigger: String, conditions: Map<*, *>): Map<String, Any?> {
+    val renames = advancementTriggerKeyRenames[trigger].orEmpty()
+    val converted = linkedMapOf<String, Any?>()
+    conditions.forEach { (key, value) ->
+        val name = renames[key as String] ?: key
+        converted[name] = when {
+            value is List<*> && value.isNotEmpty() && value.all { it is Map<*, *> && it.containsKey("condition") } ->
+                convertAdvancementPredicate(value)
+            value is List<*> && value.isNotEmpty() && value.all { it is List<*> } ->
+                value.map { convertAdvancementPredicate(it) }
+            value is Map<*, *> || value is List<*> -> convertLootNode(value)
+            else -> value
+        }
+    }
+    return converted
+}
+
+fun convertAdvancement(advancement: Map<*, *>): Map<String, Any?> {
+    val converted = LinkedHashMap<String, Any?>()
+    advancement.forEach { (key, value) -> converted[key as String] = value }
+    val criteria = converted["criteria"] as? Map<*, *> ?: return converted
+    converted["criteria"] = criteria.entries.associateTo(linkedMapOf<String, Any?>()) { (name, rawCriterion) ->
+        val criterion = LinkedHashMap<String, Any?>()
+        (rawCriterion as Map<*, *>).forEach { (key, value) -> criterion[key as String] = value }
+        val trigger = (criterion["trigger"] as String? ?: "").let { if (':' in it) it else "minecraft:$it" }
+        (criterion["conditions"] as? Map<*, *>)?.let {
+            criterion["conditions"] = convertAdvancementCriterionConditions(trigger, it)
+        }
+        name as String to criterion
+    }
+    return converted
+}
+
+fun legacyLootKeys(node: Any?, path: String = ""): List<String> = when (node) {
+    is Map<*, *> -> node.entries.flatMap { (key, value) ->
+        when {
+            key == "fabric:load_conditions" -> emptyList()
+            key == "conditions" || key == "functions" || key == "function" || key == "condition" && value is String ->
+                listOf("$path/$key")
+            else -> legacyLootKeys(value, "$path/$key")
+        }
+    }
+    is List<*> -> node.flatMapIndexed { index, value -> legacyLootKeys(value, "$path/$index") }
+    else -> emptyList()
+}
+
 // Create Fly 26.2 stitches every connected-texture variant as an individual
 // sprite. Railway's source art deliberately stays in the legacy spritesheet
 // format; split the sheets into the indices requested by the 26.2 CT types.
@@ -372,7 +509,8 @@ tasks.processResources {
     )
     inputs.properties(properties)
     inputs.property("railwayFabricConventionTagSchema", "fabric-convention-tags-v2-26.2-v1")
-    inputs.property("railwayAdvancementSchema", "minecraft-26.2-v1")
+    inputs.property("railwayAdvancementSchema", "minecraft-26.3-v1")
+    inputs.property("railwayLootTableSchema", "minecraft-26.3-v1")
     inputs.property("railwayPaintFluidComponents", "minecraft-26.2-custom-data-v1")
     inputs.property("railwayPaintProjectileRegistryPath", "create-fly-26.2-v1")
     inputs.property("railwayCompatTrackLootConditions", "fabric-resource-conditions-6.1-v1")
@@ -885,6 +1023,31 @@ tasks.processResources {
                     missingNormalizedOutputs.joinToString("\n"),
             )
         }
+
+        val allLootTables = fileTree(outputRoot) { include("data/*/loot_table/**/*.json") }.files.sortedBy(File::getPath)
+        val legacyLootTables = allLootTables.mapNotNull { lootTableFile ->
+            val converted = convertLootNode(JsonSlurper().parse(lootTableFile))
+            lootTableFile.writeText(JsonOutput.prettyPrint(JsonOutput.toJson(converted)) + "\n", Charsets.UTF_8)
+            val legacy = legacyLootKeys(converted)
+            if (legacy.isEmpty()) null else "${lootTableFile.path}: ${legacy.joinToString()}"
+        }
+        if (legacyLootTables.isNotEmpty()) {
+            throw GradleException("Loot tables still use a legacy schema:\n" + legacyLootTables.joinToString("\n"))
+        }
+
+        val allAdvancements = fileTree(outputRoot) { include("data/*/advancement/**/*.json") }.files.sortedBy(File::getPath)
+        allAdvancements.forEach { advancementFile ->
+            val advancement = JsonSlurper().parse(advancementFile) as? Map<*, *>
+                ?: throw GradleException("Advancement root must be a JSON object: $advancementFile")
+            advancementFile.writeText(
+                JsonOutput.prettyPrint(JsonOutput.toJson(convertAdvancement(advancement))) + "\n",
+                Charsets.UTF_8,
+            )
+        }
+
+        logger.lifecycle(
+            "Converted ${allLootTables.size} loot tables and ${allAdvancements.size} advancements for Minecraft 26.3",
+        )
     }
 
     exclude("architectury.common.json")
