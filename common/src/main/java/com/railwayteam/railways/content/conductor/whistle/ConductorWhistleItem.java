@@ -61,6 +61,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -316,7 +317,7 @@ public class ConductorWhistleItem extends TrackTargetingBlockItem {
 					}
 				});
 				if (!scheduleStack.isEmpty() && !player.addItem(scheduleStack))
-					player.drop(scheduleStack, false);
+					player.drop(scheduleStack, false, Prediction.SERVER_ONLY);
 			}
 		}
 

@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -117,7 +118,7 @@ public abstract class MixinBezierConnection implements IHasTrackCasing {
         Block casing = railways$getTrackCasing();
         if (casing != null) {
             Inventory inv = player.getInventory();
-            inv.placeItemBackInInventory(new ItemStack(casing));
+            inv.placeItemBackInInventory(new ItemStack(casing), Prediction.SERVER_ONLY);
         }
     }
 }

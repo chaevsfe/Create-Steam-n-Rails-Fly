@@ -15,6 +15,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.railwayteam.railways.content.palettes.painting.PaintPitcherItem;
 import com.railwayteam.railways.util.ItemUtils;
 import com.zurrtum.create.content.equipment.potatoCannon.PotatoCannonItem;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -67,6 +68,6 @@ public class MixinPotatoCannonItem {
         // stack, consume that stack and return the remainder to the inventory instead of allowing
         // an infinite paint source.
         source.setCount(0);
-        inventory.placeItemBackInInventory(replacement);
+        inventory.placeItemBackInInventory(replacement, Prediction.SERVER_ONLY);
     }
 }

@@ -38,6 +38,7 @@ import com.zurrtum.create.catnip.data.Iterate;
 import com.zurrtum.create.catnip.math.VecHelper;
 import com.railwayteam.railways.shim.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.core.Direction;
@@ -273,8 +274,8 @@ public class GenericCrossingBlock extends Block implements IBE<GenericCrossingBl
                 if (!player.isCreative()) {
                     Item a = crossingBE.getPrimary().getBlock().asItem();
                     Item b = crossingBE.getSecondary().getBlock().asItem();
-                    player.getInventory().placeItemBackInInventory(new ItemStack(a));
-                    player.getInventory().placeItemBackInInventory(new ItemStack(b));
+                    player.getInventory().placeItemBackInInventory(new ItemStack(a), Prediction.SERVER_ONLY);
+                    player.getInventory().placeItemBackInInventory(new ItemStack(b), Prediction.SERVER_ONLY);
                 }
             }
         }

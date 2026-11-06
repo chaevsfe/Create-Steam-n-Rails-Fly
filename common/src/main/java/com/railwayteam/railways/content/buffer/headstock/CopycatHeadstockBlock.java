@@ -36,6 +36,7 @@ import net.fabricmc.api.Environment;
 import com.railwayteam.railways.shim.minecraft.MethodsReturnNonnullByDefault;
 import com.railwayteam.railways.shim.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -232,7 +233,7 @@ public class CopycatHeadstockBlock extends WaterloggedCopycatBlock implements Bl
             if (player != null && !player.isCreative())
                 Block.getDrops(state, (ServerLevel) world, pos, world.getBlockEntity(pos), player, context.getItemInHand())
                     .forEach(itemStack -> {
-                        player.getInventory().placeItemBackInInventory(itemStack);
+                        player.getInventory().placeItemBackInInventory(itemStack, Prediction.SERVER_ONLY);
                     });
             state.spawnAfterBreak((ServerLevel) world, pos, ItemStack.EMPTY, true);
             world.destroyBlock(pos, false);

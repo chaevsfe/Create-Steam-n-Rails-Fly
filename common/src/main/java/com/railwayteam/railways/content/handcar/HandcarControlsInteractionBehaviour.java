@@ -27,6 +27,7 @@ import com.zurrtum.create.content.contraptions.AbstractContraptionEntity;
 import com.zurrtum.create.content.contraptions.actors.trainControls.ControlsInteractionBehaviour;
 import com.zurrtum.create.content.trains.entity.CarriageContraptionEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -40,7 +41,7 @@ public class HandcarControlsInteractionBehaviour extends ControlsInteractionBeha
 
                 ItemStack stack = CRBlocks.HANDCAR.asStack();
                 if (!player.isCreative()) {
-                    player.getInventory().placeItemBackInInventory(stack);
+                    player.getInventory().placeItemBackInInventory(stack, Prediction.SERVER_ONLY);
                 }
                 AllSoundEvents.WRENCH_REMOVE.playOnServer(player.level, BlockPos.containing(cce.toGlobalVector(Vec3.atCenterOf(localPos), 0.5f)), 1, player.getRandom().nextFloat() * .5f + .5f);
 
