@@ -53,7 +53,7 @@ public class ConductorToolboxLayer extends RenderLayer<ConductorRenderState, Con
             return;
 
         poseStack.pushPose();
-        poseStack.mulPose(Axis.XP.rotationDegrees(180.0f));
+        poseStack.rotate(Axis.XP.rotationDegrees(180.0f));
         poseStack.translate(-0.5, -1.2, -0.94);
 
         SuperByteBuffer body = CachedBuffers.partial(

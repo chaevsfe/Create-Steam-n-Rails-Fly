@@ -65,15 +65,15 @@ public final class VirtualCouplerRendering {
             matrices.translate(anchor.x, anchor.y, anchor.z);
 
             matrices.pushPose();
-            matrices.mulPose(Axis.YP.rotationDegrees(-yRot));
-            matrices.mulPose(Axis.XP.rotationDegrees(xRot));
+            matrices.rotate(Axis.YP.rotationDegrees(-yRot));
+            matrices.rotate(Axis.XP.rotationDegrees(xRot));
             head.submit(matrices, queue);
             matrices.popPose();
 
             if (couplingSegments > 0) {
                 matrices.pushPose();
-                matrices.mulPose(Axis.YP.rotationDegrees(-yRot + 180));
-                matrices.mulPose(Axis.XP.rotationDegrees(-xRot));
+                matrices.rotate(Axis.YP.rotationDegrees(-yRot + 180));
+                matrices.rotate(Axis.XP.rotationDegrees(-xRot));
                 matrices.translate(0, 0, 5 / 16f);
                 cable.submit(matrices, queue);
                 for (int segment = 1; segment < couplingSegments; segment++) {
@@ -84,8 +84,8 @@ public final class VirtualCouplerRendering {
             }
 
             matrices.translate(anchor2.x - anchor.x, anchor2.y - anchor.y, anchor2.z - anchor.z);
-            matrices.mulPose(Axis.YP.rotationDegrees(-yRot + 180));
-            matrices.mulPose(Axis.XP.rotationDegrees(-xRot));
+            matrices.rotate(Axis.YP.rotationDegrees(-yRot + 180));
+            matrices.rotate(Axis.XP.rotationDegrees(-xRot));
             head.submit(matrices, queue);
             matrices.popPose();
         }

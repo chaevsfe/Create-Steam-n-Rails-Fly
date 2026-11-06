@@ -128,7 +128,6 @@ public class SemaphoreRenderer extends SmartBlockEntityRenderer<SemaphoreBlockEn
                 : (yellow ? CRBlockPartials.SEMAPHORE_LAMP_YELLOW : CRBlockPartials.SEMAPHORE_LAMP_RED);
             state.lampColorBuf = CachedBuffers.partial(lamp, blockState);
 
-            state.translucentType = CreateRenderTypes.translucent();
             state.additiveType = CreateRenderTypes.additive();
         }
     }
@@ -153,7 +152,7 @@ public class SemaphoreRenderer extends SmartBlockEntityRenderer<SemaphoreBlockEn
                     .translate(state.lampTx, state.lampTy, state.lampTz)
                     .light(0xF000F0)
                     .disableDiffuse()
-                    .submit(state.translucentType, matrices, queue);
+                    .submit(matrices, queue);
             }
 
             OrderedSubmitNodeCollector additiveQueue = queue.order(1);
@@ -190,7 +189,6 @@ public class SemaphoreRenderer extends SmartBlockEntityRenderer<SemaphoreBlockEn
         public @Nullable SuperByteBuffer lampBuf;
         public @Nullable SuperByteBuffer glowBuf;
         public @Nullable SuperByteBuffer lampColorBuf;
-        public @Nullable RenderType translucentType;
         public @Nullable RenderType additiveType;
     }
 }

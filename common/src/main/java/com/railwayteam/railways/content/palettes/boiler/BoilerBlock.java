@@ -204,7 +204,7 @@ public class BoilerBlock extends Block implements IWrenchable, IHasCustomOutline
     @Environment(EnvType.CLIENT)
     public void matrixRotation(PoseStack poseStack, BlockState state) {
         if (state.getValue(HORIZONTAL_AXIS) == Axis.X)
-            poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(90));
+            poseStack.rotate(com.mojang.math.Axis.YP.rotationDegrees(90));
     }
 
     public enum Style implements StringRepresentable {

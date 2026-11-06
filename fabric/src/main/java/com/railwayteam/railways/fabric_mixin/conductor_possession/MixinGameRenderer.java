@@ -28,7 +28,9 @@ public abstract class MixinGameRenderer {
     private Minecraft minecraft;
 
     @Shadow
-    public abstract void setPostEffect(Identifier postEffectId);
+    private void setSpectatedEntityPostEffect(Identifier postEffectId) {
+        throw new AssertionError();
+    }
 
     @Inject(method = "bobView", at = @At("HEAD"), cancellable = true)
     private void railways$bobView(CameraRenderState cameraState, PoseStack poseStack, CallbackInfo ci) {
@@ -39,15 +41,15 @@ public abstract class MixinGameRenderer {
         float bob = cameraState.entityRenderState.bob;
         poseStack.translate(Mth.sin(walk * (float) Math.PI) * bob * 0.5f,
             -Math.abs(Mth.cos(walk * (float) Math.PI) * bob), 0.0);
-        poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.sin(walk * (float) Math.PI) * bob * 3.0f));
-        poseStack.mulPose(Axis.XP.rotationDegrees(Math.abs(Mth.cos(walk * (float) Math.PI - 0.2f) * bob) * 5.0f));
+        poseStack.rotate(Axis.ZP.rotationDegrees(Mth.sin(walk * (float) Math.PI) * bob * 3.0f));
+        poseStack.rotate(Axis.XP.rotationDegrees(Math.abs(Mth.cos(walk * (float) Math.PI - 0.2f) * bob) * 5.0f));
         ci.cancel();
     }
 
     @Inject(method = "checkEntityPostEffect", at = @At("RETURN"))
     private void railways$checkEntityPostEffect(Entity entity, CallbackInfo ci) {
         if (entity instanceof ConductorEntity && CRConfigs.client().useConductorSpyShader.get())
-            setPostEffect(Identifier.fromNamespaceAndPath("railways", "scan_pincushion"));
+            setSpectatedEntityPostEffect(Identifier.fromNamespaceAndPath("railways", "scan_pincushion"));
     }
 
     @Inject(method = "shouldRenderBlockOutline", at = @At("HEAD"), cancellable = true)

@@ -37,7 +37,7 @@ public enum CRKeys {
         for (CRKeys key : values()) {
             if (key.keybind == null || key.keybind.isUnbound())
                 continue;
-            key.keybind.setDown(InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), key.getBoundCode()));
+            key.keybind.setDown(InputConstants.isKeyDown(key.getBoundCode()));
         }
     }
 
@@ -58,7 +58,7 @@ public enum CRKeys {
     }
 
     public static boolean isKeyDown(int key) {
-        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), key);
+        return InputConstants.isKeyDown(key);
     }
 
     public static boolean isMouseButtonDown(int button) {

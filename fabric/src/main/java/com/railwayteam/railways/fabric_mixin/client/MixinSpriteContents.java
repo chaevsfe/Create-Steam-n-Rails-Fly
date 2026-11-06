@@ -18,7 +18,7 @@
 
 package com.railwayteam.railways.fabric_mixin.client;
 
-import com.mojang.blaze3d.buffers.GpuBufferSlice;
+import com.mojang.renderpearl.api.buffers.GpuBufferSlice;
 import com.railwayteam.railways.content.custom_tracks.phantom.PhantomSpriteManager;
 import com.railwayteam.railways.mixin_interfaces.IPhantomAnimationState;
 import com.railwayteam.railways.mixin_interfaces.IPotentiallyInvisibleSpriteContents;

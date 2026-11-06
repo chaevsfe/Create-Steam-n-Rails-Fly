@@ -65,9 +65,9 @@ public class MixinTrackBlockOutline {
         method = "drawCurveSelection",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/zurrtum/create/client/content/trains/track/TrackBlockOutline;submitShape(Lnet/minecraft/world/phys/shapes/VoxelShape;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;IF)V"
+            target = "Lcom/zurrtum/create/client/content/trains/track/TrackBlockOutline;submitShape(Lnet/minecraft/client/Minecraft;Lnet/minecraft/world/phys/shapes/VoxelShape;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;IF)V"
         ),
-        index = 0
+        index = 1
     )
     private static VoxelShape railways$drawCurveWithMaterialShape(VoxelShape original) {
         TrackBlockOutline.BezierPointSelection selection = TrackBlockOutline.result;
@@ -133,7 +133,7 @@ public class MixinTrackBlockOutline {
 
         VoxelShape blockShape = state.getShape(minecraft.level, pos);
         VoxelShape materialShape = CustomTrackBlockOutline.convert(blockShape, trackBlock.getMaterial());
-        TrackBlockOutline.submitShape(materialShape, poseStack, queue, color, partialTicks);
+        TrackBlockOutline.submitShape(minecraft, materialShape, poseStack, queue, color, partialTicks);
         cir.setReturnValue(true);
     }
 }

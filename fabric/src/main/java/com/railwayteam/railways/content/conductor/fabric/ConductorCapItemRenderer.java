@@ -58,7 +58,7 @@ public class ConductorCapItemRenderer implements ArmorRenderer {
 		// Match the conductor entity cap: render in head-local space so pitch, yaw, and roll all follow the head.
 		matrices.translate(0.0F, 0.0F, -0.25F / 16.0F);
 		submitter.submitModel((Model) model, state, matrices, ConductorCapLayer.entityCutoutNoCull(cap.textureId),
-			light, LivingEntityRenderer.getOverlayCoords(state, 0), -1, null);
+			light, LivingEntityRenderer.getOverlayCoords(state, 0), -1);
 		matrices.popPose();
 	}
 
