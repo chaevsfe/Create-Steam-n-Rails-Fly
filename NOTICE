@@ -8,7 +8,7 @@ Based on Create: Steam 'n' Rails by The Railways Team, version 1.7.3.
   Upstream project: https://modrinth.com/mod/create-steam-n-rails
   This port:        https://modrinth.com/project/13eOfSPn
 
-Modified by chaevsfe in 2026 to run on Minecraft 26.2 with the Fabric mod
+Modified by chaevsfe in 2026 to run on Minecraft 26.3 with the Fabric mod
 loader, built against Create Fly by ZurrTum rather than the original Create mod.
 
 Nature of the modifications:
