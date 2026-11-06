@@ -20,8 +20,8 @@ import com.zurrtum.create.content.trains.entity.Carriage;
 import com.zurrtum.create.content.trains.entity.Train;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.FuelValues;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.storage.loot.LootContext;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -42,15 +42,18 @@ public abstract class MixinTrainFuel {
     @Shadow
     public int fuelTicks;
 
+    @Shadow
+    public abstract LootContext getLootContext(ServerLevel level);
+
     @Inject(
         method = "burnFuel",
         at = @At(value = "INVOKE", target = "Ljava/util/List;size()I", shift = At.Shift.AFTER),
         cancellable = true
     )
-    private void railways$burnLiquidFuel(Level level, CallbackInfo ci) {
+    private void railways$burnLiquidFuel(ServerLevel level, CallbackInfo ci) {
         boolean iterateFromBack = speed < 0;
         int carriageCount = carriages.size();
-        FuelValues fuelValues = level.fuelValues();
+        LootContext lootContext = getLootContext(level);
 
         for (int index = 0; index < carriageCount; index++) {
             int carriageIndex = iterateFromBack ? carriageCount - 1 - index : index;
@@ -61,7 +64,7 @@ public abstract class MixinTrainFuel {
                 continue;
             }
 
-            fuelTicks += LiquidFuelTrainHandler.handleFuelDraining(fuelFluids, fuelValues);
+            fuelTicks += LiquidFuelTrainHandler.handleFuelDraining(fuelFluids, lootContext);
             if (fuelTicks > 0) {
                 ci.cancel();
                 return;

@@ -32,7 +32,7 @@ import com.zurrtum.create.content.trains.graph.TrackNode;
 import com.zurrtum.create.content.trains.signal.TrackEdgePoint;
 import com.zurrtum.create.content.trains.station.GlobalStation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.spongepowered.asm.mixin.Final;
@@ -66,7 +66,7 @@ public abstract class MixinNavigationBuffer implements IBufferBlockCheckableNavi
     private final ThreadLocal<Double> railways$bufferDistance = ThreadLocal.withInitial(() -> Double.MAX_VALUE);
 
     @Inject(method = "tick", at = @At("HEAD"))
-    private void railways$resetBufferDistance(Level level, CallbackInfo ci) {
+    private void railways$resetBufferDistance(ServerLevel level, CallbackInfo ci) {
         railways$bufferDistance.set(Double.MAX_VALUE);
     }
 
@@ -91,9 +91,9 @@ public abstract class MixinNavigationBuffer implements IBufferBlockCheckableNavi
 
     @Inject(
         method = "tick",
-        at = @At(value = "INVOKE", target = "Lcom/zurrtum/create/content/trains/entity/Train;burnFuel(Lnet/minecraft/world/level/Level;)V")
+        at = @At(value = "INVOKE", target = "Lcom/zurrtum/create/content/trains/entity/Train;burnFuel(Lnet/minecraft/server/level/ServerLevel;)V")
     )
-    private void railways$applyBufferSlowdown(Level level, CallbackInfo ci, @Local(name = "targetDistance") LocalDoubleRef targetDistance) {
+    private void railways$applyBufferSlowdown(ServerLevel level, CallbackInfo ci, @Local(name = "targetDistance") LocalDoubleRef targetDistance) {
         if (railways$bufferDistance.get() < targetDistance.get())
             targetDistance.set(railways$bufferDistance.get());
         railways$bufferDistance.set(Double.MAX_VALUE);
@@ -118,7 +118,7 @@ public abstract class MixinNavigationBuffer implements IBufferBlockCheckableNavi
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
-    private void railways$respectBuffersWithoutSchedule(Level level, CallbackInfo ci) {
+    private void railways$respectBuffersWithoutSchedule(ServerLevel level, CallbackInfo ci) {
         railways$updateControlsBlockInternal(false, false);
     }
 
