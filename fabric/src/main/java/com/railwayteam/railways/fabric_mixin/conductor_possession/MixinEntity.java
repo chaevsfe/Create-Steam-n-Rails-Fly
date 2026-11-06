@@ -25,6 +25,12 @@ public class MixinEntity {
         }
     }
 
+    @Inject(method = "commonTick", at = @At("HEAD"))
+    private void railways$cancelPossessedInterpolation(CallbackInfo ci) {
+        if ((Object) this instanceof ConductorEntity conductor && conductor.isPossessedAndClient())
+            conductor.getInterpolation().cancel();
+    }
+
     @Inject(method = "push(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"), cancellable = true)
     private void railways$stopPushing(Entity entity, CallbackInfo ci) {
         if (ConductorPossessionController.getPossessingConductor((Entity) (Object) this) == entity)
