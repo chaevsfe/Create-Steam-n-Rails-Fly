@@ -44,12 +44,12 @@ public class SmokestackPartFix extends DataFix {
             this.name,
             this.getInputSchema().getType(References.BLOCK_STATE),
             typed -> typed.update(DSL.remainderFinder(),dynamic -> {
-                Optional<String> name = dynamic.get("Name").asString().result();
+                Optional<String> name = dynamic.get("id").asString().result();
                 if (name.isPresent() && name.get().equals(this.blockId)) {
-                    Dynamic<?> properties = dynamic.get("Properties").orElseEmptyMap();
+                    Dynamic<?> properties = dynamic.get("properties").orElseEmptyMap();
                     if (properties.get("part").result().isEmpty()) {
                         properties = properties.set("part", dynamic.createString(this.defaultPart.getSerializedName()));
-                        dynamic = dynamic.set("Properties", properties);
+                        dynamic = dynamic.set("properties", properties);
                     }
                 }
                 return dynamic;

@@ -37,14 +37,14 @@ public class UpsideDownMonoBogeyFix extends DataFix {
     }
     public TypeRewriteRule makeRule() {
         return this.fixTypeEverywhereTyped(this.name + " for block_state", this.getInputSchema().getType(References.BLOCK_STATE), typed -> typed.update(DSL.remainderFinder(), dynamic -> {
-            Optional<String> optional = dynamic.get("Name").asString().result();
+            Optional<String> optional = dynamic.get("id").asString().result();
             if (optional.isPresent() && optional.get().equals("railways:mono_bogey_upside_down")) {
-                dynamic = dynamic.set("Name", dynamic.createString("railways:mono_bogey"));
+                dynamic = dynamic.set("id", dynamic.createString("railways:mono_bogey"));
 
-                Dynamic<?> properties = dynamic.get("Properties").orElseEmptyMap()
+                Dynamic<?> properties = dynamic.get("properties").orElseEmptyMap()
                     .set("upside_down", dynamic.createString("true"));
 
-                dynamic = dynamic.set("Properties", properties);
+                dynamic = dynamic.set("properties", properties);
                 return dynamic;
             }
 

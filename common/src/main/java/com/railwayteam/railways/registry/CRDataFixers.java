@@ -301,11 +301,11 @@ public final class CRDataFixers {
 
     private static CompoundTag blockState(String name, String property, String value) {
         CompoundTag state = new CompoundTag();
-        state.putString("Name", name);
+        state.putString("id", name);
         CompoundTag properties = new CompoundTag();
         if (property != null && value != null)
             properties.putString(property, value);
-        state.put("Properties", properties);
+        state.put("properties", properties);
         return state;
     }
 
@@ -396,13 +396,13 @@ public final class CRDataFixers {
     }
 
     private static void requireName(CompoundTag state, String expected) {
-        String actual = state.getStringOr("Name", "");
+        String actual = state.getStringOr("id", "");
         if (!expected.equals(actual))
             throw new IllegalStateException("DFU probe expected block " + expected + " but got " + actual);
     }
 
     private static void requireProperty(CompoundTag state, String key, String expected) {
-        String actual = state.getCompoundOrEmpty("Properties").getStringOr(key, "");
+        String actual = state.getCompoundOrEmpty("properties").getStringOr(key, "");
         if (!expected.equals(actual))
             throw new IllegalStateException(
                 "DFU probe expected property " + key + "=" + expected + " but got " + actual

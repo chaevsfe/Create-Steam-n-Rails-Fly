@@ -56,7 +56,7 @@ public class CompatCherryTrackFix extends DataFix {
     }
     protected TypeRewriteRule makeRule() {
         return this.fixTypeEverywhereTyped(this.name + " for block_state", this.getInputSchema().getType(References.BLOCK_STATE), typed -> typed.update(DSL.remainderFinder(), dynamic -> {
-            Optional<String> optional = dynamic.get("Name").asString().result();
+            Optional<String> optional = dynamic.get("id").asString().result();
 
             if (optional.isPresent()) {
                 if (standardCherryOld.contains(optional.get())) {
@@ -73,7 +73,7 @@ public class CompatCherryTrackFix extends DataFix {
     }
 
     private static Dynamic<?> fixCherryData(Dynamic<?> dynamic, String name) {
-        dynamic = dynamic.set("Name", dynamic.createString(name));
-        return dynamic.set("Properties", dynamic.get("Properties").orElseEmptyMap());
+        dynamic = dynamic.set("id", dynamic.createString(name));
+        return dynamic.set("properties", dynamic.get("properties").orElseEmptyMap());
     }
 }

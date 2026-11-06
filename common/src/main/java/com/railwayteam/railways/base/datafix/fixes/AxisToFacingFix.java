@@ -44,14 +44,14 @@ public abstract class AxisToFacingFix extends DataFix {
     protected abstract boolean applyToBlockState(String blockId);
     public TypeRewriteRule makeRule() {
         return this.fixTypeEverywhereTyped(this.name + " for block_state", this.getInputSchema().getType(References.BLOCK_STATE), typed -> typed.update(DSL.remainderFinder(), dynamic -> {
-            Optional<String> optional = dynamic.get("Name").asString().result();
+            Optional<String> optional = dynamic.get("id").asString().result();
             if (optional.isPresent() && applyToBlockState(optional.get())) {
                 // Conversions:
                 // Axis Z -> Facing North
                 // Axis X -> Facing East
                 // Axis Y -> Facing Up
 
-                Dynamic<?> properties = dynamic.get("Properties").orElseEmptyMap();
+                Dynamic<?> properties = dynamic.get("properties").orElseEmptyMap();
 
                 Optional<String> maybeAxis = properties.get("axis").asString().result();
                 if (maybeAxis.isEmpty()) return dynamic;
@@ -66,7 +66,7 @@ public abstract class AxisToFacingFix extends DataFix {
                 }
                 properties = properties.remove("axis");
 
-                dynamic = dynamic.set("Properties", properties);
+                dynamic = dynamic.set("properties", properties);
                 return dynamic;
             }
 

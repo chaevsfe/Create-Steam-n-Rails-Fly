@@ -45,22 +45,30 @@ public abstract class MixinNbtUtilsDataFix {
         CompoundTag tag,
         CallbackInfoReturnable<BlockState> cir
     ) {
-        String name = tag.getStringOr("Name", "");
+        if (tag.contains("Name") && !tag.contains("id")) {
+            tag.putString("id", tag.getStringOr("Name", ""));
+            tag.remove("Name");
+            if (tag.contains("Properties")) {
+                tag.put("properties", tag.getCompoundOrEmpty("Properties"));
+                tag.remove("Properties");
+            }
+        }
+        String name = tag.getStringOr("id", "");
         if (name.isEmpty())
             return;
 
         if ("railways:mono_bogey_upside_down".equals(name)) {
-            tag.putString("Name", "railways:mono_bogey");
+            tag.putString("id", "railways:mono_bogey");
             railways$properties(tag).putString("upside_down", "true");
             name = "railways:mono_bogey";
         }
 
         if (CompatCherryTrackFix.standardCherryOld.contains(name)) {
-            tag.putString("Name", "railways:track_cherry");
+            tag.putString("id", "railways:track_cherry");
         } else if (CompatCherryTrackFix.wideCherryOld.contains(name)) {
-            tag.putString("Name", "railways:track_cherry_wide");
+            tag.putString("id", "railways:track_cherry_wide");
         } else if (CompatCherryTrackFix.narrowCherryOld.contains(name)) {
-            tag.putString("Name", "railways:track_cherry_narrow");
+            tag.putString("id", "railways:track_cherry_narrow");
         }
 
         boolean axisToFacing = name.startsWith("railways:") && (
@@ -88,8 +96,8 @@ public abstract class MixinNbtUtilsDataFix {
 
     @Unique
     private static CompoundTag railways$properties(CompoundTag tag) {
-        CompoundTag properties = tag.getCompoundOrEmpty("Properties");
-        tag.put("Properties", properties);
+        CompoundTag properties = tag.getCompoundOrEmpty("properties");
+        tag.put("properties", properties);
         return properties;
     }
 
