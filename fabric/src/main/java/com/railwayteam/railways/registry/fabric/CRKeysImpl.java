@@ -18,6 +18,7 @@
 
 package com.railwayteam.railways.registry.fabric;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 
@@ -27,6 +28,7 @@ public class CRKeysImpl {
     }
 
     public static int getBoundCode(KeyMapping keyMapping) {
-        return KeyMappingHelper.getBoundKeyOf(keyMapping).getValue();
+        InputConstants.Key key = KeyMappingHelper.getBoundKeyOf(keyMapping);
+        return key.getType() == InputConstants.Type.KEYBOARD ? key.getValue() : InputConstants.UNKNOWN.getValue();
     }
 }
