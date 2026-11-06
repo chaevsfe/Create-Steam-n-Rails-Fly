@@ -22,11 +22,14 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.game.ServerboundPunchPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.SwingAnimation;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -61,7 +64,7 @@ public abstract class MixinCurvedTrackInteraction {
         ItemStack held = player.getMainHandItem();
         Item heldItem = held.getItem();
         if (heldItem instanceof HandcarItem handcar && handcar.useOnCurve(result, held)) {
-            player.swing(InteractionHand.MAIN_HAND);
+            railways$swingMainHand(player);
             cir.setReturnValue(true);
             return;
         }
@@ -82,7 +85,13 @@ public abstract class MixinCurvedTrackInteraction {
         }
 
         CRPackets.PACKETS.send(new SlabUseOnCurvePacket(track.getBlockPos(), curveTarget, BlockPos.containing(result.vec())));
-        player.swing(InteractionHand.MAIN_HAND);
+        railways$swingMainHand(player);
         cir.setReturnValue(true);
+    }
+
+    @Unique
+    private static void railways$swingMainHand(LocalPlayer player) {
+        player.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT, false);
+        player.connection.send(ServerboundPunchPacket.INSTANCE);
     }
 }
