@@ -88,7 +88,7 @@ public class CopycatHeadstockBlockEntity extends CopycatBlockEntity implements I
             return InteractionResult.SUCCESS;
         this.color = color;
         notifyUpdate();
-        level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, worldPosition, Block.getId(BlockStateUtils.getWoolBlock(color).defaultBlockState()));
+        level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_DESTROY_BLOCK, worldPosition, Block.getId(BlockStateUtils.getWoolBlock(color).defaultBlockState()));
         return InteractionResult.SUCCESS;
     }
 }

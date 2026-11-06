@@ -90,7 +90,7 @@ public class DyeableBlockEntity extends SmartBlockEntity implements IDyedBuffer 
             return InteractionResult.SUCCESS;
         this.color = color;
         notifyUpdate();
-        level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, worldPosition, Block.getId(BlockStateUtils.getWoolBlock(color).defaultBlockState()));
+        level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_DESTROY_BLOCK, worldPosition, Block.getId(BlockStateUtils.getWoolBlock(color).defaultBlockState()));
         return InteractionResult.SUCCESS;
     }
 }
