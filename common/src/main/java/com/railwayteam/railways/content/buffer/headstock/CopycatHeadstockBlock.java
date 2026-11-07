@@ -307,7 +307,7 @@ public class CopycatHeadstockBlock extends WaterloggedCopycatBlock implements Bl
             return InteractionResult.PASS;
         });
         if (result.consumesAction()) return result;
-        return InteractionResult.PASS;
+        return super.useItemOn(held, pState, pLevel, pPos, pPlayer, pHand, pHit);
     }
 
     @Environment(EnvType.CLIENT)
