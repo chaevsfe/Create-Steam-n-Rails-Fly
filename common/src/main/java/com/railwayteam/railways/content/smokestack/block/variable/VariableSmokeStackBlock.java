@@ -168,7 +168,7 @@ public non-sealed class VariableSmokeStackBlock extends StyledSmokeStackBlock im
             return InteractionResult.SUCCESS;
         }
 
-        return InteractionResult.PASS;
+        return super.useItemOn(heldItem, pState, pLevel, pPos, pPlayer, pHand, pHit);
     }
 
     public static void incrementSize(LevelAccessor level, BlockPos pos) {
