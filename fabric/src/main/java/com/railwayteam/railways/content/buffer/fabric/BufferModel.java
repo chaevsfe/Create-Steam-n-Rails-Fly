@@ -53,9 +53,7 @@ import net.minecraft.client.resources.model.sprite.TextureSlots;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ItemOwner;
 import net.minecraft.world.item.DyeColor;
@@ -182,12 +180,7 @@ public class BufferModel extends WrapperBlockStateModel {
                 return new SwapData(null, null);
 
             CompoundTag tag = data.copyTagWithoutId();
-            BlockState material = tag.contains("Material")
-                ? NbtUtils.readBlockState(
-                    BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK),
-                    tag.getCompound("Material").orElse(new CompoundTag())
-                )
-                : null;
+            BlockState material = tag.read("Material", BlockState.CODEC).orElse(null);
             DyeColor color = tag.getInt("Color").isPresent()
                 ? DyeColor.byId(tag.getInt("Color").orElse(0))
                 : null;

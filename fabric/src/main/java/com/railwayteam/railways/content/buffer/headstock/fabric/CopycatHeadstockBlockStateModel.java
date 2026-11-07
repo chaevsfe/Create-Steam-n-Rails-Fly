@@ -60,9 +60,7 @@ import net.minecraft.client.resources.model.sprite.TextureSlots;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ItemOwner;
@@ -392,12 +390,7 @@ public class CopycatHeadstockBlockStateModel extends CopycatModel {
 				return new ItemData(material, null);
 
 			CompoundTag tag = data.copyTagWithoutId();
-			if (tag.contains("Material")) {
-				material = NbtUtils.readBlockState(
-					BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK),
-					tag.getCompound("Material").orElse(new CompoundTag())
-				);
-			}
+			material = tag.read("Material", BlockState.CODEC).orElse(material);
 			if (tag.getInt("Color").isPresent())
 				color = DyeColor.byId(tag.getInt("Color").orElse(0));
 			return new ItemData(material, color);
