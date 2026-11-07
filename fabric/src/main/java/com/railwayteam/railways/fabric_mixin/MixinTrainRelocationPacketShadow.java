@@ -13,6 +13,7 @@ package com.railwayteam.railways.fabric_mixin;
 import com.railwayteam.railways.content.shadow_realm.ShadowRealm;
 import com.railwayteam.railways.content.shadow_realm.ShadowRealm.RestorationTarget;
 import com.zurrtum.create.infrastructure.packet.c2s.TrainRelocationPacket;
+import net.minecraft.network.protocol.PacketUtils;
 import net.minecraft.network.protocol.game.ServerGamePacketListener;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,6 +30,7 @@ public abstract class MixinTrainRelocationPacketShadow {
             return;
         }
         TrainRelocationPacket packet = (TrainRelocationPacket) (Object) this;
+        PacketUtils.ensureRunningOnSameThread(packet, listener, serverListener.player.level());
         RestorationTarget target = new RestorationTarget(
             serverListener.player.level(),
             packet.pos(),

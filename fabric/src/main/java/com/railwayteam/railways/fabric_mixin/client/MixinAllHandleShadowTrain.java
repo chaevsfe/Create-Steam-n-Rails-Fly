@@ -10,6 +10,7 @@
 
 package com.railwayteam.railways.fabric_mixin.client;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import com.railwayteam.railways.content.shadow_realm.ShadowRealm;
 import com.zurrtum.create.client.AllHandle;
 import com.zurrtum.create.content.trains.entity.Train;
@@ -26,7 +27,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = AllHandle.class, remap = false)
 public abstract class MixinAllHandleShadowTrain {
     @Inject(method = "onAddTrain", at = @At("HEAD"), cancellable = true)
-    private void railways$beginShadowRestore(AddTrainPacket packet, CallbackInfo ci) {
+    private void railways$beginShadowRestore(CallbackInfo ci, @Local(argsOnly = true) AddTrainPacket packet) {
+        if (!Minecraft.getInstance().packetProcessor().isSameThread()) {
+            return;
+        }
         Train train = packet.train();
         if (!train.id.equals(ShadowRealm.clientPendingShadowTrainId)) {
             return;
