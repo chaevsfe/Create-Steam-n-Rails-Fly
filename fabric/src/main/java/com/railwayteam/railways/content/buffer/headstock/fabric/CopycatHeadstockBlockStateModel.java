@@ -391,7 +391,7 @@ public class CopycatHeadstockBlockStateModel extends CopycatModel {
 				return new ItemData(material, null);
 
 			CompoundTag tag = data.copyTagWithoutId();
-			material = tag.read("Material", BlockState.CODEC).orElse(material);
+			material = BlockState.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, tag.get("Material")).resultOrPartial().orElse(material);
 			if (tag.getInt("Color").isPresent())
 				color = DyeColor.byId(tag.getInt("Color").orElse(0));
 			return new ItemData(material, color);
