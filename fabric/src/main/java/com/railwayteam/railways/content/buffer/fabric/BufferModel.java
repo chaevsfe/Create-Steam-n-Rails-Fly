@@ -180,7 +180,7 @@ public class BufferModel extends WrapperBlockStateModel {
                 return new SwapData(null, null);
 
             CompoundTag tag = data.copyTagWithoutId();
-            BlockState material = tag.read("Material", BlockState.CODEC).orElse(null);
+            BlockState material = BlockState.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, tag.get("Material")).resultOrPartial().orElse(null);
             DyeColor color = tag.getInt("Color").isPresent()
                 ? DyeColor.byId(tag.getInt("Color").orElse(0))
                 : null;
