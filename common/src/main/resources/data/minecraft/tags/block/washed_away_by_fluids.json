@@ -1,5 +1,8 @@
 {
   "values": [
-    "railways:conductor_whistle"
+    {
+      "id": "railways:conductor_whistle",
+      "required": false
+    }
   ]
 }
