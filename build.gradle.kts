@@ -1088,6 +1088,7 @@ tasks.named("compileJava") {
 
 tasks.jar {
     from("LICENSE")
+    from("COPYING")
     from("NOTICE")
     from("licenses") { into("licenses") }
     from("common/src/main/java/com/railwayteam/railways/base/datafixerapi/LICENSE") {
@@ -1097,6 +1098,7 @@ tasks.jar {
 
 tasks.named<Jar>("sourcesJar") {
     from("LICENSE")
+    from("COPYING")
     from("NOTICE")
     from("licenses") { into("licenses") }
 }
