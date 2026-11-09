@@ -11,9 +11,9 @@ Expands Create's train and steam systems with custom tracks, semaphores, conduct
 
 | Component | Version |
 | --- | --- |
-| Minecraft | `26.2` |
+| Minecraft | `26.1`, `26.1.1` or `26.1.2` |
 | Mod loader | Fabric Loader `0.19.3` or newer |
-| Create Fly | `6.0.9-1` or newer |
+| Create Fly | `6.0.9-4` or newer |
 | Fabric API | required |
 | Java | `25` or newer |
 | Environments | Client and server |
@@ -39,6 +39,7 @@ Requires JDK 25.
 
 - **Create: Steam 'n' Rails** by IThundxr
 - **Create Fly** by ZurrTum
+- **Create: Steam 'n' Rails — Create Fly port** by R2bEEaton
 - **Create: Steam 'n' Rails — Create Fly port** by cat4blep
 - **Create** by the Create Team
 
