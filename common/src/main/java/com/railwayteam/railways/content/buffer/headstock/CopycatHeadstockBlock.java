@@ -80,6 +80,7 @@ public class CopycatHeadstockBlock extends WaterloggedCopycatBlock implements Bl
             .setValue(FACING, Direction.NORTH)
             .setValue(STYLE, HeadstockStyle.BUFFER)
             .setValue(UPSIDE_DOWN, false)
+            .setValue(EMISSIVE, false)
         );
     }
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

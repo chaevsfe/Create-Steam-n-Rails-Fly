@@ -55,7 +55,7 @@ public abstract class VentBlock extends CopycatBlock implements IWrenchable {
     public static final BooleanProperty CONDUCTOR_VISIBLE = BooleanProperty.create("conductor_visible");
     protected VentBlock(Properties pProperties) {
         super(pProperties);
-        registerDefaultState(defaultBlockState().setValue(CONDUCTOR_VISIBLE, false));
+        registerDefaultState(defaultBlockState().setValue(CONDUCTOR_VISIBLE, false).setValue(EMISSIVE, false));
     }
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder.add(CONDUCTOR_VISIBLE));
