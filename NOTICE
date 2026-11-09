@@ -8,6 +8,11 @@ Based on Create: Steam 'n' Rails by The Railways Team, version 1.7.3.
   Upstream project: https://modrinth.com/mod/create-steam-n-rails
   This port:        https://modrinth.com/project/13eOfSPn
 
+This port continues earlier Create Fly ports of Steam 'n' Rails: the port by
+R2bEEaton (Ryan Eaton), June to July 2026, and cat4blep's continuation of it
+(https://github.com/cat4blep/Create-Steam-n-Rails-Fly, from 2026-07-13), of
+which this repository is a GitHub fork.
+
 Modified by chaevsfe in 2026 to run on Minecraft 26.3 with the Fabric mod
 loader, built against Create Fly by ZurrTum rather than the original Create mod.
 
@@ -25,10 +30,33 @@ This is an UNOFFICIAL port. It is not endorsed by or affiliated with the
 original authors. Please report problems with the port to this repository,
 not to the upstream project.
 
-This product includes software from the Quilt Standard Libraries
-(datafixerapi), licensed under the Apache License 2.0. The Apache licence
-text accompanies those classes at
-com/railwayteam/railways/base/datafixerapi/LICENSE.
+Third-party code
+----------------
+Upstream Steam 'n' Rails and this port contain code from the following
+projects, kept here under each project's own licence:
+  - Create, by the Create Team (https://github.com/Creators-of-Create/Create),
+    MIT License: certain sections of the code, and renderers this port
+    re-expressed from Create Fly's Fabric version of Create's code. Licence
+    text: licenses/Create-LICENSE.
+  - Quilt Standard Libraries, Copyright 2022 QuiltMC
+    (https://github.com/QuiltMC/quilt-standard-libraries), Apache License 2.0:
+    the datafixer classes in com.railwayteam.railways.base.datafixerapi,
+    NbtUtilsMixin and MixinNbtUtilsDataFix. Licence text:
+    com/railwayteam/railways/base/datafixerapi/LICENSE.
+  - SecurityCraft, Copyright (c) 2022 Geforce
+    (https://github.com/Geforce132/SecurityCraft), MIT License: most of the
+    conductor possession code, including the mixins in
+    com.railwayteam.railways.fabric_mixin.conductor_possession. Licence text:
+    licenses/SecurityCraft-LICENSE.
+  - Neruina, Copyright (c) 2023-Present Bawnorton
+    (https://github.com/Bawnorton/Neruina), MIT License: ConditionalMixin and
+    ConditionalMixinManager. Licence text: licenses/Neruina-LICENSE.
+  - FramedBlocks, by XFactHD (https://github.com/XFactHD/FramedBlocks),
+    LGPL-3.0: the custom hitbox outlines in IHasCustomOutline. Licence text:
+    LICENSE.
+
+Bundled library: MixinExtras 0.5.3 by LlamaLad7, MIT; its licence travels
+inside META-INF/jars/mixinextras-fabric-0.5.3.jar.
 
 Licence
 -------
