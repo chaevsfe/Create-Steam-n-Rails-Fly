@@ -928,6 +928,7 @@ tasks.named("compileJava") {
 tasks.jar {
     from("LICENSE")
     from("NOTICE")
+    from("licenses") { into("licenses") }
     from("common/src/main/java/com/railwayteam/railways/base/datafixerapi/LICENSE") {
         into("com/railwayteam/railways/base/datafixerapi")
     }
@@ -936,6 +937,7 @@ tasks.jar {
 tasks.named<Jar>("sourcesJar") {
     from("LICENSE")
     from("NOTICE")
+    from("licenses") { into("licenses") }
 }
 
 val ownNamespace = "com/railwayteam/railways/"

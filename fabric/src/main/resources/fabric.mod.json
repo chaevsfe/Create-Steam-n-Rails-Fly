@@ -7,6 +7,7 @@
   "authors": [
     "The Railways Team",
     "R2bEEaton",
+    "cat4blep",
     "chaevsfe"
   ],
   "contact": {
@@ -60,9 +61,5 @@
         "Upstream project": "https://modrinth.com/mod/create-steam-n-rails"
       }
     }
-  },
-  "contributors": [
-    "cat4blep",
-    "chaevsfe"
-  ]
+  }
 }
