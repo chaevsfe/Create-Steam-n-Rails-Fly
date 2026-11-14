@@ -33,6 +33,7 @@ import com.railwayteam.railways.mixin_interfaces.IHandcarTrain;
 import com.zurrtum.create.AllItems;
 import net.minecraft.world.InteractionHand;
 import com.railwayteam.railways.config.CRConfigs;
+import com.railwayteam.railways.content.conductor.IConductorHoldingFakePlayer;
 import com.railwayteam.railways.content.switches.TrackSwitch;
 import com.railwayteam.railways.content.switches.TrackSwitchBlock.SwitchState;
 import com.railwayteam.railways.mixin_interfaces.IDistanceTravelled;
@@ -47,14 +48,17 @@ import com.zurrtum.create.content.trains.entity.Carriage;
 import com.zurrtum.create.content.trains.entity.CarriageBogey;
 import com.zurrtum.create.content.trains.entity.CarriageContraptionEntity;
 import com.zurrtum.create.content.trains.entity.Navigation;
+import com.zurrtum.create.content.trains.entity.Train;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Position;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -165,6 +169,34 @@ public abstract class MixinCarriageContraptionEntity extends OrientedContraption
     private void railways$cancelClientDerailing(CallbackInfo ci) {
         if (level().isClientSide() && CRConfigs.client().skipClientDerailing.get())
             ci.cancel();
+    }
+
+    @Unique
+    private boolean railways$isOwnConductor(Player player) {
+        return player instanceof IConductorHoldingFakePlayer holder
+            && holder.getConductor() != null
+            && holder.getConductor().getRootVehicle() == (Object) this;
+    }
+
+    @WrapOperation(
+        method = "control",
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/Vec3;closerThan(Lnet/minecraft/core/Position;D)Z")
+    )
+    private boolean railways$conductorInRange(Vec3 instance, Position pos, double distance, Operation<Boolean> original,
+                                              @Local(argsOnly = true) Player player) {
+        if (railways$isOwnConductor(player))
+            return true;
+        return original.call(instance, pos, distance);
+    }
+
+    @WrapOperation(
+        method = "control",
+        at = @At(value = "FIELD", target = "Lcom/zurrtum/create/content/trains/entity/Train;throttle:D", opcode = Opcodes.GETFIELD)
+    )
+    private double railways$conductorThrottle(Train instance, Operation<Double> original, @Local(argsOnly = true) Player player) {
+        if (railways$isOwnConductor(player))
+            return Math.abs(((IConductorHoldingFakePlayer) player).getConductor().getThrottle()) / 15.0d;
+        return original.call(instance);
     }
 
     @Inject(
