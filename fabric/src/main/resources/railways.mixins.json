@@ -84,6 +84,7 @@
     "MixinIOWorkerDataVersion",
     "MixinItemCombinerMenu",
     "MixinItemSandPaper",
+    "MixinMixingRecipeDyeWaste",
     "MixinMountedStorageManagerFuel",
     "MixinNavigation",
     "MixinNavigationBuffer",
