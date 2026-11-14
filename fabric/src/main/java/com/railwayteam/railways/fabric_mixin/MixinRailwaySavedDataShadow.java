@@ -77,7 +77,7 @@ public abstract class MixinRailwaySavedDataShadow implements RailwaySavedDataDuc
         return new ArrayList<>(combined.values());
     }
 
-    @Inject(method = "load", at = @At("RETURN"))
+    @Inject(method = "load(Lcom/mojang/serialization/DynamicOps;Ljava/lang/Object;)Lcom/mojang/serialization/DataResult;", at = @At("RETURN"))
     private static <T> void railways$separateLoadedShadowTrains(
         DynamicOps<T> ops,
         T input,
