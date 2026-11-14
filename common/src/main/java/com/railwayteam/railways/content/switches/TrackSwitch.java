@@ -28,6 +28,7 @@ import com.zurrtum.create.content.trains.graph.TrackNode;
 import com.zurrtum.create.content.trains.graph.TrackNodeLocation;
 import com.zurrtum.create.content.trains.signal.SignalPropagator;
 import com.zurrtum.create.content.trains.signal.SingleBlockEntityEdgePoint;
+import io.netty.handler.codec.DecoderException;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
@@ -390,14 +391,18 @@ public class TrackSwitch extends SingleBlockEntityEdgePoint {
 
 	public void read(FriendlyByteBuf buffer, DimensionPalette dimensions) {
 		super.read(buffer, dimensions);
-		switchState = SwitchState.values()[buffer.readInt()];
+		int state = buffer.readInt();
+		SwitchState[] states = SwitchState.values();
+		switchState = state >= 0 && state < states.length ? states[state] : SwitchState.NORMAL;
 		automatic = buffer.readBoolean();
 		locked = buffer.readBoolean();
 		autoTrainsSwitch = buffer.readBoolean();
 		if (buffer.readBoolean()) {
 			TrackNodeLocation point = TrackNodeLocation.receive(buffer, dimensions);
 			int count = buffer.readVarInt();
-			List<TrackNodeLocation> received = new ArrayList<>(count);
+			if (count < 0 || count > buffer.readableBytes())
+				throw new DecoderException("Invalid track switch exit count " + count);
+			List<TrackNodeLocation> received = new ArrayList<>(Math.min(count, 16));
 			for (int i = 0; i < count; i++)
 				received.add(TrackNodeLocation.receive(buffer, dimensions));
 			updateExits(point, received);
