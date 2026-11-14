@@ -94,6 +94,7 @@
     "MixinRailwaySavedDataShadow",
     "MixinRollerBlockEntity",
     "MixinRollerMovementBehaviour",
+    "MixinSandPaperItem",
     "MixinSavedDataStorage",
     "MixinScheduleRuntime",
     "MixinSchematicItemDataFix",
