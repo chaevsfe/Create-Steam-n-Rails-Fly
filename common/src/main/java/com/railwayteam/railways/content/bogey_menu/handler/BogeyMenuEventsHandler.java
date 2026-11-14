@@ -30,19 +30,32 @@ import net.minecraft.world.level.GameType;
 
 public class BogeyMenuEventsHandler {
 	public static int COOLDOWN = 0;
+	private static boolean wasPressed = false;
 
 	@MultiLoaderEvent
 	public static void clientTick() {
-		if (COOLDOWN > 0 && !CRKeys.BOGEY_MENU.isPressed())
+		boolean pressed = CRKeys.BOGEY_MENU.isPressed();
+		if (COOLDOWN > 0 && !pressed)
 			COOLDOWN--;
+		if (pressed && !wasPressed && CRKeys.BOGEY_MENU.isMouseBound())
+			tryOpen();
+		wasPressed = pressed;
 	}
 
 	@MultiLoaderEvent
 	public static void onKeyInput(int key, boolean pressed) {
+		if (!CRKeys.BOGEY_MENU.matchesKey(key) || !pressed)
+			return;
+		tryOpen();
+	}
+
+	private static void tryOpen() {
 		Minecraft mc = Minecraft.getInstance();
+		if (mc.screen != null)
+			return;
 		if (mc.gameMode == null || mc.gameMode.getPlayerMode() == GameType.SPECTATOR)
 			return;
-		if (key != CRKeys.BOGEY_MENU.getBoundCode() || !pressed || COOLDOWN > 0)
+		if (COOLDOWN > 0)
 			return;
 
 		LocalPlayer player = mc.player;
