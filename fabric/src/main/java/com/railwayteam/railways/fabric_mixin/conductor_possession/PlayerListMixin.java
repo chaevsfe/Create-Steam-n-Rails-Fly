@@ -10,37 +10,37 @@
 
 package com.railwayteam.railways.fabric_mixin.conductor_possession;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.railwayteam.railways.content.conductor.ConductorEntity;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
-/** Routes positional broadcasts (notably sounds) to the possessed conductor's location. */
 @Mixin(value = PlayerList.class, priority = 1200)
 public class PlayerListMixin {
-    @Redirect(
-        method = "broadcast",
+    @WrapOperation(
+        method = "broadcast(Lnet/minecraft/world/entity/player/Player;DDDDLnet/minecraft/resources/ResourceKey;Lnet/minecraft/network/protocol/Packet;)V",
         at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;getX()D")
     )
-    private double railways$useConductorXForBroadcast(ServerPlayer player) {
-        return player.getCamera() instanceof ConductorEntity conductor ? conductor.getX() : player.getX();
+    private double railways$useConductorXForBroadcast(ServerPlayer player, Operation<Double> original) {
+        return player.getCamera() instanceof ConductorEntity conductor ? conductor.getX() : original.call(player);
     }
 
-    @Redirect(
-        method = "broadcast",
+    @WrapOperation(
+        method = "broadcast(Lnet/minecraft/world/entity/player/Player;DDDDLnet/minecraft/resources/ResourceKey;Lnet/minecraft/network/protocol/Packet;)V",
         at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;getY()D")
     )
-    private double railways$useConductorYForBroadcast(ServerPlayer player) {
-        return player.getCamera() instanceof ConductorEntity conductor ? conductor.getY() : player.getY();
+    private double railways$useConductorYForBroadcast(ServerPlayer player, Operation<Double> original) {
+        return player.getCamera() instanceof ConductorEntity conductor ? conductor.getY() : original.call(player);
     }
 
-    @Redirect(
-        method = "broadcast",
+    @WrapOperation(
+        method = "broadcast(Lnet/minecraft/world/entity/player/Player;DDDDLnet/minecraft/resources/ResourceKey;Lnet/minecraft/network/protocol/Packet;)V",
         at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;getZ()D")
     )
-    private double railways$useConductorZForBroadcast(ServerPlayer player) {
-        return player.getCamera() instanceof ConductorEntity conductor ? conductor.getZ() : player.getZ();
+    private double railways$useConductorZForBroadcast(ServerPlayer player, Operation<Double> original) {
+        return player.getCamera() instanceof ConductorEntity conductor ? conductor.getZ() : original.call(player);
     }
 }
