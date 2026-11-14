@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(value = FlywheelRenderer.class, remap = false)
 public abstract class MixinFlywheelRenderer {
     @WrapOperation(
-        method = "extractRenderState",
+        method = "extractRenderState(Lcom/zurrtum/create/content/kinetics/flywheel/FlywheelBlockEntity;Lcom/zurrtum/create/client/content/kinetics/flywheel/FlywheelRenderer$FlywheelRenderState;FLnet/minecraft/world/phys/Vec3;Lnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V",
         at = @At(
             value = "FIELD",
             target = "Lcom/zurrtum/create/client/AllPartialModels;FLYWHEEL:Lcom/zurrtum/create/client/flywheel/lib/model/baked/PartialModel;",
