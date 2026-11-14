@@ -19,16 +19,21 @@
 package com.railwayteam.railways.fabric_mixin;
 
 import com.railwayteam.railways.content.buffer.headstock.CopycatHeadstockBlock;
+import com.railwayteam.railways.mixin_interfaces.CopycatDuck;
 import com.railwayteam.railways.registry.CRBlockEntities;
 import com.zurrtum.create.content.decoration.copycat.CopycatBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(value = CopycatBlockEntity.class, remap = false)
-public class MixinCopycatBlockEntity {
+public class MixinCopycatBlockEntity implements CopycatDuck {
+    @Shadow
+    private BlockState material;
+
     @ModifyArgs(
         method = "<init>",
         at = @At(
@@ -41,5 +46,11 @@ public class MixinCopycatBlockEntity {
         BlockState state = args.get(2);
         if (state.getBlock() instanceof CopycatHeadstockBlock)
             args.set(0, CRBlockEntities.COPYCAT_HEADSTOCK.get());
+    }
+
+    @Override
+    public void railways$setMaterialSimple(BlockState material) {
+        this.material = material;
+        ((CopycatBlockEntity) (Object) this).notifyUpdate();
     }
 }
