@@ -83,6 +83,7 @@
     "MixinGlobalStationLimit",
     "MixinIOWorkerDataVersion",
     "MixinItemCombinerMenu",
+    "MixinItemSandPaper",
     "MixinMountedStorageManagerFuel",
     "MixinNavigation",
     "MixinNavigationBuffer",
