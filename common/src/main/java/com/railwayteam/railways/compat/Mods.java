@@ -34,6 +34,7 @@ public enum Mods {
 	HEXCASTING("hexcasting",true),
 	TWILIGHTFOREST("twilightforest"),
 	SODIUM("sodium"),
+	IRIS("iris"),
 	VOICECHAT("voicechat"),
 	FIGURA("figura"),
 	NATURES_SPIRIT("natures_spirit"),

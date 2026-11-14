@@ -25,6 +25,7 @@
     "client.MixinKeyboardHandler",
     "client.MixinObjGeometryModelMesh",
     "client.MixinRadialToolboxMenu",
+    "client.MixinRenderSetupBuilder",
     "client.MixinRollingModeScrollBehaviour",
     "client.MixinSegmentAngles",
     "client.MixinSignalVisual",
