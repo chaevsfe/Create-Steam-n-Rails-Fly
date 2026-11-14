@@ -50,8 +50,6 @@ public abstract class MixinGlobalRailwayManagerShadow {
             throw new IllegalStateException("Cannot persist a shadow train before RailwaySavedData is loaded");
         }
 
-        // Carriage encoding captures the current contraption and passenger data before the
-        // manager drops the train's live entities and broadcasts RemoveTrainPacket.
         DimensionPalette dimensions = new DimensionPalette();
         for (Carriage carriage : train.carriages) {
             ShadowRealm.dropRemovedEntities(carriage);
