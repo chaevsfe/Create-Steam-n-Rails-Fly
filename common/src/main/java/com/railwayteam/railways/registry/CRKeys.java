@@ -20,6 +20,7 @@ package com.railwayteam.railways.registry;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.railwayteam.railways.Railways;
+import com.zurrtum.create.client.foundation.utility.ControlsUtil;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
@@ -55,7 +56,7 @@ public enum CRKeys {
         for (CRKeys key : values()) {
             if (key.keybind == null || key.keybind.isUnbound())
                 continue;
-            key.keybind.setDown(InputConstants.isKeyDown(key.getBoundCode()));
+            key.keybind.setDown(ControlsUtil.isActuallyPressed(key.keybind));
         }
     }
 
@@ -73,6 +74,14 @@ public enum CRKeys {
 
     public int getBoundCode() {
         return keybind == null ? InputConstants.UNKNOWN.getValue() : getBoundCode(keybind);
+    }
+
+    public boolean matchesKey(int keyCode) {
+        return keyCode != InputConstants.UNKNOWN.getValue() && keyCode == getBoundCode();
+    }
+
+    public boolean isMouseBound() {
+        return keybind != null && isMouseBound(keybind);
     }
 
     public static boolean isKeyDown(int key) {
@@ -107,5 +116,9 @@ public enum CRKeys {
 
     private static int getBoundCode(KeyMapping keyMapping) {
         return com.railwayteam.railways.registry.fabric.CRKeysImpl.getBoundCode(keyMapping);
+    }
+
+    private static boolean isMouseBound(KeyMapping keyMapping) {
+        return com.railwayteam.railways.registry.fabric.CRKeysImpl.isMouseBound(keyMapping);
     }
 }

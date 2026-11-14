@@ -28,6 +28,7 @@ import com.zurrtum.create.client.catnip.gui.AbstractSimiScreen;
 import com.zurrtum.create.client.catnip.gui.element.GuiGameElement;
 import com.zurrtum.create.client.foundation.gui.AllGuiTextures;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.KeyEvent;
@@ -194,5 +195,15 @@ public class RadialTagCycleMenu extends AbstractSimiScreen {
             return true;
         }
         return super.keyReleased(event);
+    }
+
+    @Override
+    public boolean mouseReleased(MouseButtonEvent event) {
+        KeyMapping keybind = CRKeys.CYCLE_MENU.getKeybind();
+        if (keybind != null && keybind.matchesMouse(event)) {
+            onClose();
+            return true;
+        }
+        return super.mouseReleased(event);
     }
 }

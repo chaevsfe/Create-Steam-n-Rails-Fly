@@ -79,7 +79,7 @@ public class TagCycleHandlerClient {
 
     @MultiLoaderEvent
     public static void onKeyInput(int key, boolean pressed) {
-        if (key != CRKeys.CYCLE_MENU.getBoundCode() || !pressed || COOLDOWN > 0)
+        if (!CRKeys.CYCLE_MENU.matchesKey(key) || !pressed || COOLDOWN > 0)
             return;
         openCycleMenu();
     }

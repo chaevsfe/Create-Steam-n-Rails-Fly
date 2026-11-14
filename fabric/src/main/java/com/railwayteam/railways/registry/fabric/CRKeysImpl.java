@@ -31,4 +31,8 @@ public class CRKeysImpl {
         InputConstants.Key key = KeyMappingHelper.getBoundKeyOf(keyMapping);
         return key.getType() == InputConstants.Type.KEYBOARD ? key.getValue() : InputConstants.UNKNOWN.getValue();
     }
+
+    public static boolean isMouseBound(KeyMapping keyMapping) {
+        return KeyMappingHelper.getBoundKeyOf(keyMapping).getType() == InputConstants.Type.MOUSE;
+    }
 }
