@@ -35,6 +35,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = Carriage.class, remap = false)
@@ -73,6 +74,12 @@ public abstract class MixinCarriage {
 		} finally {
 			MixinVariables.trackEdgeCarriageTravelling = previouslyTravelling;
 		}
+	}
+
+	@Inject(method = "manageEntities(Lnet/minecraft/world/level/Level;)V", at = @At("HEAD"), cancellable = true)
+	private void railways$allowTravellingWithoutLevel(Level level, CallbackInfo ci) {
+		if (level == null)
+			ci.cancel();
 	}
 
 	@Unique
