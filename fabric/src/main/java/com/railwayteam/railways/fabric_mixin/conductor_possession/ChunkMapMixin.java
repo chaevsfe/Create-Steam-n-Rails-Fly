@@ -10,6 +10,8 @@
 
 package com.railwayteam.railways.fabric_mixin.conductor_possession;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.railwayteam.railways.content.conductor.ConductorEntity;
 import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ChunkMap;
@@ -17,28 +19,22 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.entity.EntityAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
-/**
- * Routes Minecraft 26.2's native player chunk-tracking view through a possessed conductor.
- *
- * <p>Unlike the legacy implementation, 26.2 no longer needs a second client chunk cache or
- * manual chunk-packet loops. {@link ChunkMap} owns a {@code ChunkTrackingView}; moving its player
- * origin to the camera makes vanilla update tickets, cache-center packets, chunk add/drop packets,
- * and block-update recipients as one coherent operation.</p>
- */
 @Mixin(value = ChunkMap.class, priority = 1200)
 public class ChunkMapMixin {
-    @Redirect(
-        method = {"move", "updatePlayerPos"},
+    @WrapOperation(
+        method = {
+            "move(Lnet/minecraft/server/level/ServerPlayer;)V",
+            "updatePlayerPos(Lnet/minecraft/server/level/ServerPlayer;)V"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/core/SectionPos;of(Lnet/minecraft/world/level/entity/EntityAccess;)Lnet/minecraft/core/SectionPos;"
         )
     )
-    private SectionPos railways$useConductorSectionForChunkTickets(EntityAccess entity) {
+    private SectionPos railways$useConductorSectionForChunkTickets(EntityAccess entity, Operation<SectionPos> original) {
         if (entity instanceof ServerPlayer player && player.getCamera() instanceof ConductorEntity conductor)
             return SectionPos.of(conductor);
-        return SectionPos.of(entity);
+        return original.call(entity);
     }
 }
