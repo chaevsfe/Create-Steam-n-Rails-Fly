@@ -41,6 +41,7 @@ import com.zurrtum.create.infrastructure.packet.s2c.ContraptionRelocationPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -156,6 +157,15 @@ public class ShadowRealm {
         int verifyDistance = AllConfigs.server().trains.maxTrackPlacementLength.get() * 2;
         if (!sender.position().closerThan(Vec3.atCenterOf(target.pos()), verifyDistance)) {
             LOGGER.warn("{}: player too far from clicked position", messagePrefix);
+            sender.sendOverlayMessage(Component.translatable("create.train.relocate.too_far")
+                .withStyle(ChatFormatting.RED));
+            return;
+        }
+
+        if (!hasRestorableSnapshot(shadowTrain)) {
+            LOGGER.warn("Shadow train '{}' has no saved carriage entity and stays in the shadow realm",
+                shadowTrain.name.getString());
+            sender.sendOverlayMessage(emptySnapshotMessage(shadowTrain).withStyle(ChatFormatting.RED));
             return;
         }
 
@@ -168,6 +178,25 @@ public class ShadowRealm {
         }
 
         LOGGER.warn("{}: restoration failed server-side", messagePrefix);
+        sender.sendOverlayMessage(Component.translatable("create.train.relocate.invalid")
+            .withStyle(ChatFormatting.RED));
+    }
+
+    public static boolean hasRestorableSnapshot(Train train) {
+        for (Carriage carriage : train.carriages) {
+            dropRemovedEntities(carriage);
+            if (carriage.anyAvailableEntity() == null
+                && !((AccessorCarriage) carriage).railways$getSerialisedEntity().contains("id")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static MutableComponent emptySnapshotMessage(Train train) {
+        return Component.literal("Shadow train '").append(train.name)
+            .append("' has no saved carriages and cannot be restored; /" + Railways.MOD_ID + " shadow_realm kill "
+                + ((IShadowTrain) train).railways$getShadowKey() + " removes it");
     }
 
     public static boolean restoreTrain(RailwaySavedData savedData, Train train, RestorationTarget target) {
@@ -175,14 +204,10 @@ public class ShadowRealm {
         if (!shadowTrain.railways$isShadow()) {
             return true;
         }
-        for (Carriage carriage : train.carriages) {
-            dropRemovedEntities(carriage);
-            if (carriage.anyAvailableEntity() == null
-                && !((AccessorCarriage) carriage).railways$getSerialisedEntity().contains("id")) {
-                LOGGER.warn("Shadow train '{}' has no saved carriage entity and stays in the shadow realm",
-                    train.name.getString());
-                return false;
-            }
+        if (!hasRestorableSnapshot(train)) {
+            LOGGER.warn("Shadow train '{}' has no saved carriage entity and stays in the shadow realm",
+                train.name.getString());
+            return false;
         }
         if (!target.apply(train)) {
             return false;

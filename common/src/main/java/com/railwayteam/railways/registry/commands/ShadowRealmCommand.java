@@ -115,6 +115,11 @@ public class ShadowRealmCommand {
             return 0;
         }
 
+        if (!ShadowRealm.hasRestorableSnapshot(train)) {
+            source.sendFailure(ShadowRealm.emptySnapshotMessage(train));
+            return 0;
+        }
+
         // The marker is deliberately sent first. AddTrainPacket then supplies the train through
         // Create Fly's registry-aware Train.STREAM_CODEC without duplicating its wire format.
         CRPackets.PACKETS.sendTo(player, new ShadowTrainRestorePacket(train.id));
