@@ -199,7 +199,7 @@ public class ClientPacketHandlers {
                 SignalBlockEntity signalBE = null;
                 if (signalPos != null && level.getBlockEntity(signalPos) instanceof SignalBlockEntity signal)
                     signalBE = signal;
-                overridableSignal.railways$refresh(signalBE, signalState, ticks, distantSignal);
+                overridableSignal.railways$refresh(signalBE, signalState, ticks * 3, distantSignal);
             }
         }
     }
