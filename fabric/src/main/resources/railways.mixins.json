@@ -124,6 +124,7 @@
     "MixinTrainHandcarCollision",
     "MixinTrainRealism",
     "MixinTrainRelocationPacketShadow",
+    "MixinTrainRelocator",
     "MixinTrainShadow",
     "MixinTrainWaypoint",
     "MixinTravellingPoint",
