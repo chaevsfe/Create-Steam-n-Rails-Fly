@@ -27,15 +27,24 @@ import com.railwayteam.railways.util.packet.AddTrainEndPacket;
 import com.railwayteam.railways.util.packet.CarriageContraptionEntityUpdatePacket;
 import com.railwayteam.railways.util.packet.ChopTrainEndPacket;
 import com.zurrtum.create.Create;
+import com.zurrtum.create.catnip.data.Couple;
+import com.zurrtum.create.catnip.data.Pair;
 import com.zurrtum.create.content.trains.entity.Carriage;
 import com.zurrtum.create.content.trains.entity.CarriageContraption;
 import com.zurrtum.create.content.trains.entity.CarriageContraptionEntity;
+import com.zurrtum.create.content.trains.entity.Navigation;
 import com.zurrtum.create.content.trains.entity.Train;
+import com.zurrtum.create.content.trains.entity.TravellingPoint;
+import com.zurrtum.create.content.trains.graph.TrackNode;
+import com.zurrtum.create.content.trains.schedule.ScheduleRuntime;
+import com.zurrtum.create.content.trains.signal.TrackEdgePoint;
+import com.zurrtum.create.content.trains.station.GlobalStation;
 import com.zurrtum.create.infrastructure.packet.s2c.AddTrainPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.apache.commons.lang3.mutable.MutableObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,6 +52,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class TrainUtils {
+    private static final int FIRST = 0, BOTH = 3;
+
     public static Train splitTrain(Train train, int numberOffEnd) {
         if (((IHandcarTrain) train).railways$isHandcar())
             return train;
@@ -131,10 +142,52 @@ public class TrainUtils {
         if (train.carriages.isEmpty())
             Create.RAILWAYS.removeTrain(train.id);
 
+        tryToParkNearby(newTrain, 0.75);
+        newTrain.collectInitiallyOccupiedSignalBlocks();
+
         return newTrain;
     }
 
     public static void tryToParkNearby(Train train, double maxDistance) {
+        if (train.carriages.isEmpty() || train.graph == null)
+            return;
+        final double offsetDist = 0.05;
+        Carriage leadingCarriage = train.carriages.get(0);
+        int leadingType = train.carriages.size() == 1 ? BOTH : FIRST;
+        leadingCarriage.travel(null, train.graph, -offsetDist, null, null, leadingType);
+        TravellingPoint discoveryPoint = copy(leadingCarriage.getLeadingPoint());
+        MutableObject<GlobalStation> targetStation = new MutableObject<>(null);
+        double distance = discoveryPoint.travel(train.graph, maxDistance + offsetDist,
+            discoveryPoint.steer(TravellingPoint.SteerDirection.NONE, new Vec3(0, 1, 0)),
+            (Double a, Pair<TrackEdgePoint, Couple<TrackNode>> couple) -> {
+                if (couple.getFirst() instanceof GlobalStation station && station.canApproachFrom(couple.getSecond().getSecond())
+                    && (station.getNearestTrain() == null || station.getNearestTrain() == train) && station.getPresentTrain() == null) {
+                    targetStation.setValue(station);
+                    return true;
+                }
+                return false;
+            });
+
+        if (targetStation.getValue() != null) {
+            Navigation oldNavigation = train.navigation;
+            ScheduleRuntime oldRuntime = train.runtime;
+            train.navigation = new Navigation(train);
+            train.runtime = new ScheduleRuntime(train);
+            train.navigation.destination = targetStation.getValue();
+            leadingCarriage.travel(null, train.graph, Math.max(0.01, distance) + offsetDist, discoveryPoint, null, leadingType);
+            targetStation.getValue().reserveFor(train);
+            train.navigation.train = null;
+            train.runtime = oldRuntime;
+            train.navigation = oldNavigation;
+        } else {
+            leadingCarriage.travel(null, train.graph, offsetDist, null, null, leadingType);
+        }
+    }
+
+    private static TravellingPoint copy(TravellingPoint original) {
+        TravellingPoint copy = new TravellingPoint(original.node1, original.node2, original.edge, original.position, original.upsideDown);
+        copy.blocked = original.blocked;
+        return copy;
     }
 
     public static Train combineTrains(Train frontTrain, Train backTrain, BlockPos itemDropPos, Level itemDropLevel, int carriageSpacing) {
