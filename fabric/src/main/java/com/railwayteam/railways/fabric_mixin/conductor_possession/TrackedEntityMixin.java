@@ -10,27 +10,27 @@
 
 package com.railwayteam.railways.fabric_mixin.conductor_possession;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.railwayteam.railways.content.conductor.ConductorEntity;
 import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
-/** Makes entity tracking distance use the possessed conductor instead of the stationary body. */
 @Mixin(value = ChunkMap.TrackedEntity.class, priority = 1200)
 public class TrackedEntityMixin {
-    @Redirect(
-        method = "updatePlayer",
+    @WrapOperation(
+        method = "updatePlayer(Lnet/minecraft/server/level/ServerPlayer;)V",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/server/level/ServerPlayer;position()Lnet/minecraft/world/phys/Vec3;"
         )
     )
-    private Vec3 railways$useConductorPositionForEntityTracking(ServerPlayer player) {
+    private Vec3 railways$useConductorPositionForEntityTracking(ServerPlayer player, Operation<Vec3> original) {
         if (player.getCamera() instanceof ConductorEntity conductor)
             return conductor.position();
-        return player.position();
+        return original.call(player);
     }
 }
