@@ -82,6 +82,7 @@
     "MixinGlobalStationLimit",
     "MixinIOWorkerDataVersion",
     "MixinItemCombinerMenu",
+    "MixinMixingRecipeDyeWaste",
     "MixinMountedStorageManagerFuel",
     "MixinNavigation",
     "MixinNavigationBuffer",
