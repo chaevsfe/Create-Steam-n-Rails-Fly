@@ -64,6 +64,7 @@
     "MixinBlockBehaviourTrackCasingDrops",
     "MixinBlockEntityType",
     "MixinCarriage",
+    "MixinCarriageBogeyInvisibleCoupler",
     "MixinCarriageBufferDistance",
     "MixinCarriageContraptionEntity",
     "MixinContainerLevelAccess",
