@@ -151,6 +151,8 @@ public class ShadowRealm {
 
         if (!sender.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)) {
             LOGGER.warn("{}: player has insufficient permissions", messagePrefix);
+            sender.sendOverlayMessage(Component.literal("Restoring a shadow train requires operator permissions")
+                .withStyle(ChatFormatting.RED));
             return;
         }
 
