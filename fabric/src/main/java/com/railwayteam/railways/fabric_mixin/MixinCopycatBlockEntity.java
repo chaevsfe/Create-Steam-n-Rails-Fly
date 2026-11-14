@@ -39,8 +39,7 @@ public class MixinCopycatBlockEntity implements CopycatDuck {
         at = @At(
             value = "INVOKE",
             target = "Lcom/zurrtum/create/foundation/blockEntity/SmartBlockEntity;<init>(Lnet/minecraft/world/level/block/entity/BlockEntityType;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V"
-        ),
-        require = 0
+        )
     )
     private static void railways$useCopycatHeadstockType(Args args) {
         BlockState state = args.get(2);
