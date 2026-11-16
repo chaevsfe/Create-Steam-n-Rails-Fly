@@ -23,4 +23,6 @@ import org.jetbrains.annotations.Nullable;
 
 public interface IPhantomAnimationState {
     void railways$setPhantomOwner(@Nullable SpriteContents owner);
+
+    boolean railways$hasPendingPhantomFrame();
 }
