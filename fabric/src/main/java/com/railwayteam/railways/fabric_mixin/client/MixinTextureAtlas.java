@@ -18,7 +18,12 @@
 
 package com.railwayteam.railways.fabric_mixin.client;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.railwayteam.railways.content.custom_tracks.phantom.PhantomSpriteManager;
+import com.railwayteam.railways.mixin_interfaces.IPhantomAnimationState;
+import net.minecraft.client.renderer.texture.SpriteContents;
 import net.minecraft.client.renderer.texture.SpriteLoader;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.Identifier;
@@ -29,11 +34,31 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.List;
+
 @Mixin(TextureAtlas.class)
 public abstract class MixinTextureAtlas {
     @Shadow
     @Final
     private Identifier location;
+    @Shadow
+    private List<SpriteContents.AnimationState> animatedTexturesStates;
+
+    @ModifyExpressionValue(method = "uploadAnimationFrames", at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;anyMatch(Ljava/util/function/Predicate;)Z"))
+    private boolean railways$drawPendingPhantomFrames(boolean original) {
+        if (original)
+            return true;
+        for (SpriteContents.AnimationState state : animatedTexturesStates) {
+            if (((IPhantomAnimationState) state).railways$hasPendingPhantomFrame())
+                return true;
+        }
+        return false;
+    }
+
+    @WrapOperation(method = "uploadAnimationFrames", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/SpriteContents$AnimationState;needsToDraw()Z"))
+    private boolean railways$drawPendingPhantomFrame(SpriteContents.AnimationState state, Operation<Boolean> original) {
+        return original.call(state) || ((IPhantomAnimationState) state).railways$hasPendingPhantomFrame();
+    }
 
     @Inject(method = "cycleAnimationFrames", at = @At("HEAD"))
     private void railways$cycleAnimationFrames(CallbackInfo ci) {

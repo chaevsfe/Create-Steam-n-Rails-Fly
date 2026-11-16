@@ -40,10 +40,17 @@ public abstract class MixinSpriteContentsAnimationState implements IPhantomAnima
     @Unique
     @Nullable
     private SpriteContents railways$phantomOwner;
+    @Unique
+    private int railways$drawnPhantomFrame = -1;
 
     @Override
     public void railways$setPhantomOwner(@Nullable SpriteContents owner) {
         this.railways$phantomOwner = owner;
+    }
+
+    @Override
+    public boolean railways$hasPendingPhantomFrame() {
+        return railways$phantomOwner != null && isDirty;
     }
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
@@ -53,9 +60,14 @@ public abstract class MixinSpriteContentsAnimationState implements IPhantomAnima
         IPotentiallyInvisibleSpriteContents contents = (IPotentiallyInvisibleSpriteContents) railways$phantomOwner;
         if (!contents.railways$shouldDoInvisibility())
             return;
-        int target = contents.railways$isVisible() ? 0 : 1;
-        isDirty = frame != target;
-        frame = target;
+        frame = contents.railways$isVisible() ? 0 : 1;
+        isDirty = frame != railways$drawnPhantomFrame;
         ci.cancel();
+    }
+
+    @Inject(method = "drawToAtlas", at = @At("HEAD"))
+    private void railways$recordPhantomFrame(CallbackInfo ci) {
+        if (railways$phantomOwner != null && isDirty)
+            railways$drawnPhantomFrame = frame;
     }
 }
